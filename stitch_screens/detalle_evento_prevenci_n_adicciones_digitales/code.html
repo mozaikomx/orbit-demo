@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalle de Evento | PoliticaAI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary-container": "#c04400",
+                "on-surface-variant": "#434655",
+                "on-error": "#ffffff",
+                "on-tertiary-fixed": "#370e00",
+                "on-error-container": "#93000a",
+                "on-tertiary-container": "#ffede7",
+                "tertiary": "#973400",
+                "inverse-primary": "#ffb599",
+                "surface": "#f7f9fb",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#5c647a",
+                "inverse-surface": "#2d3133",
+                "secondary-container": "#dae2fd",
+                "surface-container-highest": "#e0e3e5",
+                "error-container": "#ffdad6",
+                "tertiary-fixed-dim": "#ffb599",
+                "surface-container-high": "#e6e8ea",
+                "surface-container": "#eceef0",
+                "error": "#ba1a1a",
+                "on-tertiary-fixed-variant": "#7f2b00",
+                "on-primary-fixed-variant": "#7f2b00",
+                "outline-variant": "#c3c6d7",
+                "on-secondary-fixed": "#131b2e",
+                "surface-tint": "#B87851",
+                "surface-dim": "#d8dadc",
+                "outline": "#737686",
+                "on-primary-fixed": "#370e00",
+                "on-primary-container": "#ffffff",
+                "on-background": "#191c1e",
+                "surface-variant": "#e0e3e5",
+                "on-primary": "#ffffff",
+                "surface-container-low": "#f2f4f6",
+                "surface-bright": "#f7f9fb",
+                "primary-fixed-dim": "#ffb599",
+                "secondary": "#565e74",
+                "primary-fixed": "#ffdbce",
+                "on-surface": "#191c1e",
+                "secondary-fixed-dim": "#bec6e0",
+                "secondary-fixed": "#dae2fd",
+                "primary": "#B87851",
+                "on-secondary-fixed-variant": "#3f465c",
+                "tertiary-fixed": "#ffdbce",
+                "primary-container": "#B87851",
+                "on-secondary": "#ffffff",
+                "inverse-on-surface": "#eff1f3",
+                "background": "#f7f9fb",
+                "surface-container-lowest": "#ffffff"
+              },
+              fontFamily: {
+                "headline": ["Playfair Display", "serif"],
+                "body": ["DM Sans", "sans-serif"],
+                "label": ["DM Sans", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04), 0 4px 8px rgba(15, 23, 42, 0.02);
+        }
+        body {
+            background-color: #f7f9fb;
+            font-family: 'DM Sans', sans-serif;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(.33); opacity: 1; }
+            80%, 100% { opacity: 0; }
+        }
+        .pulse-ring-red::before {
+            content: '';
+            position: absolute;
+            width: 300%;
+            height: 300%;
+            left: -100%;
+            top: -100%;
+            border-radius: 50%;
+            background-color: #DC2626;
+            animation: pulse-ring 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        .widget-transition {
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+        .pills-container button.active {
+            background-color: #B87851;
+            color: #FDFAF4;
+        }
+        #toast.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-fixed">
+<!-- SideNavBar -->
+<aside class="h-screen w-[220px] fixed left-0 top-0 dark:bg-slate-950 shadow-xl flex flex-col py-4 z-50" style="background-color: #121212;">
+<div class="px-6 py-8 flex justify-center">
+<img alt="Orbit Logo" class="h-11 mx-auto mb-2 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ujJOYeED5ESr2kvjXnxUK-52NGh_4Prq2UbrfVMer3g1dnxu7ibC0WN2NWGh2to0HHlnfwm9w2l0MY8gbsIkWCu2Afsu9ePkvJpNLxAV4spmUP9OfAExzB1PdDjepwq8NL7CXd67_sAHPXRDeKUb994I_DgECUfMjlkg5Yo3BknIyIqPN3uem3uP5BmUd_o7AYH-2nfjz8DSN-L_pLE_l88YTLQzYwK4X1bptn_47MVV6LESKXrKu2_g6KV1ngHYQ126U4GTa-QXrU" style=""/>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-[#60A5FA] bg-[#1E293B]/50 my-1 py-3 px-6 flex items-center justify-between transition-all relative border-r-4 border-primary" href="#" style="">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="home" style="">home</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Monitoreo</span>
+</div>
+</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all pl-10" href="#" style="">
+<span class="material-symbols-outlined" data-icon="dashboard" style="">dashboard</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Dashboard</span>
+</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all pl-10" href="#" style="">
+<span class="material-symbols-outlined" data-icon="group" style="">group</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Grupo de interés setup</span>
+</a><a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all group relative" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-slate-900"></span>
+</div>
+<span class="font-label text-sm tracking-wide font-medium">Broad Listening</span>
+</a><div class="mx-4 my-2 border-t-[0.5px] border-slate-200/10"></div>
+</nav>
+<div class="px-6 py-4 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 relative group">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs font-label" style="">JD</div>
+<div class="overflow-hidden flex-1">
+<div class="flex items-center justify-between">
+<p class="text-xs font-bold text-white truncate font-label" style="">Juan Delgado</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px] cursor-pointer hover:text-white transition-colors" data-icon="settings" style="">settings</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate font-label" style="">Analista Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-220px)] h-16 z-40 bg-[#f7f9fb]/80 backdrop-blur-md flex justify-end items-center px-8 border-b border-slate-200/15">
+<div class="flex items-center gap-4">
+<div class="relative group flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" data-icon="search" style="">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none w-64 font-body" placeholder="Buscar documentación..." type="text"/>
+</div>
+<div class="h-8 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium font-body text-slate-700" style=""><br/></span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[220px] pt-24 pb-12 px-8 min-h-screen">
+<div class="max-w-7xl mx-auto flex gap-8">
+<!-- Left Column (65%) -->
+<section class="w-[65%] space-y-8">
+<!-- Back Button -->
+<button class="group flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-body text-sm font-semibold" style="">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform" data-icon="arrow_back" style="">arrow_back</span>
+                Regresar al inicio
+            </button>
+<!-- Article Header -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-xs font-mono text-slate-400 tracking-tight" style="">24 de febrero de 2026</span>
+<span class="flex items-center gap-1 text-slate-400 text-xs font-body" style="">
+<span class="material-symbols-outlined text-sm" data-icon="schedule" style="">schedule</span>
+                        3 min lectura
+                    </span>
+</div>
+<h2 class="text-4xl font-headline font-bold leading-tight tracking-tight text-slate-900" style="">
+                    Iniciativa que adiciona un artículo 101 Bis 4 a la Ley General de los Derechos de Niñas, Niños y Adolescentes, en materia de prevención de adicciones digitales
+                </h2>
+<div class="flex items-center gap-6 pt-4">
+<div class="inline-flex flex-col gap-[14px] bg-surface-container-lowest border border-slate-100 rounded-xl p-[16px_20px] editorial-shadow">
+<p class="text-[10px] font-bold uppercase text-slate-400 font-label tracking-[0.15em] text-center" style="">Impacto</p>
+<div class="flex items-center gap-6">
+<!-- Intensity Scale Section -->
+<div class="flex flex-col gap-1.5 min-w-[140px]">
+<div class="flex gap-[3px] h-[6px]"><div class="flex-1 bg-[#16A34A] rounded-[3px]"></div><div class="flex-1 bg-[#EF9F27] rounded-[3px]"></div><div class="flex-1 bg-[#E24B4A] rounded-[3px]"></div></div>
+<div class="flex justify-between items-center px-0.5">
+<span class="text-[10px] font-[600] text-[#16A34A] font-label" style="">Bajo</span>
+<span class="text-[10px] font-[600] text-[#EF9F27] font-label" style="">Medio</span>
+<span class="text-[10px] font-[600] text-[#E24B4A] font-label" style="">Alto</span>
+</div>
+</div>
+<!-- Vertical Divider -->
+<div class="w-[0.5px] bg-[#E0D9CC] h-[30px]"></div>
+<!-- Stakeholders Section -->
+<div class="flex items-center gap-2">
+<div class="bg-[#E24B4A] px-[14px] py-[6px] rounded-[20px] flex items-center justify-center">
+<span class="text-white font-[600] text-[12px] font-body" style="">Apple</span>
+</div>
+<div class="bg-[#F59E0B] px-[14px] py-[6px] rounded-[20px] flex items-center justify-center">
+<span class="text-white font-[600] text-[12px] font-body" style="">Rappi</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Key Points -->
+<div class="bg-primary/5 border-l-4 border-primary p-8 rounded-r-lg space-y-4">
+<h3 class="font-body text-xs font-bold uppercase tracking-widest text-primary" style="">Puntos Clave de la Iniciativa</h3>
+<ol class="space-y-4">
+<li class="flex gap-4" style="">
+<span class="flex-none w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-body" style="">1</span>
+<p class="text-slate-700 font-body leading-relaxed" style="">Adiciona artículo 101 Bis 4 a la Ley General de Derechos de Niñas, Niños y Adolescentes.</p>
+</li>
+<li class="flex gap-4" style="">
+<span class="flex-none w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-body" style="">2</span>
+<p class="text-slate-700 font-body leading-relaxed" style="">Establece Estrategia Nacional para Prevención de Adicciones Digitales.</p>
+</li>
+<li class="flex gap-4" style="">
+<span class="flex-none w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-body" style="">3</span>
+<p class="text-slate-700 font-body leading-relaxed" style="">Incluye campañas de concientización y protocolos de salud mental.</p>
+</li>
+<li class="flex gap-4" style="">
+<span class="flex-none w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-body" style="">4</span>
+<p class="text-slate-700 font-body leading-relaxed" style="">Obliga a reglamentar verificación de edad y control parental digital.</p>
+</li>
+<li class="flex gap-4" style="">
+<span class="flex-none w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold font-body" style="">5</span>
+<p class="text-slate-700 font-body leading-relaxed" style="">Considera límites de tiempo y suspensión nocturna de notificaciones.</p>
+</li>
+</ol>
+</div>
+<!-- New Sections: TEMAS RELACIONADOS & INFORMACIÓN ADICIONAL -->
+<div class="space-y-8">
+<div class="space-y-4">
+<h3 class="text-[11px] font-bold uppercase tracking-[1.5px] text-slate-400 font-label" style="">TEMAS RELACIONADOS</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-slate-100/50 text-slate-700 rounded-full text-xs font-medium font-body" style="">Protección de menores</span>
+<span class="px-4 py-2 bg-slate-100/50 text-slate-700 rounded-full text-xs font-medium font-body" style="">Regulación digital</span>
+<span class="px-4 py-2 bg-slate-100/50 text-slate-700 rounded-full text-xs font-medium font-body" style="">Salud mental</span>
+<span class="px-4 py-2 bg-slate-100/50 text-slate-700 rounded-full text-xs font-medium font-body" style="">Control parental</span>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-[11px] font-bold uppercase tracking-[1.5px] text-slate-400 font-label" style="">INFORMACIÓN ADICIONAL</h3>
+<div class="flex flex-wrap gap-3">
+<a class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-100 editorial-shadow rounded-full text-xs hover:border-primary transition-colors group" href="#" style="">
+<span class="text-slate-400 font-medium font-body group-hover:text-primary" style="">FUENTE:</span>
+<span class="text-slate-900 font-bold font-body" style="">Gaceta Parlamentaria</span>
+</a>
+<div class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-100 editorial-shadow rounded-full text-xs">
+<span class="text-slate-400 font-medium font-body uppercase" style="">Nivel:</span>
+<span class="text-slate-900 font-bold font-body" style="">Federal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Summary -->
+<div class="bg-surface-container-lowest editorial-shadow rounded-lg p-8 space-y-6">
+<div class="flex items-center justify-between border-b border-slate-100 pb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome" style="">auto_awesome</span>
+<h3 class="font-headline text-2xl font-bold italic" style="">Resumen con IA</h3>
+</div>
+<div class="flex p-1 bg-surface-container-low rounded-full">
+<button class="px-4 py-1.5 text-xs font-bold bg-primary text-white rounded-full transition-all font-body" style="">EJECUTIVO</button>
+<button class="px-4 py-1.5 text-xs font-bold text-slate-500 rounded-full hover:text-slate-700 font-body" style="">DETALLADO</button>
+</div>
+</div>
+<div class="space-y-4 font-body text-slate-600 leading-relaxed text-lg">
+<p class="" style="">Esta iniciativa establece la obligación del Estado de diseñar e implementar una Estrategia Nacional para la Prevención de Adicciones Digitales en niñas, niños y adolescentes. Considera campañas de información, concientización y protocolos de detección temprana y atención a la salud mental.</p>
+<p class="" style="">Obliga al IFT y a la Secretaría de Salud a emitir reglamentación sobre verificación de edad, control parental, límites de tiempo de uso y suspensión nocturna de notificaciones para menores. Representa un riesgo regulatorio alto para plataformas digitales con usuarios menores de edad.</p>
+</div>
+</div>
+<!-- New Section: ACTORES INVOLUCRADOS -->
+<div class="space-y-6 pt-4">
+<h3 class="text-[11px] font-bold uppercase tracking-[1.5px] text-slate-400 font-label" style="">ACTORES INVOLUCRADOS</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-white border border-slate-100 rounded-full p-2 pr-6 flex items-center gap-3 editorial-shadow">
+<div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[10px] font-bold text-blue-800" style="">DIP</div>
+<div>
+<p class="text-[13px] font-bold text-slate-900 leading-none" style="">Cámara de Diputados</p>
+<p class="text-[9px] font-bold text-slate-400 uppercase mt-0.5 tracking-wider" style="">PODER LEGISLATIVO</p>
+</div>
+</div>
+<div class="bg-white border border-slate-100 rounded-full p-2 pr-6 flex items-center gap-3 editorial-shadow">
+<div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-[10px] font-bold text-slate-700" style="">IFT</div>
+<div>
+<p class="text-[13px] font-bold text-slate-900 leading-none" style="">IFT</p>
+<p class="text-[9px] font-bold text-slate-400 uppercase mt-0.5 tracking-wider" style="">ÓRGANO AUTÓNOMO</p>
+</div>
+</div>
+<div class="bg-white border border-slate-100 rounded-full p-2 pr-6 flex items-center gap-3 editorial-shadow">
+<div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-[10px] font-bold text-orange-800" style="">SS</div>
+<div>
+<p class="text-[13px] font-bold text-slate-900 leading-none" style="">Secretaría de Salud</p>
+<p class="text-[9px] font-bold text-slate-400 uppercase mt-0.5 tracking-wider" style="">EJECUTIVO FEDERAL</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column (35%) -->
+<aside class="w-[35%] space-y-6 relative">
+<!-- Acciones Card -->
+<div class="bg-surface-container-lowest editorial-shadow rounded-lg p-6 space-y-4">
+<div class="space-y-3">
+<button class="w-full py-3.5 bg-primary text-white rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all font-body shadow-md" style="">
+<span class="material-symbols-outlined text-lg" data-icon="download" style="">download</span>
+                        Descargar reporte PDF
+                    </button>
+<button class="w-full py-3.5 bg-transparent border-2 border-primary text-primary rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary/5 transition-all font-body" style="">
+<span class="material-symbols-outlined text-lg" data-icon="calendar_today" style="">calendar_today</span>
+                        Descargar datos CSV
+                    </button>
+</div>
+<!-- Retractable Tracking Widget -->
+<div class="bg-white rounded-xl border border-slate-100 overflow-hidden font-body" id="tracking-widget">
+<!-- Trigger Row -->
+<div class="px-[18px] py-[14px] flex items-center justify-between cursor-pointer hover:bg-slate-50/50 transition-colors" onclick="toggleWidget()">
+<div class="flex items-center gap-3">
+<div class="w-[30px] h-[30px] bg-[#F5E6D8] rounded-[8px] flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px] text-[#B87851]" data-icon="description" style="">description</span>
+</div>
+<div>
+<p class="text-[14px] font-[600] text-[#111110] leading-tight" style="">Seguimiento</p>
+<p class="text-[11px] text-[#8A887F]" id="widget-subtitle" style="">Sin asignar</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform duration-300" data-icon="expand_more" id="chevron-icon" style="">expand_more</span>
+</div>
+<!-- Expandable Body -->
+<div class="max-h-0 overflow-hidden widget-transition" id="widget-body">
+<div class="border-t-[0.5px] border-slate-100 p-[18px] space-y-5">
+<!-- Group Selection -->
+<div class="space-y-3">
+<p class="text-[10px] font-[600] uppercase tracking-[1.8px] text-slate-400" style="">ASIGNAR A GRUPO DE INTERÉS</p>
+<div class="flex flex-wrap gap-2 pills-container">
+<button class="px-4 py-1.5 rounded-full border border-slate-200 text-[12px] font-medium text-slate-600 hover:border-primary transition-all" onclick="selectGroup('Apple')" style="">Apple</button>
+<button class="px-4 py-1.5 rounded-full border border-slate-200 text-[12px] font-medium text-slate-600 hover:border-primary transition-all" onclick="selectGroup('Rappi')" style="">Rappi</button>
+</div>
+</div>
+<!-- Dynamic Textarea State -->
+<div class="hidden space-y-3" id="textarea-container">
+<p class="text-[11px] font-bold text-[#B87851] uppercase tracking-wide" id="textarea-label" style="">NOTA · APPLE</p>
+<textarea class="w-full bg-slate-50 border-none rounded-[10px] p-3 text-[13px] text-[#111110] focus:ring-1 focus:ring-primary/20 h-24 font-body placeholder-slate-400" id="note-input" placeholder="Escribe tu nota aquí..."></textarea>
+<div class="flex gap-2">
+<button class="flex-1 py-2 text-[12px] font-bold text-slate-500 hover:bg-slate-100 rounded-lg transition-colors" onclick="cancelSelection()" style="">Cancelar</button>
+<button class="flex-1 py-2 text-[12px] font-bold text-white bg-[#111110] rounded-lg hover:bg-black transition-colors" onclick="saveNote()" style="">Guardar nota</button>
+</div>
+</div>
+<!-- Saved View State -->
+<div class="hidden space-y-2 p-3 bg-slate-50 rounded-lg border border-slate-100" id="saved-state">
+<div class="flex items-center justify-between">
+<p class="text-[11px] font-bold text-[#B87851]" id="saved-group-name" style="">APPLE</p>
+<button class="text-[10px] text-slate-400 hover:text-primary underline" onclick="selectGroup(document.getElementById('saved-group-name').innerText)" style="">Editar</button>
+</div>
+<p class="text-[13px] text-slate-600 italic font-medium leading-relaxed" id="saved-note-text" style="">"La propuesta representa un riesgo..."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Navigation Cards -->
+<div class="grid grid-cols-2 gap-4">
+<a class="bg-surface-container-lowest editorial-shadow p-4 rounded-lg group hover:-translate-y-1 transition-all" href="#" style="">
+<div class="flex items-center gap-2 text-primary mb-2">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform" data-icon="arrow_back" style="">arrow_back</span>
+<span class="text-[10px] font-bold uppercase tracking-widest font-body" style="">Anterior</span>
+</div>
+<p class="text-xs font-bold text-slate-900 line-clamp-2 font-body" style="">Acuerdo Comercio Exterior</p>
+</a>
+<a class="bg-surface-container-lowest editorial-shadow p-4 rounded-lg group hover:-translate-y-1 transition-all text-right" href="#" style="">
+<div class="flex items-center justify-end gap-2 text-primary mb-2">
+<span class="text-[10px] font-bold uppercase tracking-widest font-body" style="">Siguiente</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward" style="">arrow_forward</span>
+</div>
+<p class="text-xs font-bold text-slate-900 line-clamp-2 font-body" style="">Iniciativa Consumidor</p>
+</a>
+</div>
+<!-- Toast Confirmation -->
+<div class="absolute bottom-0 left-6 right-6 pointer-events-none">
+<div class="bg-[#111110] text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 opacity-0 translate-y-4 transition-all duration-300" id="toast">
+<div class="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] font-bold" data-icon="check" style="">check</span>
+</div>
+<span class="text-xs font-bold tracking-wide" style="">Nota guardada correctamente</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<script>
+    let selectedGroup = null;
+    let isExpanded = false;
+
+    function toggleWidget() {
+        const body = document.getElementById('widget-body');
+        const icon = document.getElementById('chevron-icon');
+        isExpanded = !isExpanded;
+        
+        if (isExpanded) {
+            body.style.maxHeight = '500px';
+            icon.style.transform = 'rotate(180deg)';
+        } else {
+            body.style.maxHeight = '0';
+            icon.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    function selectGroup(group) {
+        selectedGroup = group;
+        const container = document.getElementById('textarea-container');
+        const label = document.getElementById('textarea-label');
+        const savedState = document.getElementById('saved-state');
+        
+        // Highlight active pill
+        const pills = document.querySelectorAll('.pills-container button');
+        pills.forEach(p => {
+            if (p.innerText === group) p.classList.add('active');
+            else p.classList.remove('active');
+        });
+
+        label.innerText = `NOTA · ${group.toUpperCase()}`;
+        container.classList.remove('hidden');
+        savedState.classList.add('hidden');
+    }
+
+    function cancelSelection() {
+        const container = document.getElementById('textarea-container');
+        const pills = document.querySelectorAll('.pills-container button');
+        pills.forEach(p => p.classList.remove('active'));
+        container.classList.add('hidden');
+        selectedGroup = null;
+    }
+
+    function saveNote() {
+        const noteInput = document.getElementById('note-input');
+        const noteValue = noteInput.value.trim();
+        if (!noteValue) return;
+
+        const subtitle = document.getElementById('widget-subtitle');
+        const container = document.getElementById('textarea-container');
+        const savedState = document.getElementById('saved-state');
+        const savedGroup = document.getElementById('saved-group-name');
+        const savedText = document.getElementById('saved-note-text');
+
+        // Update UI
+        subtitle.innerText = selectedGroup;
+        savedGroup.innerText = selectedGroup.toUpperCase();
+        savedText.innerText = `"${noteValue}"`;
+        
+        container.classList.add('hidden');
+        savedState.classList.remove('hidden');
+
+        // Show Toast
+        showToast();
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('visible');
+        setTimeout(() => {
+            toast.classList.remove('visible');
+        }, 2500);
+    }
+</script>
+</body></html>

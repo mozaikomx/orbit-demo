@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Orbit - Grupo de Interés Setup (Seguimiento)</title>
+<script data-updated-font="true" src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#7f2b00",
+                        "surface": "#f7f9fb",
+                        "outline": "#737686",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-container": "#c04400",
+                        "inverse-primary": "#ffb599",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#ffede7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#370e00",
+                        "surface-tint": "#B87851",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-surface": "#191c1e",
+                        "surface-container": "#eceef0",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary": "#B87851",
+                        "secondary": "#565e74",
+                        "tertiary": "#973400",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-container": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#B87851"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-shadow {
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.04), 0 4px 8px rgba(15, 23, 42, 0.02);
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .group-content { display: none; }
+        .group-content.active { display: block; }
+        .toast-hidden { transform: translateY(100px); opacity: 0; pointer-events: none; }
+        .toast-visible { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed overflow-x-hidden">
+<!-- SIDEBAR -->
+<aside class="h-screen w-[220px] fixed left-0 top-0 bg-[#0F172A] shadow-xl flex flex-col py-4 z-50" style="background-color: #121212;">
+<div class="px-6 py-8 flex justify-center">
+<img alt="Orbit Logo" class="h-11 mx-auto mb-2 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ujJOYeED5ESr2kvjXnxUK-52NGh_4Prq2UbrfVMer3g1dnxu7ibC0WN2NWGh2to0HHlnfwm9w2l0MY8gbsIkWCu2Afsu9ePkvJpNLxAV4spmUP9OfAExzB1PdDjepwq8NL7CXd67_sAHPXRDeKUb994I_DgECUfMjlkg5Yo3BknIyIqPN3uem3uP5BmUd_o7AYH-2nfjz8DSN-L_pLE_l88YTLQzYwK4X1bptn_47MVV6LESKXrKu2_g6KV1ngHYQ126U4GTa-QXrU"/>
+</div>
+<nav class="flex-1 space-y-1"><!-- Active Tab: Inicio -->
+<a class="my-1 py-3 px-6 flex items-center justify-between transition-all relative text-slate-400 hover:text-white hover:bg-slate-800/50" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label text-sm tracking-wide font-medium">Monitoreo</span>
+</div>
+</a>
+<!-- Inactive Tab: Dashboard -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label text-sm tracking-wide font-medium">Dashboard</span>
+</a>
+<!-- Inactive Tab: Grupo de interés setup -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label text-sm tracking-wide font-medium">Grupo de interés setup</span>
+</a><a class="text-[#60A5FA] bg-[#1E293B]/50 my-1 py-3 px-6 flex items-center justify-between transition-all relative border-r-4 border-primary" href="#">
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-slate-900"></span>
+</div>
+<span class="font-label text-sm tracking-wide font-medium">Broad Listening</span>
+</div>
+</a><div class="mx-4 my-2 border-t-[0.5px] border-slate-200/10"></div>
+<!-- Notification Item -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all group relative" href="#">
+<span class="font-label text-sm tracking-wide font-medium"><br/></span>
+</a></nav>
+<div class="px-6 py-4 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 relative group">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs font-label">JD</div>
+<div class="overflow-hidden flex-1">
+<div class="flex items-center justify-between">
+<p class="text-xs font-bold text-white truncate font-label">Juan Delgado</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px] cursor-pointer hover:text-white transition-colors" data-icon="settings">settings</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate font-label">Analista Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TOPBAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-220px)] h-16 z-40 bg-surface/80 backdrop-blur-md flex items-center justify-between px-8 border-b border-slate-200/15">
+<div class="flex-1 max-w-2xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none font-body" placeholder="Buscar documentación" type="text"/>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="ml-[220px] pt-16 flex min-h-screen">
+<div class="flex-1 p-10 overflow-y-auto bg-surface relative">
+<!-- HEADER -->
+<div class="flex items-start justify-between mb-2">
+<div>
+<h1 class="text-4xl font-headline font-bold tracking-tight text-on-surface mb-2">Grupo de interés setup</h1>
+<p class="text-sm text-on-surface-variant font-body">Configure los parámetros, estructura organizacional y temas clave para el monitoreo estratégico.</p>
+</div>
+</div>
+<!-- TABS -->
+<div class="flex items-center gap-8 border-b border-outline-variant/30 mb-8 font-body">
+<button class="px-2 py-4 text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors relative" id="tab-btn-base">
+                    Base
+                </button>
+<button class="px-2 py-4 text-sm font-bold text-on-surface border-b-2 border-primary transition-all" id="tab-btn-seguimiento">
+                    Seguimiento
+                </button>
+</div>
+<!-- TAB CONTENT: SEGUIMIENTO -->
+<div class="tab-content active" id="content-seguimiento">
+<div class="mb-10">
+<h2 class="text-3xl font-headline font-bold text-on-surface mb-2">Seguimiento</h2>
+<p class="text-on-surface-variant text-sm font-body">Eventos marcados manualmente para monitoreo prioritario.</p>
+</div>
+<!-- Redesigned Stats Row -->
+<div class="grid grid-cols-3 gap-6 mb-12">
+<!-- Card 1 — Período de seguimiento -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-slate-100 editorial-shadow flex flex-col">
+<div class="mb-6">
+<p class="font-body text-[10px] font-bold uppercase tracking-widest text-slate-400">PERÍODO DE SEGUIMIENTO</p>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<span class="font-headline text-lg font-bold text-primary">Octubre 2023</span>
+<div class="flex gap-1">
+<button class="w-6 h-6 flex items-center justify-center rounded-lg border border-slate-200 hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[16px] text-slate-400">chevron_left</span>
+</button>
+<button class="w-6 h-6 flex items-center justify-center rounded-lg border border-slate-200 hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center">
+<span class="font-body text-[10px] font-bold text-slate-400">L</span>
+<span class="font-body text-[10px] font-bold text-slate-400">M</span>
+<span class="font-body text-[10px] font-bold text-slate-400">M</span>
+<span class="font-body text-[10px] font-bold text-slate-400">J</span>
+<span class="font-body text-[10px] font-bold text-slate-400">V</span>
+<span class="font-body text-[10px] font-bold text-slate-400">S</span>
+<span class="font-body text-[10px] font-bold text-slate-400">D</span>
+<span class="text-[11px] text-slate-300 p-1.5 font-body">9</span>
+<span class="text-[11px] text-primary font-bold bg-primary/10 rounded-full p-1.5 border border-primary/20 font-body">10</span>
+<span class="text-[11px] text-slate-300 p-1.5 font-body">11</span>
+<span class="text-[11px] text-primary font-bold bg-primary/10 rounded-full p-1.5 border border-primary/20 font-body">12</span>
+<span class="text-[11px] text-slate-300 p-1.5 font-body">13</span>
+<span class="text-[11px] text-slate-300 p-1.5 font-body">14</span>
+<span class="text-[11px] text-primary font-bold bg-primary/10 rounded-full p-1.5 border border-primary/20 font-body">15</span>
+</div>
+</div>
+</div>
+<!-- Card 2 — Composición de riesgo -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-slate-100 editorial-shadow flex items-center gap-6">
+<div class="relative w-20 h-20 shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle class="text-slate-50" cx="18" cy="18" fill="none" r="14" stroke="currentColor" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="none" r="14" stroke="#ba1a1a" stroke-dasharray="40 100" stroke-dashoffset="0" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="none" r="14" stroke="#f59e0b" stroke-dasharray="40 100" stroke-dashoffset="-40" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="none" r="14" stroke="#10b981" stroke-dasharray="20 100" stroke-dashoffset="-80" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-body text-[8px] font-bold uppercase tracking-wider text-slate-400">RIESGO</span>
+</div>
+</div>
+<div class="flex flex-col flex-1">
+<p class="font-body text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">COMPOSICIÓN DE RIESGO</p>
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#ba1a1a]"></div>
+<span class="font-body text-xs text-slate-600">Alto</span>
+</div>
+<span class="font-body text-[10px] text-slate-400 font-bold">2</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></div>
+<span class="font-body text-xs text-slate-600">Medio</span>
+</div>
+<span class="font-body text-[10px] text-slate-400 font-bold">2</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></div>
+<span class="font-body text-xs text-slate-600">Bajo</span>
+</div>
+<span class="font-body text-[10px] text-slate-400 font-bold">1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 — Total en seguimiento -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-slate-100 editorial-shadow flex flex-col items-center justify-center text-center">
+<p class="font-body text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">TOTAL EN SEGUIMIENTO</p>
+<div class="w-8 h-0.5 bg-primary mb-4"></div>
+<p class="text-6xl font-bold text-on-surface leading-none font-body" id="stat-total">5</p>
+</div>
+</div>
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 font-label" id="section-title">EVENTOS EN SEGUIMIENTO <div class="inline-flex items-center gap-4 ml-6 lowercase font-medium tracking-normal text-slate-400 normal-case">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-[10px] font-body">Alto</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-[10px] font-body">Medio</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-[10px] font-body">Bajo</span>
+</div>
+</div></h2>
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-full border border-slate-200 font-label">
+<button class="px-5 py-1.5 rounded-full bg-white shadow-sm text-[11px] font-bold text-primary">Por grupo</button>
+<button class="px-5 py-1.5 rounded-full text-[11px] font-bold text-on-surface-variant hover:text-on-surface transition-colors">Todos</button>
+</div>
+</div>
+<!-- EVENT LIST CONTAINER -->
+<div class="space-y-6" id="event-list">
+<!-- APPLE EVENTS -->
+<div class="group-content active space-y-6" id="group-apple">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest p-8 rounded-xl border border-slate-100 editorial-shadow flex gap-8 group">
+<div class="flex flex-col items-center min-w-[100px] border-r border-slate-100 pr-6">
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 font-label">Impacto</p>
+<div class="space-y-4 w-full flex flex-col items-center">
+<span class="bg-[#DC2626] text-white text-[10px] font-bold px-3 py-1 rounded-full leading-none font-label">Apple</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-2">
+<span class="bg-[#EFF6FF] text-[#1E40AF] text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-primary/10">Regulatorio</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400 font-label">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<time class="text-xs font-bold">12 OCT, 2023</time>
+</div>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">Decreto presidencial regula modelos de negocio en plataformas digitales</h3>
+<div class="note-container mb-0 pl-6 border-l-4 border-primary bg-primary/5 p-6 rounded-r-xl">
+<div class="flex items-center gap-2 mb-3 text-[10px] font-bold text-primary uppercase tracking-widest font-label">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span> Nota guardada
+                                    </div>
+<p class="note-text text-[14px] italic text-slate-700 leading-relaxed font-body">"Impacto directo en App Store. Necesario evaluar respuesta técnica sobre las APIs de pago de terceros."</p>
+</div>
+</div>
+<div class="flex flex-col justify-between items-end min-w-[160px]">
+<span class="text-[10px] font-mono font-bold text-slate-300">LX-2023-902</span>
+<div class="flex flex-col gap-3 w-full font-label">
+<button class="w-full py-3 bg-primary text-white text-[11px] font-bold rounded-full hover:opacity-90 transition-all shadow-md">Ver evento →</button>
+<button class="edit-note-btn w-full py-3 border border-slate-200 text-on-surface-variant text-[11px] font-bold rounded-full hover:bg-slate-50 transition-all">Editar nota</button>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest p-8 rounded-xl border border-slate-100 editorial-shadow flex gap-8 group">
+<div class="flex flex-col items-center min-w-[100px] border-r border-slate-100 pr-6">
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 font-label">Impacto</p>
+<div class="space-y-4 w-full flex flex-col items-center">
+<span class="bg-[#F59E0B] text-white text-[10px] font-bold px-3 py-1 rounded-full leading-none font-label">Apple</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-2">
+<span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-emerald-100">Privacidad</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400 font-label">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<time class="text-xs font-bold">10 OCT, 2023</time>
+</div>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">INAI emite nuevos lineamientos sobre tratamiento de datos biométricos</h3>
+<div class="note-container mb-0 pl-6 border-l-4 border-primary bg-primary/5 p-6 rounded-r-xl">
+<div class="flex items-center gap-2 mb-3 text-[10px] font-bold text-primary uppercase tracking-widest font-label">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span> Nota guardada
+                                    </div>
+<p class="note-text text-[14px] italic text-slate-700 leading-relaxed font-body">"Validar compatibilidad con FaceID and protocolos de iCloud en México."</p>
+</div>
+</div>
+<div class="flex flex-col justify-between items-end min-w-[160px]">
+<span class="text-[10px] font-mono font-bold text-slate-300">LX-2023-884</span>
+<div class="flex flex-col gap-3 w-full font-label">
+<button class="w-full py-3 bg-primary text-white text-[11px] font-bold rounded-full hover:opacity-90 transition-all shadow-md">Ver evento →</button>
+<button class="edit-note-btn w-full py-3 border border-slate-200 text-on-surface-variant text-[11px] font-bold rounded-full hover:bg-slate-50 transition-all">Editar nota</button>
+</div>
+</div>
+</article>
+</div>
+<!-- RAPPI EVENTS -->
+<div class="group-content space-y-6" id="group-rappi">
+<article class="bg-surface-container-lowest p-8 rounded-xl border border-slate-100 editorial-shadow flex gap-8 group">
+<div class="flex flex-col items-center min-w-[100px] border-r border-slate-100 pr-6">
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 font-label">Impacto</p>
+<div class="space-y-4 w-full flex flex-col items-center">
+<span class="bg-[#DC2626] text-white text-[10px] font-bold px-3 py-1 rounded-full leading-none font-label">Rappi</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-2">
+<span class="bg-orange-50 text-orange-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-orange-100">Laboral</span>
+</div>
+<div class="flex items-center gap-2 text-slate-400 font-label">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<time class="text-xs font-bold">15 OCT, 2023</time>
+</div>
+</div>
+<h3 class="font-headline text-2xl font-bold mb-4 group-hover:text-primary transition-colors leading-tight">Propuesta de ley de seguridad social para repartidores de plataformas</h3>
+<div class="note-container mb-0 pl-6 border-l-4 border-primary bg-primary/5 p-6 rounded-r-xl">
+<div class="flex items-center gap-2 mb-3 text-[10px] font-bold text-primary uppercase tracking-widest font-label">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span> Nota guardada
+                                    </div>
+<p class="note-text text-[14px] italic text-slate-700 leading-relaxed font-body">"Reunión con cámara de comercio programada para el 20 de octubre."</p>
+</div>
+</div>
+<div class="flex flex-col justify-between items-end min-w-[160px]">
+<span class="text-[10px] font-mono font-bold text-slate-300">LX-2023-950</span>
+<div class="flex flex-col gap-3 w-full font-label">
+<button class="w-full py-3 bg-primary text-white text-[11px] font-bold rounded-full hover:opacity-90 transition-all shadow-md">Ver evento →</button>
+<button class="edit-note-btn w-full py-3 border border-slate-200 text-on-surface-variant text-[11px] font-bold rounded-full hover:bg-slate-50 transition-all">Editar nota</button>
+</div>
+</div>
+</article>
+</div>
+</div>
+</div>
+<!-- TOAST -->
+<div class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[60]">
+<div class="flex items-center gap-4 bg-[#0F172A] text-white px-8 py-4 rounded-full shadow-2xl toast-hidden transition-all duration-300" id="save-toast">
+<span class="material-symbols-outlined text-emerald-400" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="text-xs font-bold font-label uppercase tracking-widest">Nota actualizada correctamente</p>
+</div>
+</div>
+</div>
+<!-- ZONE B: RIGHT PANEL -->
+<aside class="w-[280px] bg-white border-l border-slate-100 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto">
+<div class="p-6">
+<h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-8 font-label">GRUPOS DE INTERÉS</h3>
+<div class="space-y-4">
+<!-- Apple Card (Active) -->
+<div class="group-card p-4 bg-primary/10 rounded-full border border-primary/20 cursor-pointer transition-all hover:translate-x-1 relative overflow-hidden flex items-center gap-4" id="card-apple">
+<div class="w-12 h-12 shrink-0 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm font-label">AP</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-primary font-label">Apple</p>
+<p class="text-[11px] text-primary/70 font-medium font-body">3 eventos activos</p>
+</div>
+</div>
+<!-- Rappi Card -->
+<div class="group-card p-4 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all cursor-pointer flex items-center gap-4" id="card-rappi">
+<div class="w-12 h-12 shrink-0 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-sm font-label">RA</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold text-slate-700 font-label">Rappi</p>
+<p class="text-[11px] text-slate-400 font-medium font-body">2 eventos activos</p>
+</div>
+</div>
+<!-- Add New -->
+<button class="w-full mt-6 p-6 border-2 border-dashed border-slate-200 rounded-full flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-all group">
+<div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors">add</span>
+</div>
+<p class="text-[10px] font-bold text-slate-400 group-hover:text-primary uppercase tracking-widest transition-colors font-body">Configurar nuevo grupo</p>
+</button>
+</div>
+</div>
+<!-- Retractable Tab Symbol -->
+<div class="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 w-4 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center cursor-pointer shadow-sm hover:bg-slate-50">
+<span class="material-symbols-outlined text-slate-400 text-xs">chevron_right</span>
+</div>
+</aside>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<script data-updated-font="true">
+        // Tab Switching Logic
+        const tabBaseBtn = document.getElementById('tab-btn-base');
+        const tabSeguimientoBtn = document.getElementById('tab-btn-seguimiento');
+        const contentSeguimiento = document.getElementById('content-seguimiento');
+
+        tabBaseBtn.addEventListener('click', () => {
+            // Simulated navigation to Base tab
+            window.location.href = '#base'; 
+        });
+
+        // Group Selection Logic
+        const groupCards = {
+            apple: document.getElementById('card-apple'),
+            rappi: document.getElementById('card-rappi')
+        };
+        const groupContents = {
+            apple: document.getElementById('group-apple'),
+            rappi: document.getElementById('group-rappi')
+        };
+
+        function selectGroup(groupId) {
+            Object.keys(groupCards).forEach(key => {
+                const card = groupCards[key];
+                if (key === groupId) {
+                    card.classList.add('bg-primary/10', 'border-primary/20');
+                    card.classList.remove('bg-white', 'border-slate-200');
+                    card.querySelector('p:first-of-type').classList.add('text-primary');
+                    card.querySelector('p:first-of-type').classList.remove('text-slate-700');
+                    if(!card.querySelector('.absolute')) {
+                        const stripe = document.createElement('div');
+                        stripe.className = 'absolute left-0 top-0 bottom-0 w-1.5 bg-primary';
+                        card.prepend(stripe);
+                    }
+                    card.querySelector('.w-12').classList.replace('bg-slate-100', 'bg-primary');
+                    card.querySelector('.w-12').classList.replace('text-slate-400', 'text-white');
+                } else {
+                    card.classList.remove('bg-primary/10', 'border-primary/20');
+                    card.classList.add('bg-white', 'border-slate-200');
+                    card.querySelector('p:first-of-type').classList.remove('text-primary');
+                    card.querySelector('p:first-of-type').classList.add('text-slate-700');
+                    const stripe = card.querySelector('.absolute');
+                    if(stripe) stripe.remove();
+                    card.querySelector('.w-12').classList.replace('bg-primary', 'bg-slate-100');
+                    card.querySelector('.w-12').classList.replace('text-white', 'text-slate-400');
+                }
+            });
+
+            Object.keys(groupContents).forEach(key => {
+                if (groupContents[key]) groupContents[key].classList.toggle('active', key === groupId);
+            });
+
+            document.getElementById('stat-total').innerText = groupId === 'apple' ? '5' : '2';
+            const name = groupId.toUpperCase();
+            document.getElementById('section-title').innerHTML = `EVENTOS EN SEGUIMIENTO — ${name} <span id="section-count" class="ml-2 text-primary bg-primary/10 px-3 py-1 rounded-full text-[10px]">${groupId === 'apple' ? '3' : '1'} EVENTOS</span>`;
+        }
+
+        groupCards.apple.addEventListener('click', () => selectGroup('apple'));
+        groupCards.rappi.addEventListener('click', () => selectGroup('rappi'));
+
+        // Note Editing Logic
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('edit-note-btn')) {
+                const btn = e.target;
+                const article = btn.closest('article');
+                const noteContainer = article.querySelector('.note-container');
+                const noteTextEl = noteContainer.querySelector('.note-text');
+                const currentText = noteTextEl.innerText;
+
+                noteContainer.innerHTML = `
+                    <div class="space-y-4 pt-2">
+                        <textarea class="w-full bg-white border border-slate-200 rounded-lg p-4 text-[14px] font-body focus:ring-2 focus:ring-primary/20 outline-none leading-relaxed" rows="4">${currentText}</textarea>
+                        <div class="flex justify-end gap-3">
+                            <button class="cancel-edit px-4 py-1.5 text-[11px] font-bold text-slate-500 hover:text-slate-700 font-label">Cancelar</button>
+                            <button class="save-note bg-slate-900 text-white px-6 py-1.5 rounded-full text-[11px] font-bold font-label hover:bg-black transition-all">Guardar Cambios</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (e.target.classList.contains('save-note')) {
+                const btn = e.target;
+                const container = btn.closest('.note-container');
+                const newText = container.querySelector('textarea').value;
+
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 mb-3 text-[10px] font-bold text-primary uppercase tracking-widest font-label">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">bookmark</span> Nota guardada
+                    </div>
+                    <p class="note-text text-[14px] italic text-slate-700 leading-relaxed font-body">"${newText}"</p>
+                `;
+
+                const toast = document.getElementById('save-toast');
+                toast.classList.remove('toast-hidden');
+                toast.classList.add('toast-visible');
+                setTimeout(() => {
+                    toast.classList.remove('toast-visible');
+                    toast.classList.add('toast-hidden');
+                }, 3000);
+            }
+
+            if (e.target.classList.contains('cancel-edit')) {
+                location.reload(); 
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mosaico - Sesión Detalle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#7f2b00",
+                        "surface": "#f7f9fb",
+                        "outline": "#737686",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-container": "#c04400",
+                        "inverse-primary": "#ffb599",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#ffede7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#370e00",
+                        "surface-tint": "#B87851",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-surface": "#191c1e",
+                        "surface-container": "#eceef0",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary": "#B87851",
+                        "secondary": "#565e74",
+                        "tertiary": "#973400",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-container": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#B87851"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ambient-glow {
+            box-shadow: 0 12px 32px rgba(184, 120, 81, 0.08), 0 4px 8px rgba(184, 120, 81, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed">
+<!-- SideNavBar Wrapper (Matched exactly with Mosaico Inicio) -->
+<aside class="h-screen w-[220px] fixed left-0 top-0 dark:bg-slate-950 shadow-xl flex flex-col py-4 z-50 bg-[#121212]">
+<div class="px-6 py-8 flex justify-center">
+<img alt="Orbit Logo" class="h-auto mx-auto mb-2 w-auto h-11" src="https://lh3.googleusercontent.com/aida/ADBb0uhxHNvKTKH74faVpRFutzg-d5aLAt2Rf54AVaPmwMBafh9SbBnqj8gIsKTuzhNDzAdhgOaWzvyl7ZMYMgi9MTbeWRe3DAaZPuHkusakYPS-KXJEDEcfQitt-9j4QRvtXnqnNeOlLHGK2ICaz_l_yK0yoW8pHK3NZRovHGLJaxs3sYFryam6Tgpipr9PmVbSeTrXgSHhevACMbsk-932I_7Dpfce1-wT6iU-j-28sYynStJ93FxVUaPWIh1RtUyTopUjxaGYwbFOtQ"/>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Inactive Tab: Monitoreo -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center justify-between transition-all" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label text-sm tracking-wide font-medium">Monitoreo</span>
+</div>
+</a>
+<!-- Inactive Tab: Dashboard -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label text-sm tracking-wide font-medium">Dashboard</span>
+</a>
+<!-- Inactive Tab: Grupo de interés setup -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label text-sm tracking-wide font-medium">Grupo de interés setup</span>
+</a><a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all group relative" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-slate-900"></span>
+</div>
+<span class="font-label text-sm tracking-wide font-medium">Broad Listening</span>
+</a>
+<div class="mx-4 my-2 border-t-[0.5px] border-slate-200/10"></div>
+<!-- Active Tab: Broad Listening (Based on previous screen context) -->
+</nav>
+<div class="px-6 py-4 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 relative group">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs font-label">JD</div>
+<div class="overflow-hidden flex-1">
+<div class="flex items-center justify-between">
+<p class="text-xs font-bold text-white truncate font-label">Juan Delgado</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px] cursor-pointer hover:text-white transition-colors" data-icon="settings">settings</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate font-label">Analista Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Shell (Matched with Mosaico Inicio) -->
+<!-- Main Content -->
+<main class="ml-[220px] p-8 min-h-screen">
+<!-- Back Navigation -->
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 px-6 py-2 bg-white text-primary text-sm font-bold rounded-full shadow-sm hover:-translate-y-0.5 transition-all border border-slate-100" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="arrow_back">arrow_back</span>
+            Volver al calendario
+        </a>
+</div>
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Left Column: Session Content -->
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-white rounded-lg p-10 ambient-glow">
+<!-- Header Meta -->
+<div class="flex flex-wrap gap-3 mb-8">
+<span class="px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-label font-bold uppercase tracking-widest rounded-full">Diputados</span>
+<span class="px-4 py-1.5 bg-orange-50 text-primary text-[10px] font-label font-bold uppercase tracking-widest rounded-full flex items-center gap-2 border border-primary/20">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                        Programada
+                    </span>
+</div>
+<!-- Main Title -->
+<h2 class="font-headline text-4xl font-bold text-on-surface leading-tight mb-8">
+                    A la decimoséptima reunión ordinaria de la Comisión de Igualdad de Género
+                </h2>
+<!-- Schedule Info -->
+<div class="grid grid-cols-3 gap-8 py-8 mb-10 border-y border-slate-100">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label">Fecha</p>
+<p class="font-bold text-on-surface font-label">24 mar 2026</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label">Hora</p>
+<p class="font-bold text-on-surface font-label">09:00 hrs</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label">Ubicación</p>
+<p class="font-bold text-on-surface font-label">Sala de Juntas, Edif. G</p>
+</div>
+</div>
+</div>
+<!-- Orden del Día Section -->
+<div class="mb-12">
+<div class="flex items-center gap-4 mb-8">
+<div class="p-3 bg-primary/10 rounded-xl">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="description">description</span>
+</div>
+<h3 class="text-2xl font-headline font-bold">Orden del Día</h3>
+</div>
+<div class="space-y-2">
+<!-- Agenda Items -->
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">01.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Registro de asistencia y declaración de quórum.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">02.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Lectura, discusión y, en su caso, aprobación del orden del día.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">03.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Lectura, discusión y, en su caso, aprobación del acta anterior.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">04.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Dictamen reforma artículo 4 Ley INMUJERES.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">05.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Dictamen reforma artículo 34 Ter Ley Acceso Mujeres Vida Libre Violencia.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">06.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Tercer informe semestral Comisión Igualdad Género.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">07.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Asuntos generales.</p>
+</div>
+<div class="group flex gap-6 p-4 rounded-xl hover:bg-slate-50 transition-colors">
+<span class="text-xl font-headline font-bold text-primary/40 group-hover:text-primary transition-colors">08.</span>
+<p class="text-on-surface font-body font-medium leading-relaxed">Clausura.</p>
+</div>
+</div>
+</div>
+<!-- Footer / Signature -->
+<div class="mt-16 pt-10 border-t border-slate-100 flex flex-col items-center text-center">
+<p class="text-slate-400 italic mb-4 font-body">Atentamente,</p>
+<p class="font-headline text-2xl font-bold">Diputada Anaís Miriam Burgos Hernández</p>
+<p class="text-xs font-bold uppercase tracking-[2px] text-primary mt-2 font-label">Presidenta</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="grid grid-cols-2 gap-4 mb-6">
+<!-- ANTERIOR Card -->
+<a class="bg-white border border-slate-100 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center text-center gap-2" href="#">
+<div class="flex items-center gap-1 text-[9px] font-bold text-primary uppercase tracking-wider font-label">
+<span class="material-symbols-outlined text-[14px]">arrow_back</span>
+                        ANTERIOR
+                    </div>
+<div class="text-xs font-bold text-on-surface leading-tight mt-1 font-body">Iniciativa de Ley de Ciberseguridad</div>
+<div class="flex items-center justify-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full w-fit mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span class="text-[9px] font-bold font-label uppercase">Concluida</span>
+</div>
+</a>
+<!-- SIGUIENTE Card -->
+<a class="bg-white border border-slate-100 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center text-center gap-2" href="#">
+<div class="flex items-center gap-1 text-[9px] font-bold text-primary uppercase tracking-wider font-label">
+                        SIGUIENTE
+                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+<div class="text-xs font-bold text-on-surface leading-tight mt-1 font-body">Nombramiento en Banco de México</div>
+<div class="flex items-center justify-center gap-1.5 px-3 py-1 bg-orange-50 text-primary border border-primary/20 rounded-full w-fit mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-[9px] font-bold font-label uppercase">Programada</span>
+</div>
+</a>
+</div>
+<!-- Card 1: Acciones -->
+<!-- Information Card (Optional/Extra context) -->
+<div class="bg-white rounded-xl p-6 border border-slate-100">
+<h4 class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 mb-4 font-label">COMISIÓN</h4>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<p class="font-bold text-on-surface font-body">Igualdad de Género</p>
+<p class="text-xs text-slate-500 font-label">H. Cámara de Diputados</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Toast Notification (Styled to match palette) -->
+</body></html>

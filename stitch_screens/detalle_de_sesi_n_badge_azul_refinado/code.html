@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mosaico - Detalle de Sesión Concluida</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#7f2b00",
+                        "surface": "#f7f9fb",
+                        "outline": "#737686",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-container": "#c04400",
+                        "inverse-primary": "#ffb599",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#ffede7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#370e00",
+                        "surface-tint": "#B87851",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-surface": "#191c1e",
+                        "surface-container": "#eceef0",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary": "#B87851",
+                        "secondary": "#565e74",
+                        "tertiary": "#973400",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-container": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#B87851",
+                        "brand-cream": "#FDFAF4"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ambient-glow {
+            box-shadow: 0 12px 32px rgba(184, 120, 81, 0.08), 0 4px 8px rgba(184, 120, 81, 0.04);
+        }
+        .glass-player {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+        }
+        .progress-pulsing {
+            animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .spinner-ring {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #E24B4A;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(3600deg); }
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed">
+<!-- SideNavBar Wrapper -->
+<aside class="h-screen w-[220px] fixed left-0 top-0 dark:bg-slate-950 shadow-xl flex flex-col py-4 z-50 bg-[#121212]">
+<div class="px-6 py-8 flex justify-center">
+<img alt="Orbit Logo" class="h-auto mx-auto mb-2 w-auto h-11" src="https://lh3.googleusercontent.com/aida/ADBb0uhxHNvKTKH74faVpRFutzg-d5aLAt2Rf54AVaPmwMBafh9SbBnqj8gIsKTuzhNDzAdhgOaWzvyl7ZMYMgi9MTbeWRe3DAaZPuHkusakYPS-KXJEDEcfQitt-9j4QRvtXnqnNeOlLHGK2ICaz_l_yK0yoW8pHK3NZRovHGLJaxs3sYFryam6Tgpipr9PmVbSeTrXgSHhevACMbsk-932I_7Dpfce1-wT6iU-j-28sYynStJ93FxVUaPWIh1RtUyTopUjxaGYwbFOtQ" style=""/>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center justify-between transition-all" href="#" style="">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="home" style="">home</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Monitoreo</span>
+</div>
+</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#" style="">
+<span class="material-symbols-outlined" data-icon="dashboard" style="">dashboard</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Dashboard</span>
+</a>
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all pl-10 pr-6" href="#" style="">
+<span class="material-symbols-outlined" data-icon="group" style="">group</span>
+<span class="font-label text-sm tracking-wide font-medium" style="">Grupo de interés setup</span>
+</a>
+<div class="mx-4 my-2 border-t-[0.5px] border-slate-200/10"></div><a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all group relative" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-slate-900"></span>
+</div>
+<span class="font-label text-sm tracking-wide font-medium">Broad Listening</span>
+</a>
+</nav>
+<div class="px-6 py-4 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 relative group">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs font-label" style="">JD</div>
+<div class="overflow-hidden flex-1">
+<div class="flex items-center justify-between">
+<p class="text-xs font-bold text-white truncate font-label" style="">Juan Delgado</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px] cursor-pointer hover:text-white transition-colors" data-icon="settings" style="">settings</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate font-label" style="">Analista Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[220px] p-8 min-h-screen">
+<!-- Back Navigation -->
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 px-6 py-2 bg-white text-primary text-sm font-bold rounded-full shadow-sm hover:-translate-y-0.5 transition-all border border-slate-100" href="#" style="">
+<span class="material-symbols-outlined text-lg" data-icon="arrow_back" style="">arrow_back</span>
+                Volver al calendario
+            </a>
+</div>
+<div class="grid grid-cols-12 gap-8 items-start">
+<!-- Left Column: Session Content -->
+<div class="col-span-12 lg:col-span-8">
+<div class="bg-white rounded-lg p-10 ambient-glow space-y-10">
+<!-- Header Block -->
+<section>
+<div class="flex flex-wrap gap-3 mb-8">
+<span class="px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-label font-bold uppercase tracking-widest rounded-full" style="">Camara de diputados</span>
+<span class="px-5 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-label font-bold uppercase tracking-widest rounded-full flex items-center gap-2 border border-blue-100 min-w-fit" style=""><span class="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 progress-pulsing"></span><span class="whitespace-nowrap">En Progreso</span></span>
+</div>
+<h2 class="font-headline text-4xl font-bold text-on-surface leading-tight mb-8" style="">
+                            Debate sobre Presupuesto Nacional 2025
+                        </h2>
+<!-- Session Info (Moved from bottom to here) -->
+<div class="grid grid-cols-3 gap-8 py-8 border-y border-slate-100">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="calendar_today" style="">calendar_today</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label" style="">Fecha</p>
+<p class="font-bold text-on-surface font-label" style="">4 oct 2025</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="schedule" style="">schedule</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label" style="">Hora</p>
+<p class="font-bold text-on-surface font-label" style="">10:00 hrs</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="location_on" style="">location_on</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 font-label" style="">Ubicación</p>
+<p class="font-bold text-on-surface font-label" style="">Salón de Sesiones</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Media Player -->
+<section class="rounded-lg p-8 relative overflow-hidden shadow-xl bg-slate-100 text-on-surface">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-12">
+<div>
+<p class="text-[10px] uppercase tracking-[0.2em] font-bold mb-1 text-slate-600" style="">Sesión en Vivo (Grabación)</p>
+<h3 class="text-xl font-bold" style="">Presupuesto_Nacional_2025_Final.mp4</h3>
+</div>
+<span class="text-sm font-mono px-3 py-1 rounded-md bg-slate-200" style="">2:00:45</span>
+</div>
+<!-- Timeline -->
+<div class="mb-8 group">
+<div class="w-full h-1.5 rounded-full cursor-pointer relative bg-slate-300">
+<div class="absolute top-0 left-0 h-full w-2/3 bg-primary rounded-full"></div>
+<div class="absolute top-1/2 left-2/3 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg group-hover:scale-125 transition-transform"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-mono text-slate-600">
+<span class="" style="">01:20:15</span>
+<span class="" style=""><br/></span>
+</div>
+</div>
+<!-- Controls -->
+<div class="flex items-center justify-center gap-10">
+<button class="material-symbols-outlined text-3xl hover:text-white transition-colors text-slate-600" data-icon="replay_10" style="">replay_10</button>
+<button class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-inner hover:scale-105 transition-transform text-primary" style="">
+<span class="material-symbols-outlined text-4xl text-slate-600" data-icon="play_arrow" style='font-variation-settings: "FILL" 1;'>play_arrow</span>
+</button>
+<div class="flex items-center gap-2 px-3 py-1 bg-[#dc2626] text-white text-[11px] font-bold rounded-full uppercase tracking-wider shadow-sm">
+<span class="w-1.5 h-1.5 bg-white rounded-full progress-pulsing"></span>
+EN VIVO
+</div>
+<div class="absolute right-0 flex items-center gap-4">
+<span class="material-symbols-outlined text-2xl cursor-pointer hover:text-white transition-colors text-slate-600" data-icon="volume_up" style="">volume_up</span>
+<span class="material-symbols-outlined text-2xl cursor-pointer hover:text-white transition-colors text-slate-600" data-icon="fullscreen" style="">fullscreen</span>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Summary Section -->
+<section class="pt-2" id="ai-summary-component">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-[#B87851]/10 rounded-xl">
+<span class="material-symbols-outlined text-[#B87851] text-2xl" data-icon="auto_awesome" style="">auto_awesome</span>
+</div>
+<h3 class="text-2xl font-headline font-bold" style="">Resumen por bloques con IA</h3>
+</div>
+<div class="text-right">
+<p class="text-xs text-slate-400 font-medium" style=""><br/></p>
+</div>
+</div>
+<!-- Timeline Controller -->
+<!-- Navigation Controls -->
+<!-- Accordion Blocks -->
+<div class="space-y-4" id="accordion-container">
+<!-- Block 1 (Open by default) -->
+<div class="accordion-item border-0.5 rounded-xl overflow-hidden transition-all duration-300 border-[#B87851]" data-block="0" id="accordion-0">
+<button class="w-full flex items-center justify-between p-5 bg-[#F5E6D8] transition-colors accordion-header" style="">
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-surface" style="">12:00 - 12:10</span>
+<span class="px-3 py-1 bg-[#EAF3DE] text-[#3B6D11] text-[9px] font-bold rounded-full uppercase tracking-wider" style="">Completado</span>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform rotate-180" data-icon="expand_more" style="">expand_more</span>
+</button>
+<div class="accordion-content p-6 border-t border-[#B87851]/10 block">
+<p class="text-on-surface-variant leading-relaxed text-sm" style="">El bloque inicial se centró en la apertura de la sesión y la validación del quórum reglamentario. Se presentaron las líneas generales del presupuesto 2025, destacando un incremento nominal del 4% respecto al ejercicio anterior.</p>
+</div>
+</div>
+<!-- Block 2 -->
+<div class="accordion-item border-0.5 border-slate-200 rounded-xl overflow-hidden transition-all duration-300" data-block="1" id="accordion-1">
+<button class="w-full flex items-center justify-between p-5 bg-white transition-colors accordion-header" style="">
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-surface" style="">12:10 - 12:20</span>
+<span class="px-3 py-1 bg-[#EAF3DE] text-[#3B6D11] text-[9px] font-bold rounded-full uppercase tracking-wider" style="">Completado</span>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform" data-icon="expand_more" style="">expand_more</span>
+</button>
+<div class="accordion-content p-6 border-t border-slate-100 hidden">
+<p class="text-on-surface-variant leading-relaxed text-sm" style="">Discusión sobre las partidas de educación y salud. Se debatieron los mecanismos de indexación para los salarios docentes y el mantenimiento de infraestructura hospitalaria en zonas rurales.</p>
+</div>
+</div>
+<!-- Block 3 -->
+<div class="accordion-item border-0.5 border-slate-200 rounded-xl overflow-hidden transition-all duration-300" data-block="2" id="accordion-2">
+<button class="w-full flex items-center justify-between p-5 bg-white transition-colors accordion-header" style="">
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-surface" style="">12:20 - 12:30</span>
+<span class="px-3 py-1 bg-[#EAF3DE] text-[#3B6D11] text-[9px] font-bold rounded-full uppercase tracking-wider" style="">Completado</span>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform" data-icon="expand_more" style="">expand_more</span>
+</button>
+<div class="accordion-content p-6 border-t border-slate-100 hidden">
+<p class="text-on-surface-variant leading-relaxed text-sm" style="">Presentación del plan de obras públicas. Se detallaron 15 proyectos estratégicos de transporte ferroviario y conectividad digital para el segundo semestre del 2025.</p>
+</div>
+</div>
+<!-- Block 4 -->
+<div class="accordion-item border-0.5 border-slate-200 rounded-xl overflow-hidden transition-all duration-300" data-block="3" id="accordion-3">
+<button class="w-full flex items-center justify-between p-5 bg-white transition-colors accordion-header" style="">
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-surface" style="">12:30 - 12:40</span>
+<span class="px-3 py-1 bg-[#EAF3DE] text-[#3B6D11] text-[9px] font-bold rounded-full uppercase tracking-wider" style="">Completado</span>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform" data-icon="expand_more" style="">expand_more</span>
+</button>
+<div class="accordion-content p-6 border-t border-slate-100 hidden">
+<p class="text-on-surface-variant leading-relaxed text-sm" style="">Ronda de preguntas y respuestas técnicas. Los diputados de la oposición solicitaron aclaraciones sobre el origen de los fondos para el fondo de estabilización energética.</p>
+</div>
+</div>
+<!-- In Progress Block -->
+<div class="accordion-item border-0.5 border-dashed border-[#E24B4A] rounded-xl overflow-hidden transition-all duration-300 bg-red-50/10" data-block="4" id="accordion-4">
+<button class="w-full flex items-center justify-between p-5 bg-white transition-colors accordion-header" style="">
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold text-on-surface" style="">12:40 - 12:50</span>
+<div class="flex items-center gap-2 px-3 py-1 bg-red-50 text-[#E24B4A] text-[9px] font-bold rounded-full uppercase tracking-wider border border-red-100" style="">
+<span class="w-1.5 h-1.5 bg-[#E24B4A] rounded-full progress-pulsing"></span>
+                                En curso
+                            </div>
+</div>
+<span class="material-symbols-outlined text-slate-400 transition-transform" data-icon="expand_more" style="">expand_more</span>
+</button>
+<div class="accordion-content p-10 border-t border-dashed border-red-100 hidden">
+<div class="flex flex-col items-center justify-center text-center gap-4 py-4">
+<div class="spinner-ring"></div>
+<p class="text-xs font-bold text-[#E24B4A] uppercase tracking-widest" style="">Generando resumen...</p>
+<p class="text-xs text-slate-500 max-w-xs" style="">Nuestra IA está analizando los últimos 10 minutos de la sesión en tiempo real.</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let activeBlock = 0;
+    const totalCompleted = 4;
+    const totalTotal = 5;
+
+    function updateUI(blockIndex) {
+        if (blockIndex >= totalTotal) return;
+        
+        activeBlock = blockIndex;
+
+        // Update Accordions
+        document.querySelectorAll('.accordion-item').forEach((item, idx) => {
+            const content = item.querySelector('.accordion-content');
+            const header = item.querySelector('.accordion-header');
+            const chevron = item.querySelector('.material-symbols-outlined');
+            
+            if (idx === activeBlock) {
+                item.classList.remove('border-slate-200');
+                if (idx === 4) { // In progress block color
+                    item.classList.add('border-[#E24B4A]');
+                    header.classList.add('bg-white');
+                } else {
+                    item.classList.add('border-[#B87851]');
+                    header.classList.add('bg-[#F5E6D8]');
+                }
+                content.classList.remove('hidden');
+                content.classList.add('block');
+                chevron.classList.add('rotate-180');
+            } else {
+                item.classList.remove('border-[#B87851]');
+                if (idx !== 4) item.classList.add('border-slate-200');
+                header.classList.remove('bg-[#F5E6D8]');
+                content.classList.add('hidden');
+                content.classList.remove('block');
+                chevron.classList.remove('rotate-180');
+            }
+        });
+
+        // Update Time Labels
+        document.querySelectorAll('.time-label').forEach((label, idx) => {
+            label.classList.remove('text-[#111110]', 'font-bold');
+            if (idx === activeBlock) {
+                label.classList.add('text-[#111110]', 'font-bold');
+            }
+        });
+
+        // Update Timeline Segments
+        document.querySelectorAll('.timeline-segment').forEach((seg, idx) => {
+            if (idx === activeBlock) {
+                seg.classList.remove('bg-[#B87851]');
+                seg.classList.add('bg-[#8A5A35]');
+                if (idx === 4) seg.style.background = 'linear-gradient(to right, #8A5A35 55%, #EDE7D9)';
+            } else if (idx < totalCompleted) {
+                seg.classList.remove('bg-[#8A5A35]');
+                seg.classList.add('bg-[#B87851]');
+            } else if (idx === 4) {
+                seg.style.background = 'linear-gradient(to right, #B87851 55%, #EDE7D9)';
+            }
+        });
+
+        // Update Indicator
+        const indicator = document.getElementById('block-indicator');
+        if (activeBlock < totalCompleted) {
+            indicator.innerText = `Bloque ${activeBlock + 1} de ${totalCompleted}`;
+            indicator.classList.remove('text-[#E24B4A]');
+        } else {
+            indicator.innerText = `En curso...`;
+            indicator.classList.add('text-[#E24B4A]');
+        }
+
+        // Disable/Enable Nav Buttons
+        if(document.getElementById('prev-btn')) document.getElementById('prev-btn').disabled = activeBlock === 0;
+        if(document.getElementById('next-btn')) document.getElementById('next-btn').disabled = activeBlock === totalTotal - 1;
+    }
+
+    // Event Listeners
+    document.querySelectorAll('.accordion-header').forEach((header, idx) => {
+        header.addEventListener('click', () => updateUI(idx));
+    });
+
+    document.querySelectorAll('.time-label').forEach((label) => {
+        label.addEventListener('click', () => {
+            const block = parseInt(label.getAttribute('data-block'));
+            if (block <= 4) updateUI(block);
+        });
+    });
+
+    document.querySelectorAll('.timeline-segment').forEach((seg) => {
+        seg.addEventListener('click', () => {
+            updateUI(parseInt(seg.getAttribute('data-block')));
+        });
+    });
+
+    if(document.getElementById('prev-btn')) {
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (activeBlock > 0) updateUI(activeBlock - 1);
+        });
+    }
+
+    if(document.getElementById('next-btn')) {
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (activeBlock < totalTotal - 1) updateUI(activeBlock + 1);
+        });
+    }
+});
+</script>
+</section>
+<!-- Metadata Info Row with Action Buttons (Simplified) -->
+</div>
+</div>
+<!-- Right Column: Sidebar Panels -->
+<aside class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Navigation Cards Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Anterior Card -->
+<a class="bg-white border border-slate-100 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center text-center gap-2" href="#" style="">
+<div class="flex items-center gap-1 text-[9px] font-bold text-primary uppercase tracking-wider font-label" style="">
+<span class="material-symbols-outlined text-[14px]" style="">arrow_back</span>
+                            ANTERIOR
+                        </div>
+<div class="text-xs font-bold text-on-surface leading-tight mt-1 font-body" style="">Sesión previa del presupuesto</div>
+<div class="flex items-center justify-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full w-fit mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span class="text-[9px] font-bold font-label uppercase" style="">CONCLUIDA</span>
+</div>
+</a>
+<!-- Siguiente Card -->
+<a class="bg-white border border-slate-100 rounded-xl p-4 hover:shadow-md hover:border-primary/20 transition-all flex flex-col items-center text-center gap-2" href="#" style="">
+<div class="flex items-center gap-1 text-[9px] font-bold text-primary uppercase tracking-wider font-label" style="">
+                            SIGUIENTE
+                            <span class="material-symbols-outlined text-[14px]" style="">arrow_forward</span>
+</div>
+<div class="text-xs font-bold text-on-surface leading-tight mt-1 font-body" style="">Nombramientos pendientes</div>
+<div class="flex items-center justify-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-full w-fit mt-1">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+<span class="text-[9px] font-bold font-label uppercase" style="">PROGRAMADA</span>
+</div>
+</a>
+</div>
+<!-- Comisión Card -->
+<div class="bg-white rounded-xl p-6 border border-slate-100">
+<h4 class="text-[10px] font-bold uppercase tracking-[2px] text-slate-500 mb-4 font-label" style="">COMISIÓN</h4>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="account_balance" style="">account_balance</span>
+</div>
+<div>
+<p class="font-bold text-on-surface font-body" style="">Igualdad de Género</p>
+<p class="text-xs text-slate-500 font-label" style="">H. Cámara de Diputados</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

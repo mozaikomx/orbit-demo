@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mosaico Intelligence - Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed-variant": "#7f2b00",
+                        "surface": "#f7f9fb",
+                        "outline": "#737686",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-container": "#c04400",
+                        "inverse-primary": "#ffb599",
+                        "tertiary-fixed-dim": "#ffb599",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-fixed-variant": "#7f2b00",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-tertiary-container": "#ffede7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#370e00",
+                        "surface-tint": "#B87851",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#370e00",
+                        "secondary-fixed": "#dae2fd",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-surface": "#191c1e",
+                        "surface-container": "#eceef0",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-fixed": "#131b2e",
+                        "primary": "#B87851",
+                        "secondary": "#565e74",
+                        "tertiary": "#973400",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-container": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#B87851",
+                        "mosaico-copper": "#B87851"
+                    },
+                    fontFamily: {
+                        "headline": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "label": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "1rem", 
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'DM Sans', sans-serif; background-color: #f7f9fb; }
+        .font-headline { font-family: 'Playfair Display', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .editorial-shadow {
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 8px -2px rgba(15, 23, 42, 0.03);
+        }
+        #filter-panel {
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #filter-panel.open {
+            max-height: 500px;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-fixed overflow-x-hidden">
+<!-- SIDEBAR -->
+<aside class="h-screen w-[220px] fixed left-0 top-0 shadow-xl flex flex-col py-4 z-50 bg-[#121212]">
+<div class="px-6 py-8 flex justify-center">
+<img alt="Orbit Logo" class="h-11 mx-auto mb-2 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ujJOYeED5ESr2kvjXnxUK-52NGh_4Prq2UbrfVMer3g1dnxu7ibC0WN2NWGh2to0HHlnfwm9w2l0MY8gbsIkWCu2Afsu9ePkvJpNLxAV4spmUP9OfAExzB1PdDjepwq8NL7CXd67_sAHPXRDeKUb994I_DgECUfMjlkg5Yo3BknIyIqPN3uem3uP5BmUd_o7AYH-2nfjz8DSN-L_pLE_l88YTLQzYwK4X1bptn_47MVV6LESKXrKu2_g6KV1ngHYQ126U4GTa-QXrU"/>
+</div>
+<nav class="flex-1 space-y-1"><!-- Inactive Tab: Monitoreo -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all font-label" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-sm tracking-wide font-medium">Monitoreo</span>
+</a>
+<!-- Active Tab: Dashboard -->
+<a class="text-[#60A5FA] bg-[#1E293B]/50 my-1 py-3 flex items-center justify-between transition-all relative border-r-4 border-primary font-label pl-10 pr-6" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm tracking-wide font-medium">Dashboard</span>
+</div>
+</a>
+<!-- Inactive Tab: Grupo de interés setup -->
+<a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 flex items-center gap-3 transition-all font-label pl-10 pr-6" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-sm tracking-wide font-medium">Grupo de interés setup</span>
+</a><a class="text-slate-400 hover:text-white hover:bg-slate-800/50 hover:scale-[1.02] my-1 py-3 px-6 flex items-center gap-3 transition-all group relative" href="#">
+<div class="relative">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-slate-900"></span>
+</div>
+<span class="font-label text-sm tracking-wide font-medium">Broad Listening</span>
+</a></nav>
+<div class="px-6 py-4 mt-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-800/40 relative group font-label">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs">JD</div>
+<div class="overflow-hidden flex-1">
+<div class="flex items-center justify-between">
+<p class="text-xs font-bold text-white truncate">Juan Delgado</p>
+<span class="material-symbols-outlined text-slate-500 text-[18px] cursor-pointer hover:text-white transition-colors">settings</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate">Analista Senior</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[220px] min-h-screen bg-surface">
+<!-- TOPBAR -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-md flex items-center justify-between w-full h-16 px-8 border-b border-slate-200/15">
+<div class="flex-1 max-w-2xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all outline-none font-body" placeholder="Buscar documentación" type="text"/>
+</div>
+</div>
+</header>
+<!-- Canvas Content -->
+<div class="p-10 max-w-[1440px] mx-auto space-y-12">
+<!-- Retractable Filter Bar -->
+<div class="bg-surface-container-lowest border border-slate-100 rounded-xl editorial-shadow font-body overflow-hidden">
+<!-- Collapsed Trigger Row -->
+<div class="flex items-center justify-between px-5 py-[13px] cursor-pointer hover:bg-slate-50/50 transition-colors" id="filter-trigger" onclick="toggleFilters()">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 bg-[#F5E6D8] rounded-[8px] flex items-center justify-center">
+<span class="material-symbols-outlined text-mosaico-copper text-[18px]">filter_list</span>
+</div>
+<span class="text-[13px] font-semibold text-[#111110]">Filtros</span>
+<div class="flex gap-2 ml-2" id="active-chips">
+<span class="px-3 py-0.5 bg-[#F5E6D8] text-[#8A5A35] text-[11px] font-semibold rounded-full">Apple</span>
+<span class="px-3 py-0.5 bg-[#F5E6D8] text-[#8A5A35] text-[11px] font-semibold rounded-full">Rappi</span>
+</div>
+</div>
+<div class="w-5 h-5 bg-surface rounded-full flex items-center justify-center transition-transform duration-300" id="chevron">
+<span class="material-symbols-outlined text-[14px] text-slate-400">expand_more</span>
+</div>
+</div>
+<!-- Expanded Panel -->
+<div class="border-t border-slate-100/50" id="filter-panel">
+<div class="p-5">
+<div class="grid grid-cols-5 gap-4">
+<!-- Col 1 -->
+<div class="space-y-3">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Grupo de interés</p>
+<div class="flex p-1 bg-[#F5F0E8] rounded-full">
+<button class="flex-1 py-1.5 text-[11px] font-semibold rounded-full bg-white text-[#111110] shadow-sm">Todos</button>
+<button class="flex-1 py-1.5 text-[11px] font-semibold rounded-full text-[#737686]">Apple</button>
+<button class="flex-1 py-1.5 text-[11px] font-semibold rounded-full text-[#737686]">Rappi</button>
+</div>
+</div>
+<!-- Col 2 -->
+<div class="space-y-3">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Fuente</p>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full bg-[#111110] text-white">Todas</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">DOF</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">CONAMER</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">PROFECO</button>
+</div>
+</div>
+<!-- Col 3 -->
+<div class="space-y-3">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Tema</p>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full bg-[#111110] text-white">Todas</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Salud</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Laboral</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Economía</button>
+</div>
+</div>
+<!-- Col 4 -->
+<div class="space-y-3">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Poder</p>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full bg-[#111110] text-white">Todos</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Ejecutivo</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Legislativo</button>
+</div>
+</div>
+<!-- Col 5 -->
+<div class="space-y-3">
+<p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Nivel de Gobierno</p>
+<div class="flex flex-wrap gap-1.5">
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full bg-[#111110] text-white">Todos</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Federal</button>
+<button class="px-3 py-1.5 text-[11px] font-semibold rounded-full text-[#737686] hover:bg-slate-100">Estatal</button>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-5 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-[10px] font-bold uppercase text-slate-400">Período:</span>
+<div class="flex bg-slate-100 p-1 rounded-full">
+<button class="px-4 py-1 text-[11px] font-semibold rounded-full text-[#737686]">7d</button>
+<button class="px-4 py-1 text-[11px] font-semibold rounded-full bg-mosaico-copper text-white shadow-sm">30d</button>
+<button class="px-4 py-1 text-[11px] font-semibold rounded-full text-[#737686]">90d</button>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2 text-[11px] font-bold border border-slate-200 rounded-full text-on-surface hover:bg-slate-50 transition-colors" onclick="resetFilters(event)">Restablecer</button>
+<button class="px-6 py-2 text-[11px] font-bold bg-mosaico-copper text-white rounded-full shadow-md hover:bg-mosaico-copper/90 transition-all" onclick="applyFilters(event)">Aplicar filtros</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div class="space-y-2">
+<h1 class="text-4xl font-headline font-bold text-on-surface tracking-tight">Dashboard</h1>
+<p class="text-on-surface-variant text-sm font-body">Resumen estadístico filtrado por Apple y Rappi.</p>
+</div>
+</div>
+<!-- Row 1: KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border border-slate-100 flex flex-col gap-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Eventos monitoreados</p>
+<h2 class="text-5xl font-bold text-on-surface font-body">112</h2>
+<div>
+<span class="text-[10px] font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">↑ 12% VS EL PERIODO ANTERIOR</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border border-slate-100 flex flex-col gap-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Fuentes activas</p>
+<h2 class="text-5xl font-bold text-on-surface font-body">84</h2>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border border-slate-100 flex flex-col gap-4">
+<p class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Grupos de interés</p>
+<h2 class="text-5xl font-bold text-on-surface font-body">2</h2>
+</div>
+</div>
+<!-- Row 2: Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Volumen de alertas -->
+<div class="lg:col-span-2 bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-xl font-headline font-bold text-on-surface">Volumen de alertas — Apple &amp; Rappi</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">
+<span class="w-2 h-2 rounded-full bg-mosaico-copper"></span> Legislativas
+                        </div>
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">
+<span class="w-2 h-2 rounded-full bg-[#EDE7D9]"></span> Ejecutivas
+                        </div>
+</div>
+</div>
+<div class="h-[300px] relative">
+<canvas id="alertVolumeChart"></canvas>
+</div>
+</div>
+<!-- Distribución por riesgo -->
+<div class="bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Riesgo Combinado</h3>
+<div class="h-[240px] relative flex justify-center">
+<canvas id="riskDistributionChart"></canvas>
+</div>
+<div class="mt-8 space-y-3">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#E24B4A]"></div>
+<span class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Alto</span>
+</div>
+<span class="text-xs font-bold font-body text-on-surface">15%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#EF9F27]"></div>
+<span class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Medio</span>
+</div>
+<span class="text-xs font-bold font-body text-on-surface">55%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-[#639922]"></div>
+<span class="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Bajo</span>
+</div>
+<span class="text-xs font-bold font-body text-on-surface">30%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Theme Coverage & Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Cobertura temática -->
+<div class="bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Cobertura temática (Filtrada)</h3>
+<div class="h-[300px] relative">
+<canvas id="themeCoverageChart"></canvas>
+</div>
+</div>
+<!-- Actividad por grupo -->
+<div class="bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Actividad por grupo de interés</h3>
+<div class="space-y-8 py-4">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 font-label">Apple</span>
+<span class="text-xs font-bold font-body text-primary">82%</span>
+</div>
+<div class="w-full bg-slate-50 h-3 rounded-full overflow-hidden border border-slate-100">
+<div class="bg-primary h-full rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 font-label">Rappi</span>
+<span class="text-xs font-bold font-body text-primary">64%</span>
+</div>
+<div class="w-full bg-slate-50 h-3 rounded-full overflow-hidden border border-slate-100">
+<div class="bg-primary h-full rounded-full opacity-80" style="width: 64%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 4: Level Distribution & Heatmap -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
+<!-- Nivel de Gobierno -->
+<div class="bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Nivel de gobierno (Apple + Rappi)</h3>
+<div class="h-[300px] relative">
+<canvas id="governmentLevelChart"></canvas>
+</div>
+</div>
+<!-- Mapa de calor -->
+<div class="bg-white p-8 rounded-xl editorial-shadow border border-slate-100">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Mapa de calor — tema × poder</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-separate border-spacing-2">
+<thead>
+<tr>
+<th class="p-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 font-label">Tema</th>
+<th class="p-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 text-center font-label">Ejecutivo</th>
+<th class="p-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 text-center font-label">Legislativo</th>
+<th class="p-2 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 text-center font-label">Judicial</th>
+</tr>
+</thead>
+<tbody class="font-body text-xs">
+<tr>
+<td class="p-2 font-bold text-on-surface">Laboral</td>
+<td class="p-4 bg-primary text-white text-center font-bold rounded-sm">ALTA</td>
+<td class="p-4 bg-[#D4956A] text-white text-center font-bold rounded-sm">MEDIA</td>
+<td class="p-4 bg-primary/5 text-slate-400 text-center font-bold rounded-sm border border-primary/10">BAJA</td>
+</tr>
+<tr>
+<td class="p-2 font-bold text-on-surface">Digital</td>
+<td class="p-4 bg-[#D4956A] text-white text-center font-bold rounded-sm">MEDIA</td>
+<td class="p-4 bg-primary text-white text-center font-bold rounded-sm">ALTA</td>
+<td class="p-4 bg-primary text-white text-center font-bold rounded-sm">ALTA</td>
+</tr>
+<tr>
+<td class="p-2 font-bold text-on-surface">Fiscal</td>
+<td class="p-4 bg-primary/5 text-slate-400 text-center font-bold rounded-sm border border-primary/10">BAJA</td>
+<td class="p-4 bg-[#D4956A] text-white text-center font-bold rounded-sm">MEDIA</td>
+<td class="p-4 bg-[#D4956A] text-white text-center font-bold rounded-sm">MEDIA</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    // Filter Bar Logic
+    function toggleFilters() {
+        const panel = document.getElementById('filter-panel');
+        const chevron = document.getElementById('chevron');
+        panel.classList.toggle('open');
+        chevron.classList.toggle('rotate-180');
+    }
+
+    function resetFilters(e) {
+        e.stopPropagation();
+        // Visual reset for demo
+        console.log('Filtros restablecidos');
+    }
+
+    function applyFilters(e) {
+        e.stopPropagation();
+        toggleFilters();
+        // Update chips or data for demo
+        console.log('Filtros aplicados');
+    }
+
+    // Charts
+    const primaryColor = '#B87851';
+    const secondaryColor = '#EDE7D9';
+    const labelColor = '#737686';
+    const fontFamily = "'DM Sans', sans-serif";
+
+    Chart.defaults.font.family = fontFamily;
+    Chart.defaults.color = labelColor;
+
+    // 1. Alert Volume Chart
+    new Chart(document.getElementById('alertVolumeChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+            datasets: [
+                {
+                    label: 'Legislativas',
+                    data: [22, 31, 28, 40],
+                    backgroundColor: primaryColor,
+                    borderRadius: 4
+                },
+                {
+                    label: 'Ejecutivas',
+                    data: [16, 14, 20, 18],
+                    backgroundColor: secondaryColor,
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { 
+                    stacked: true, 
+                    grid: { display: false }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10, weight: 'bold' } }
+                },
+                y: { 
+                    stacked: true, 
+                    grid: { color: 'rgba(0,0,0,0.03)' }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10 } }
+                }
+            }
+        }
+    });
+
+    // 2. Risk Distribution Donut
+    new Chart(document.getElementById('riskDistributionChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Alto', 'Medio', 'Bajo'],
+            datasets: [{
+                data: [15, 55, 30],
+                backgroundColor: ['#E24B4A', '#EF9F27', '#639922'],
+                borderWidth: 0,
+                cutout: '78%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // 3. Theme Coverage
+    new Chart(document.getElementById('themeCoverageChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Laboral', 'Digital', 'Fiscal', 'Competencia', 'Protección Datos'],
+            datasets: [{
+                data: [92, 85, 70, 62, 55],
+                backgroundColor: [
+                    '#B87851', '#C68965', '#D49B7A', '#E2AD8E', '#F0BEA3'
+                ],
+                borderRadius: 4,
+                barThickness: 16
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { 
+                    grid: { display: false }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10 } }
+                },
+                y: { 
+                    grid: { display: false }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10, weight: 'bold' } }
+                }
+            }
+        }
+    });
+
+    // 4. Government Level
+    new Chart(document.getElementById('governmentLevelChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+            datasets: [
+                {
+                    label: 'Federal',
+                    data: [35, 42, 48, 45, 50, 58],
+                    backgroundColor: primaryColor,
+                    borderRadius: 2
+                },
+                {
+                    label: 'Estatal',
+                    data: [20, 22, 18, 26, 24, 30],
+                    backgroundColor: secondaryColor,
+                    borderRadius: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { 
+                    grid: { display: false }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10, weight: 'bold' } }
+                },
+                y: { 
+                    grid: { color: 'rgba(0,0,0,0.03)' }, 
+                    border: { display: false },
+                    ticks: { font: { size: 10 } }
+                }
+            }
+        }
+    });
+</script>
+</body></html>
