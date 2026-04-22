@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "/lens", label: "Monitoreo", icon: "home" },
+  { href: "/lens", label: "Lens", icon: "home" },
   { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
   { href: "/grupo", label: "Grupo de interés setup", icon: "group" },
   { divider: true },
-  { href: "/echo", label: "Broad Listening", icon: "sensors" },
+  { href: "/echo", label: "Echo", icon: "sensors" },
   { href: "/tracker", label: "Tracker", icon: "account_tree" },
 ];
 
