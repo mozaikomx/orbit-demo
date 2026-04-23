@@ -121,25 +121,18 @@ async function wikiSearchThumb(lang, searchTerm, filterRelevance = false) {
   }
 }
 
-async function getNodeImageUrl(nodeData, searchTerm) {
+async function getNodeImageUrl(nodeData) {
   const { tipo, dominio } = nodeData;
 
-  if (tipo === "Persona") {
-    // searchTerm (main actor) already carries full context; other personas get political context added
-    const term = searchTerm || `${nodeData.label} político México`;
-    return (
-      (await wikiSearchThumb("es", term, true)) ||
-      (await wikiSearchThumb("en", term, true))
-    );
-  }
+  // Personas always use SVG silhouette — no Wikipedia fetch
+  if (tipo === "Persona") return null;
 
-  // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia
-  const term = nodeData.label;
+  // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia es, then en
   if (dominio) {
     const clearbitUrl = `https://logo.clearbit.com/${dominio}`;
     if (await testImageLoad(clearbitUrl)) return clearbitUrl;
   }
-  return (await wikiSearchThumb("es", term)) || (await wikiSearchThumb("en", term));
+  return (await wikiSearchThumb("es", nodeData.label)) || (await wikiSearchThumb("en", nodeData.label));
 }
 
 function Graph({ data, onNodeClick }) {
@@ -262,15 +255,31 @@ function Graph({ data, onNodeClick }) {
       .attr("preserveAspectRatio", "xMidYMid slice")
       .attr("href", (d) => SVG_FALLBACKS[d.tipo] || SVG_FALLBACKS.Persona);
 
-    // Below-circle label
+    // Below-circle label — full text, wraps to 2 lines if long
     node.append("text")
       .attr("text-anchor", "middle")
-      .attr("dy", (d) => getR(d) + 13)
       .attr("font-size", 9)
       .attr("fill", "#334155")
       .attr("font-family", "'DM Sans', sans-serif")
       .style("pointer-events", "none")
-      .text((d) => d.label.split(" ").slice(0, 2).join(" "));
+      .each(function(d) {
+        const el = d3.select(this);
+        const r = getR(d);
+        const words = d.label.split(" ");
+
+        if (d.label.length <= 16 || words.length <= 2) {
+          el.append("tspan").attr("x", 0).attr("dy", r + 13).text(d.label);
+        } else {
+          // Find the split point that balances both lines
+          let bestSplit = 1, bestDiff = Infinity;
+          for (let i = 1; i < words.length; i++) {
+            const diff = Math.abs(words.slice(0, i).join(" ").length - words.slice(i).join(" ").length);
+            if (diff < bestDiff) { bestDiff = diff; bestSplit = i; }
+          }
+          el.append("tspan").attr("x", 0).attr("dy", r + 13).text(words.slice(0, bestSplit).join(" "));
+          el.append("tspan").attr("x", 0).attr("dy", 11).text(words.slice(bestSplit).join(" "));
+        }
+      });
 
     // Hover helpers
     const srcId = (l) => (typeof l.source === "object" ? l.source.id : l.source);
@@ -346,10 +355,7 @@ function Graph({ data, onNodeClick }) {
 
     // Async image loading — fires after initial render, non-blocking
     nodes.forEach(async (nd) => {
-      const searchTerm = nd.id === mainActorId && data.perfil?.nombre
-        ? `${data.perfil.nombre} ${data.perfil.cargo || "político"} México`
-        : undefined;
-      const url = await getNodeImageUrl(nd, searchTerm);
+      const url = await getNodeImageUrl(nd);
       if (cancelled || !url || !svgRef.current) return;
       const imgEl = svgRef.current.querySelector(`image[data-node-id="${nd.id}"]`);
       if (imgEl) imgEl.setAttribute("href", url);
