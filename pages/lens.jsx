@@ -112,11 +112,45 @@ const newsItems = [
   },
 ];
 
+function useFilterState() {
+  const [selected, setSelected] = useState(["Todas"]);
+  const toggle = (opt) => {
+    if (opt === "Todas") {
+      setSelected(["Todas"]);
+    } else {
+      setSelected((prev) => {
+        const without = prev.filter((o) => o !== "Todas");
+        if (without.includes(opt)) {
+          const next = without.filter((o) => o !== opt);
+          return next.length === 0 ? ["Todas"] : next;
+        }
+        return [...without, opt];
+      });
+    }
+  };
+  const reset = () => setSelected(["Todas"]);
+  return { selected, toggle, reset };
+}
+
 export default function Lens() {
   const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const total = carouselCards.length;
+
+  const fuenteFilter = useFilterState();
+  const temaFilter = useFilterState();
+  const poderFilter = useFilterState();
+  const nivelFilter = useFilterState();
+  const [grupoSelected, setGrupoSelected] = useState("Todas");
+
+  const resetFilters = () => {
+    fuenteFilter.reset();
+    temaFilter.reset();
+    poderFilter.reset();
+    nivelFilter.reset();
+    setGrupoSelected("Todas");
+  };
 
   const goTo = (index) => {
     if (index < 0 || index >= total) return;
@@ -308,48 +342,82 @@ export default function Lens() {
               <>
                 <FilterSection label="Grupo de Interés">
                   <div className="relative bg-[#F3F4F6] h-8 rounded-full flex p-1 items-center">
-                    <div className="absolute inset-y-1 left-1 w-[calc(33.33%-4px)] bg-white rounded-full shadow-sm" />
-                    <button className="flex-1 text-[10px] font-bold z-10 text-on-surface text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Todas</button>
-                    <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Rappi</button>
-                    <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Apple</button>
+                    {["Todas", "Rappi", "Apple"].map((opt, idx, arr) => {
+                      const isActive = grupoSelected === opt;
+                      const pct = `calc(${(100 / arr.length)}% - 4px)`;
+                      return (
+                        <button
+                          key={opt}
+                          onClick={() => setGrupoSelected(opt)}
+                          className="flex-1 text-[10px] font-bold z-10 text-center rounded-full transition-all"
+                          style={{
+                            fontFamily: "'DM Sans', sans-serif",
+                            color: isActive ? "#0F172A" : "#64748B",
+                            backgroundColor: isActive ? "white" : "transparent",
+                            boxShadow: isActive ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+                            height: "calc(100% - 2px)",
+                          }}
+                        >
+                          {opt}
+                        </button>
+                      );
+                    })}
                   </div>
                 </FilterSection>
 
                 <FilterSection label="Fuente">
                   <div className="flex flex-wrap gap-2">
-                    <PillBtn active>Todas</PillBtn>
-                    <PillBtn accent>DOF</PillBtn>
-                    <PillBtn>CONAMER</PillBtn>
-                    <PillBtn>PROFECO</PillBtn>
+                    {["Todas", "DOF", "Gaceta Parlamentaria", "CONAMER", "PROFECO"].map((opt) => (
+                      <PillBtn
+                        key={opt}
+                        active={fuenteFilter.selected.includes(opt)}
+                        onClick={() => fuenteFilter.toggle(opt)}
+                      >
+                        {opt}
+                      </PillBtn>
+                    ))}
                   </div>
                 </FilterSection>
 
                 <FilterSection label="Tema">
                   <div className="flex flex-wrap gap-2">
-                    <PillBtn active>Todas</PillBtn>
-                    <PillBtn accent>Salud</PillBtn>
-                    <PillBtn>Seguridad</PillBtn>
-                    <PillBtn>Laboral</PillBtn>
-                    <PillBtn>Economía</PillBtn>
-                    <PillBtn>Gobierno</PillBtn>
+                    {["Todas", "Salud", "Seguridad", "Laboral", "Economía", "Gobierno"].map((opt) => (
+                      <PillBtn
+                        key={opt}
+                        active={temaFilter.selected.includes(opt)}
+                        onClick={() => temaFilter.toggle(opt)}
+                      >
+                        {opt}
+                      </PillBtn>
+                    ))}
                   </div>
                 </FilterSection>
 
                 <FilterSection label="Poder">
                   <div className="flex flex-wrap gap-2">
-                    <PillBtn active>Todas</PillBtn>
-                    <PillBtn accent>Ejecutivo</PillBtn>
-                    <PillBtn>Legislativo</PillBtn>
-                    <PillBtn>Judicial</PillBtn>
+                    {["Todas", "Ejecutivo", "Legislativo", "Judicial"].map((opt) => (
+                      <PillBtn
+                        key={opt}
+                        active={poderFilter.selected.includes(opt)}
+                        onClick={() => poderFilter.toggle(opt)}
+                      >
+                        {opt}
+                      </PillBtn>
+                    ))}
                   </div>
                 </FilterSection>
 
                 <FilterSection label="Nivel de gobierno">
                   <div className="flex flex-wrap gap-2">
-                    <PillBtn active>Todas</PillBtn>
-                    <PillBtn accent>Federal</PillBtn>
-                    <PillBtn>Estatal</PillBtn>
-                    <PillBtn>Local</PillBtn>
+                    {["Todas", "Federal", "Estatal", "Local"].map((opt) => (
+                      <PillBtn
+                        key={opt}
+                        active={nivelFilter.selected.includes(opt)}
+                        onClick={() => nivelFilter.toggle(opt)}
+                      >
+                        {opt}
+                      </PillBtn>
+                    ))}
                   </div>
                 </FilterSection>
 
@@ -364,7 +432,11 @@ export default function Lens() {
                   <button className="w-full text-white py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
                     Aplicar filtros
                   </button>
-                  <button className="w-full text-center text-slate-400 text-xs font-bold hover:text-slate-600 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  <button
+                    onClick={resetFilters}
+                    className="w-full text-center text-slate-400 text-xs font-bold hover:text-slate-600 transition-colors"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
                     Restablecer
                   </button>
                 </div>
@@ -398,14 +470,17 @@ function FilterSection({ label, children }) {
   );
 }
 
-function PillBtn({ children, active, accent }) {
-  let bg = "border border-slate-300 text-slate-600 hover:bg-slate-50";
-  if (active) bg = "bg-[#0F172A] text-white";
-  if (accent) bg = "text-white";
+function PillBtn({ children, active, onClick }) {
   return (
     <button
-      className={`text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors ${bg}`}
-      style={{ fontFamily: "'DM Sans', sans-serif", backgroundColor: accent ? "#B87851" : undefined }}
+      onClick={onClick}
+      className="text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors border"
+      style={{
+        fontFamily: "'DM Sans', sans-serif",
+        backgroundColor: active ? "#B87851" : "white",
+        color: active ? "white" : "#64748B",
+        borderColor: active ? "#B87851" : "#CBD5E1",
+      }}
     >
       {children}
     </button>
