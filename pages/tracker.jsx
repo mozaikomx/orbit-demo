@@ -12,16 +12,16 @@ const EXAMPLE_DATA = {
     tags: ["Presidenta", "Morena", "Científica", "CDMX"],
   },
   nodos: [
-    { id: "claudia", label: "Claudia Sheinbaum", tipo: "Persona" },
-    { id: "morena", label: "Morena", tipo: "Empresa" },
-    { id: "amlo", label: "Andrés Manuel López Obrador", tipo: "Persona" },
-    { id: "shcp", label: "SHCP", tipo: "Gobierno" },
-    { id: "cfe", label: "CFE", tipo: "Gobierno" },
-    { id: "pemex", label: "Pemex", tipo: "Gobierno" },
-    { id: "unam", label: "UNAM", tipo: "ONG" },
-    { id: "cdmx", label: "Gobierno CDMX", tipo: "Gobierno" },
-    { id: "gabinete", label: "Gabinete Federal", tipo: "Gobierno" },
-    { id: "congreso", label: "Congreso de la Unión", tipo: "Gobierno" },
+    { id: "claudia", label: "Claudia Sheinbaum", tipo: "Persona", dominio: null },
+    { id: "morena", label: "Morena", tipo: "Empresa", dominio: "morena.mx" },
+    { id: "amlo", label: "Andrés Manuel López Obrador", tipo: "Persona", dominio: null },
+    { id: "shcp", label: "SHCP", tipo: "Gobierno", dominio: "hacienda.gob.mx" },
+    { id: "cfe", label: "CFE", tipo: "Gobierno", dominio: "cfe.mx" },
+    { id: "pemex", label: "Pemex", tipo: "Gobierno", dominio: "pemex.com" },
+    { id: "unam", label: "UNAM", tipo: "ONG", dominio: "unam.mx" },
+    { id: "cdmx", label: "Gobierno CDMX", tipo: "Gobierno", dominio: "cdmx.gob.mx" },
+    { id: "gabinete", label: "Gabinete Federal", tipo: "Gobierno", dominio: "gob.mx" },
+    { id: "congreso", label: "Congreso de la Unión", tipo: "Gobierno", dominio: "congreso.gob.mx" },
   ],
   conexiones: [
     { source: "claudia", target: "morena", tipo: "Miembro" },
@@ -46,11 +46,90 @@ const nodeColors = {
   ONG: "#10B981",
 };
 
+// SVG fallback icons per node type (white icon on transparent bg, overlaid on colored circle)
+function makeSvgFallback(body) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${body}</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+const SVG_FALLBACKS = {
+  Persona: makeSvgFallback(
+    `<circle cx="50" cy="36" r="19" fill="rgba(255,255,255,0.88)"/>
+     <path d="M18 82 C18 60 38 52 50 52 C62 52 82 60 82 82" fill="rgba(255,255,255,0.88)"/>`
+  ),
+  Gobierno: makeSvgFallback(
+    `<polygon points="50,14 8,48 92,48" fill="rgba(255,255,255,0.88)"/>
+     <rect x="14" y="48" width="72" height="34" fill="rgba(255,255,255,0.88)"/>
+     <rect x="27" y="55" width="8" height="27" fill="rgba(0,0,0,0.12)"/>
+     <rect x="42" y="55" width="8" height="27" fill="rgba(0,0,0,0.12)"/>
+     <rect x="57" y="55" width="8" height="27" fill="rgba(0,0,0,0.12)"/>
+     <rect x="72" y="55" width="8" height="27" fill="rgba(0,0,0,0.12)"/>`
+  ),
+  Empresa: makeSvgFallback(
+    `<rect x="18" y="22" width="64" height="64" rx="2" fill="rgba(255,255,255,0.88)"/>
+     <rect x="26" y="32" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="46" y="32" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="62" y="32" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="26" y="50" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="46" y="50" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="62" y="50" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
+     <rect x="38" y="66" width="24" height="20" rx="1" fill="rgba(0,0,0,0.12)"/>`
+  ),
+  ONG: makeSvgFallback(
+    `<path d="M50 78 C50 78 16 58 16 36 C16 25 24 16 36 18 C43 18 48 23 50 28 C52 23 57 18 64 18 C76 16 84 25 84 36 C84 58 50 78 50 78 Z" fill="rgba(255,255,255,0.88)"/>`
+  ),
+};
+
+function testImageLoad(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(url);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+async function getNodeImageUrl(nodeData) {
+  const { tipo, label, dominio } = nodeData;
+
+  if (tipo === "Persona") {
+    try {
+      const r = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(label)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+      );
+      const j = await r.json();
+      const page = Object.values(j.query.pages)[0];
+      if (page?.thumbnail?.source) return page.thumbnail.source;
+    } catch {}
+    return null;
+  }
+
+  // Gobierno / Empresa / ONG — try Clearbit first
+  if (dominio) {
+    const clearbitUrl = `https://logo.clearbit.com/${dominio}`;
+    const ok = await testImageLoad(clearbitUrl);
+    if (ok) return clearbitUrl;
+  }
+
+  // Fallback: Wikipedia thumbnail for the org
+  try {
+    const r = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(label)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+    );
+    const j = await r.json();
+    const page = Object.values(j.query.pages)[0];
+    if (page?.thumbnail?.source) return page.thumbnail.source;
+  } catch {}
+
+  return null;
+}
+
 function Graph({ data, onNodeClick }) {
   const svgRef = useRef(null);
 
   useEffect(() => {
     if (!data || !svgRef.current) return;
+    let cancelled = false;
 
     const container = svgRef.current.parentElement;
     const width = container.clientWidth || 600;
@@ -59,19 +138,19 @@ function Graph({ data, onNodeClick }) {
     d3.select(svgRef.current).selectAll("*").remove();
     d3.selectAll(".orbit-tooltip").remove();
 
-    const svg = d3.select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height);
-
+    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
     const g = svg.append("g");
 
     svg.call(
-      d3.zoom().scaleExtent([0.3, 3]).on("zoom", (event) => {
-        g.attr("transform", event.transform);
-      })
+      d3.zoom().scaleExtent([0.3, 3]).on("zoom", (event) => g.attr("transform", event.transform))
     );
 
     const mainActorId = data.nodos[0].id;
+    const rMain = 25;
+    const rNode = 18;
+    const getR = (d) => (d.id === mainActorId ? rMain : rNode);
+    const safeId = (id) => id.replace(/[^a-zA-Z0-9]/g, "_");
+
     const nodes = data.nodos.map((n) => ({ ...n }));
     const links = data.conexiones.map((l) => ({ ...l }));
 
@@ -80,21 +159,28 @@ function Graph({ data, onNodeClick }) {
       .force("link", d3.forceLink(links).id((d) => d.id).distance(120))
       .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide(40));
+      .force("collision", d3.forceCollide(44));
 
-    g.append("defs").selectAll("marker")
-      .data(["arrow"])
-      .join("marker")
+    const defs = g.append("defs");
+
+    defs.append("marker")
       .attr("id", "arrow")
       .attr("viewBox", "0 -5 10 10")
-      .attr("refX", 28)
-      .attr("refY", 0)
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
+      .attr("refX", 28).attr("refY", 0)
+      .attr("markerWidth", 6).attr("markerHeight", 6)
       .attr("orient", "auto")
       .append("path")
       .attr("fill", "#94A3B8")
       .attr("d", "M0,-5L10,0L0,5");
+
+    // ClipPath per node
+    nodes.forEach((nd) => {
+      defs.append("clipPath")
+        .attr("id", `clip-${safeId(nd.id)}`)
+        .append("circle")
+        .attr("r", nd.id === mainActorId ? rMain : rNode)
+        .attr("cx", 0).attr("cy", 0);
+    });
 
     const link = g.append("g")
       .selectAll("line")
@@ -104,7 +190,7 @@ function Graph({ data, onNodeClick }) {
       .attr("stroke-width", 1.5)
       .attr("marker-end", "url(#arrow)");
 
-    // Tooltip div appended to body
+    // Tooltip
     const tooltip = d3.select("body")
       .append("div")
       .attr("class", "orbit-tooltip")
@@ -125,52 +211,50 @@ function Graph({ data, onNodeClick }) {
       .selectAll("g")
       .data(nodes)
       .join("g")
-      .style("cursor", (d) => d.id === mainActorId ? "grab" : "pointer")
+      .style("cursor", (d) => (d.id === mainActorId ? "grab" : "pointer"))
       .call(
         d3.drag()
           .on("start", (event, d) => {
             if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
+            d.fx = d.x; d.fy = d.y;
           })
-          .on("drag", (event, d) => {
-            d.fx = event.x;
-            d.fy = event.y;
-          })
+          .on("drag", (event, d) => { d.fx = event.x; d.fy = event.y; })
           .on("end", (event, d) => {
             if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
+            d.fx = null; d.fy = null;
           })
       );
 
+    // Colored background circle
     node.append("circle")
-      .attr("r", (d) => d.id === mainActorId ? 25 : 18)
+      .attr("r", getR)
       .attr("fill", (d) => nodeColors[d.tipo] || "#94A3B8")
       .attr("stroke", "#fff")
       .attr("stroke-width", 2)
       .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.15))");
 
-    node.append("text")
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("font-size", (d) => d.id === mainActorId ? 10 : 8)
-      .attr("font-weight", "bold")
-      .attr("fill", "#fff")
-      .attr("font-family", "'DM Sans', sans-serif")
-      .style("pointer-events", "none")
-      .text((d) => d.label.split(" ")[0]);
+    // Image element — starts with SVG fallback, replaced async with real image
+    node.append("image")
+      .attr("data-node-id", (d) => d.id)
+      .attr("clip-path", (d) => `url(#clip-${safeId(d.id)})`)
+      .attr("width", (d) => getR(d) * 2)
+      .attr("height", (d) => getR(d) * 2)
+      .attr("x", (d) => -getR(d))
+      .attr("y", (d) => -getR(d))
+      .attr("preserveAspectRatio", "xMidYMid slice")
+      .attr("href", (d) => SVG_FALLBACKS[d.tipo] || SVG_FALLBACKS.Persona);
 
+    // Below-circle label
     node.append("text")
       .attr("text-anchor", "middle")
-      .attr("dy", (d) => d.id === mainActorId ? 38 : 32)
+      .attr("dy", (d) => getR(d) + 13)
       .attr("font-size", 9)
       .attr("fill", "#334155")
       .attr("font-family", "'DM Sans', sans-serif")
       .style("pointer-events", "none")
       .text((d) => d.label.split(" ").slice(0, 2).join(" "));
 
-    // Helpers to resolve source/target after simulation mutates them
+    // Hover helpers
     const srcId = (l) => (typeof l.source === "object" ? l.source.id : l.source);
     const tgtId = (l) => (typeof l.target === "object" ? l.target.id : l.target);
 
@@ -182,15 +266,15 @@ function Graph({ data, onNodeClick }) {
           if (tgtId(l) === d.id) connectedIds.add(srcId(l));
         });
 
-        node.style("opacity", (n) => n.id === d.id || connectedIds.has(n.id) ? 1 : 0.2);
+        node.style("opacity", (n) => (n.id === d.id || connectedIds.has(n.id) ? 1 : 0.2));
         link
-          .style("opacity", (l) => srcId(l) === d.id || tgtId(l) === d.id ? 1 : 0.08)
-          .attr("stroke-width", (l) => srcId(l) === d.id || tgtId(l) === d.id ? 3 : 1.5)
-          .attr("stroke", (l) => srcId(l) === d.id || tgtId(l) === d.id ? "#B87851" : "#CBD5E1");
+          .style("opacity", (l) => (srcId(l) === d.id || tgtId(l) === d.id ? 1 : 0.08))
+          .attr("stroke-width", (l) => (srcId(l) === d.id || tgtId(l) === d.id ? 3 : 1.5))
+          .attr("stroke", (l) => (srcId(l) === d.id || tgtId(l) === d.id ? "#B87851" : "#CBD5E1"));
 
         d3.select(event.currentTarget).select("circle")
           .transition().duration(150)
-          .attr("r", d.id === mainActorId ? 25 * 1.4 : 18 * 1.4);
+          .attr("r", getR(d) * 1.4);
 
         const mainRelation = data.conexiones.find((c) => {
           const s = typeof c.source === "object" ? c.source.id : c.source;
@@ -207,26 +291,18 @@ function Graph({ data, onNodeClick }) {
           .style("opacity", "1");
       })
       .on("mousemove", (event) => {
-        tooltip
-          .style("left", (event.clientX + 16) + "px")
-          .style("top", (event.clientY - 44) + "px");
+        tooltip.style("left", event.clientX + 16 + "px").style("top", event.clientY - 44 + "px");
       })
       .on("mouseout", (event, d) => {
         node.style("opacity", 1);
-        link
-          .style("opacity", 1)
-          .attr("stroke-width", 1.5)
-          .attr("stroke", "#CBD5E1");
-
+        link.style("opacity", 1).attr("stroke-width", 1.5).attr("stroke", "#CBD5E1");
         d3.select(event.currentTarget).select("circle")
           .transition().duration(150)
-          .attr("r", d.id === mainActorId ? 25 : 18);
-
+          .attr("r", getR(d));
         tooltip.style("opacity", "0");
       })
       .on("click", (event, d) => {
         if (d.id === mainActorId) return;
-
         const relations = data.conexiones
           .filter((c) => {
             const s = typeof c.source === "object" ? c.source.id : c.source;
@@ -240,20 +316,26 @@ function Graph({ data, onNodeClick }) {
             const other = data.nodos.find((n) => n.id === otherId);
             return { tipo: c.tipo, direction: s === d.id ? "out" : "in", otherLabel: other?.label || otherId };
           });
-
         onNodeClick(d, relations);
       });
 
     simulation.on("tick", () => {
       link
-        .attr("x1", (d) => d.source.x)
-        .attr("y1", (d) => d.source.y)
-        .attr("x2", (d) => d.target.x)
-        .attr("y2", (d) => d.target.y);
+        .attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y);
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
 
+    // Async image loading — fires after initial render, non-blocking
+    nodes.forEach(async (nd) => {
+      const url = await getNodeImageUrl(nd);
+      if (cancelled || !url || !svgRef.current) return;
+      const imgEl = svgRef.current.querySelector(`image[data-node-id="${nd.id}"]`);
+      if (imgEl) imgEl.setAttribute("href", url);
+    });
+
     return () => {
+      cancelled = true;
       simulation.stop();
       tooltip.remove();
     };
@@ -336,7 +418,6 @@ export default function Tracker() {
           )}
         </div>
 
-        {/* Node detail panel */}
         {selectedNode ? (
           <div className="p-6 space-y-5">
             <button
@@ -413,11 +494,7 @@ export default function Tracker() {
             {perfil.tags && (
               <div className="flex flex-wrap gap-2">
                 {perfil.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[11px] font-bold px-3 py-1 rounded-full text-white"
-                    style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
-                  >
+                  <span key={tag} className="text-[11px] font-bold px-3 py-1 rounded-full text-white" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
                     {tag}
                   </span>
                 ))}

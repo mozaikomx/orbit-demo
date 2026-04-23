@@ -38,7 +38,7 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     "tags": ["etiqueta1", "etiqueta2", "etiqueta3"]
   },
   "nodos": [
-    { "id": "id_unico_snake_case", "label": "Nombre o institución", "tipo": "Persona|Gobierno|Empresa|ONG" }
+    { "id": "id_unico_snake_case", "label": "Nombre o institución", "tipo": "Persona|Gobierno|Empresa|ONG", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
   ],
   "conexiones": [
     { "source": "id_fuente", "target": "id_destino", "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')" }
@@ -50,6 +50,7 @@ Reglas:
 - Incluye entre 8 y 15 nodos relevantes (personas, instituciones, empresas, organizaciones vinculadas al actor)
 - Incluye entre 8 y 20 conexiones que muestren las relaciones
 - Los tipos de nodo solo pueden ser: Persona, Gobierno, Empresa, ONG
+- Para nodos de tipo Gobierno, Empresa y ONG: "dominio" debe ser el sitio web oficial sin https (ej: "pemex.com", "ine.mx"). Para tipo Persona: "dominio" debe ser null
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
 `;
