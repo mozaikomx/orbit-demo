@@ -445,10 +445,15 @@ export default function Lens() {
           </div>
 
           <div className="space-y-3 mt-2">
-            <button className="w-full text-white py-3.5 rounded-full font-bold text-sm shadow-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
+            <a
+              href="/reporte.pdf"
+              download="ReporteORBIT.pdf"
+              className="w-full text-white py-3.5 rounded-full font-bold text-sm shadow-lg flex items-center justify-center gap-2 hover:opacity-90 transition-all"
+              style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
+            >
               <span className="material-symbols-outlined text-lg">download</span>
               Descargar reporte (PDF)
-            </button>
+            </a>
             <button className="w-full border-2 py-3 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all" style={{ borderColor: "#B87851", color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
               <span className="material-symbols-outlined text-lg">calendar_today</span>
               Descargar datos (CSV)
