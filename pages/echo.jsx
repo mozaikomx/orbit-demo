@@ -66,7 +66,7 @@ const sessions = [
   },
 ];
 
-const foroOptions = ["Todos los foros", "Pleno de diputados", "Comisiones de diputados", "Pleno de senadores", "Comisiones de senadores"];
+const foroOptions = ["Todos los foros", "Pleno de la Cámara de Diputados", "Comisiones de la Cámara de Diputados", "Pleno del Senado de la República", "Comisiones del Senado de la República", "Conferencia Matutina Presidencial"];
 const estatusOptions = ["Todas", "Programadas", "En progreso", "Concluidas", "Canceladas"];
 
 function PillDropdown({ options, value, onChange }) {
