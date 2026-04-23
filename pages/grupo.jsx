@@ -243,31 +243,6 @@ export default function Grupo() {
               </div>
             </div>
 
-            {/* Group pills */}
-            {activeGroup !== "todos" && (
-              <div className="flex gap-4 mb-6">
-                {[["apple", "Apple", appleEvents.length], ["rappi", "Rappi", rappiEvents.length]].map(([key, label, count]) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveGroup(key)}
-                    className="flex items-center gap-4 p-4 rounded-full border transition-all"
-                    style={{
-                      backgroundColor: activeGroup === key ? `${COPPER}1A` : "#fff",
-                      borderColor: activeGroup === key ? `${COPPER}33` : "#e2e8f0",
-                    }}
-                  >
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm" style={{ backgroundColor: activeGroup === key ? COPPER : "#F1F5F9", color: activeGroup === key ? "#fff" : "#94A3B8", fontFamily: "'DM Sans', sans-serif" }}>
-                      {label.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div className="text-left">
-                      <p className="text-sm font-bold" style={{ color: activeGroup === key ? COPPER : "#374151", fontFamily: "'DM Sans', sans-serif" }}>{label}</p>
-                      <p className="text-[11px]" style={{ color: activeGroup === key ? `${COPPER}B3` : "#94A3B8", fontFamily: "'DM Sans', sans-serif" }}>{count} eventos activos</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-
             {/* Event list */}
             <div className="space-y-6">
               {(activeGroup === "todos" ? [...appleEvents, ...rappiEvents] : events).map(ev => (
