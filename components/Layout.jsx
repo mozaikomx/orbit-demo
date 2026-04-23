@@ -20,6 +20,7 @@ export default function Layout({ children }) {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [lensOpen, setLensOpen] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("orbit_sidebar_collapsed");
@@ -88,7 +89,7 @@ export default function Layout({ children }) {
             }
 
             if (item.subitem) {
-              if (collapsed || !inLensGroup) return null;
+              if (collapsed || !inLensGroup || !lensOpen) return null;
               const isActive = router.pathname === item.href;
               return (
                 <Link
@@ -119,10 +120,24 @@ export default function Layout({ children }) {
 
             const { href, label, icon } = item;
             const isActive = router.pathname === href || (href === "/lens" && inLensGroup && router.pathname !== "/echo" && router.pathname !== "/tracker");
+            const isLens = href === "/lens";
+
+            const handleClick = isLens
+              ? (e) => {
+                  if (inLensGroup) {
+                    e.preventDefault();
+                    setLensOpen((o) => !o);
+                  } else {
+                    setLensOpen(true);
+                  }
+                }
+              : undefined;
+
             return (
               <Link
                 key={label}
                 href={href}
+                onClick={handleClick}
                 title={collapsed ? label : undefined}
                 className="my-0.5 py-3 flex items-center transition-all"
                 style={{

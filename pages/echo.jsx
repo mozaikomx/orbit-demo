@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const calendarDays = Array.from({ length: 28 }, (_, i) => i + 1);
+const MONTHS = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+const YEARS = ["2024", "2025", "2026", "2027"];
 
 const dayDots = {
   1: ["emerald"],
@@ -68,6 +69,46 @@ const sessions = [
 const foroOptions = ["Todos los foros", "Pleno de diputados", "Comisiones de diputados", "Pleno de senadores", "Comisiones de senadores"];
 const estatusOptions = ["Todas", "Programadas", "En progreso", "Concluidas", "Canceladas"];
 
+function PillDropdown({ options, value, onChange }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <div
+        className="flex items-center gap-2 bg-slate-50 px-5 py-2.5 rounded-full text-sm font-bold text-on-surface cursor-pointer hover:bg-slate-100 select-none"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+        onClick={() => setOpen(!open)}
+      >
+        <span>{value}</span>
+        <span
+          className="material-symbols-outlined text-lg"
+          style={{ transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+        >
+          expand_more
+        </span>
+      </div>
+      {open && (
+        <div className="absolute top-full mt-2 left-0 bg-white border border-slate-200 rounded-2xl shadow-lg z-50 overflow-hidden min-w-[140px] max-h-60 overflow-y-auto">
+          {options.map((opt) => (
+            <div
+              key={opt}
+              className="px-4 py-2 text-sm cursor-pointer hover:bg-slate-50 transition-colors"
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                backgroundColor: opt === value ? "#F5E6D8" : undefined,
+                color: opt === value ? "#8A5A35" : "#374151",
+                fontWeight: opt === value ? 700 : 400,
+              }}
+              onClick={() => { onChange(opt); setOpen(false); }}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Dropdown({ label, options, value, onChange }) {
   const [open, setOpen] = useState(false);
   return (
@@ -113,10 +154,26 @@ export default function Echo() {
   const [selectedDay, setSelectedDay] = useState(null);
   const [foro, setForo] = useState("Todos los foros");
   const [estatus, setEstatus] = useState("Todas");
+  const [month, setMonth] = useState(2); // 0-indexed; 2 = March
+  const [year, setYear] = useState(2026);
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const calendarDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  const prevMonth = () => {
+    if (month === 0) { setMonth(11); setYear((y) => y - 1); }
+    else setMonth((m) => m - 1);
+    setSelectedDay(null);
+  };
+  const nextMonth = () => {
+    if (month === 11) { setMonth(0); setYear((y) => y + 1); }
+    else setMonth((m) => m + 1);
+    setSelectedDay(null);
+  };
 
   const catalogTitle = selectedDay
-    ? `Catálogo de sesiones del ${selectedDay} de marzo de 2026`
-    : "Catálogo de sesiones de marzo de 2026";
+    ? `Catálogo de sesiones del ${selectedDay} de ${MONTHS[month].toLowerCase()} de ${year}`
+    : `Catálogo de sesiones de ${MONTHS[month].toLowerCase()} de ${year}`;
 
   return (
     <>
@@ -135,20 +192,28 @@ export default function Echo() {
           <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 mb-10">
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 bg-slate-50 px-5 py-2.5 rounded-full text-sm font-bold text-on-surface cursor-pointer hover:bg-slate-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  <span>Marzo</span>
-                  <span className="material-symbols-outlined text-lg">expand_more</span>
-                </div>
-                <div className="flex items-center gap-2 bg-slate-50 px-5 py-2.5 rounded-full text-sm font-bold text-on-surface cursor-pointer hover:bg-slate-100" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  <span>2026</span>
-                  <span className="material-symbols-outlined text-lg">expand_more</span>
-                </div>
+                <PillDropdown
+                  options={MONTHS}
+                  value={MONTHS[month]}
+                  onChange={(m) => { setMonth(MONTHS.indexOf(m)); setSelectedDay(null); }}
+                />
+                <PillDropdown
+                  options={YEARS}
+                  value={String(year)}
+                  onChange={(y) => { setYear(parseInt(y)); setSelectedDay(null); }}
+                />
               </div>
               <div className="flex gap-2">
-                <button className="w-9 h-9 flex items-center justify-center hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-[#B87851]">
+                <button
+                  onClick={prevMonth}
+                  className="w-9 h-9 flex items-center justify-center hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-[#B87851]"
+                >
                   <span className="material-symbols-outlined">chevron_left</span>
                 </button>
-                <button className="w-9 h-9 flex items-center justify-center hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-[#B87851]">
+                <button
+                  onClick={nextMonth}
+                  className="w-9 h-9 flex items-center justify-center hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-[#B87851]"
+                >
                   <span className="material-symbols-outlined">chevron_right</span>
                 </button>
               </div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const carouselCards = [
   {
@@ -8,6 +9,7 @@ const carouselCards = [
     date: "Hace 1 día · Ley Federal del Trabajo",
     title: "Iniciativa que reforma la fracción II del artículo 53 y la fracción III del artículo 76 Bis de la Ley Federal de Protección al Consumidor",
     summary: "Esta iniciativa reforma la Ley Federal de Protección al Consumidor para garantizar mecanismos de asistencia humana en la atención al consumidor en el comercio elec...",
+    eventHref: "/evento/1",
   },
   {
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDP6jmHtSMZ1yPoeorX9klqgqRlfGw7-rEK8Nim1vFLQwUnxH9AgukhbfAYiybMeJLWGIE4t8nsAERbWUAwKT7VDDSKdfwUOe3IYwirLAPW-fXUh831NHrjIJlZAlpNtGndhU3suJwPy1fU6tumRLlnsER7LPmPqO7mrLBxzgteFsAq7_z4Z53wjNd6Z51kXhzZLo2hEJddcDFxNTtZzdm1DtbomQT54fEWtejXOwY7B9Zuaph5lk1iyzZ5ILY7S0VyqwulpZ7s3Vk",
@@ -15,6 +17,7 @@ const carouselCards = [
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Iniciativa que reforma y adiciona diversas disposiciones de la Constitución Política de los Estados Unidos Mexicanos",
     summary: "Establece Estrategia Nacional para Prevención de Adicciones Digitales con control parental obligatorio...",
+    eventHref: "/evento/2",
   },
   {
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7p3WLMuC-pzbCXMdt59eWtOcbhw_LxQga3Yd5tNhciMbJxFcHCHXl5G4QnlJo92d0gWh7beQUpxx8_1dghnjJYBhTaVtZIsXYzFK5hOGhpGfr4i0HqFX4_JOWLQ0L9qMM3gLaqNpMF-yoXCXeeAwUJBsm3Tk1YLP3aT9w1_u_H0CUm7c4oiZ4aFvPHtFycCbRmRRWLcg7E27IsnOHjjWoX21M0ygzgJxP2CTP86XHaNbtQ_30UsYp9RgNZJljcHdsfoc0ez1SohI",
@@ -22,6 +25,7 @@ const carouselCards = [
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Reforma tipifica violencia digital y mediática en el Código Penal Federal",
     summary: "Busca sancionar conductas como difusión de contenido íntimo sin consentimiento en plataformas...",
+    eventHref: "/evento/3",
   },
   {
     img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
@@ -109,6 +113,7 @@ const newsItems = [
 ];
 
 export default function Lens() {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const total = carouselCards.length;
@@ -173,9 +178,15 @@ export default function Lens() {
                       <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{card.date}</p>
                       <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-3xl font-bold text-white leading-tight mb-4 line-clamp-2">{card.title}</h2>
                       <p className="text-white/80 text-sm line-clamp-2 mb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>{card.summary}</p>
-                      <button className="bg-white text-[#0F172A] px-6 py-2 rounded-full font-bold text-xs hover:opacity-90 transition-colors flex items-center gap-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                        Leer más <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                      </button>
+                      {card.eventHref && (
+                        <button
+                          className="bg-white text-[#0F172A] px-6 py-2 rounded-full font-bold text-xs hover:opacity-90 transition-colors flex items-center gap-2"
+                          style={{ fontFamily: "'DM Sans', sans-serif" }}
+                          onClick={() => router.push(card.eventHref)}
+                        >
+                          Leer más <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
