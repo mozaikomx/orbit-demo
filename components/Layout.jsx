@@ -61,12 +61,7 @@ export default function Layout({ children }) {
           }}
         >
           {!collapsed && (
-            <span
-              className="text-2xl font-bold tracking-tight select-none whitespace-nowrap"
-              style={{ color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
-            >
-              ● orbit
-            </span>
+            <img src="/logofondonegro.png" alt="Orbit" className="h-10 w-auto mx-auto" />
           )}
           <button
             onClick={toggle}
