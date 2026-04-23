@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -9,6 +9,8 @@ export default async function handler(req, res) {
   if (!nombre) {
     return res.status(400).json({ error: "nombre es requerido" });
   }
+
+  console.log("KEY:", !!process.env.GEMINI_API_KEY);
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
@@ -66,6 +68,7 @@ Reglas:
     return res.status(200).json(data);
   } catch (err) {
     console.error("Tracker API error:", err);
+    console.log("Error detail:", err.message);
     return res.status(500).json({ error: "Error al procesar la solicitud", detail: err.message });
   }
 }
