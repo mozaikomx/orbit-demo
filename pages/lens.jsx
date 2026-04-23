@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 const carouselCards = [
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBGpDDNNLOMmaBbnk-FgPwDRf4KzllRMFMbxUB9WLofwQZ_KNUNGkV0aaWZ8y9hpMFcREAnUxvzaXFH-edDh_RPR0lNcr6H9vpaB5iUqOqKH1GoXWl2HIzyLCgqUgCFIajT-7SiChCdqohlQvluFaNDWkfDuzKzRY-LgcgUtaE-3bsX0uYYescFrIPrSy7eSjJ7hJh_SEx3kY3VXCex_NQ2oCtf1nKuMwA7SEechZfLaGrFR9JM6BW0OcCGjZKxIOjeuVGCHpDsDTI",
+    img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80",
     tag: "LABORAL",
     date: "Hace 1 día · Ley Federal del Trabajo",
     title: "Iniciativa que reforma la fracción II del artículo 53 y la fracción III del artículo 76 Bis de la Ley Federal de Protección al Consumidor",
@@ -12,7 +12,7 @@ const carouselCards = [
     eventHref: "/evento/1",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDP6jmHtSMZ1yPoeorX9klqgqRlfGw7-rEK8Nim1vFLQwUnxH9AgukhbfAYiybMeJLWGIE4t8nsAERbWUAwKT7VDDSKdfwUOe3IYwirLAPW-fXUh831NHrjIJlZAlpNtGndhU3suJwPy1fU6tumRLlnsER7LPmPqO7mrLBxzgteFsAq7_z4Z53wjNd6Z51kXhzZLo2hEJddcDFxNTtZzdm1DtbomQT54fEWtejXOwY7B9Zuaph5lk1iyzZ5ILY7S0VyqwulpZ7s3Vk",
+    img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80",
     tag: "PROTECCIÓN DIGITAL",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Iniciativa que reforma y adiciona diversas disposiciones de la Constitución Política de los Estados Unidos Mexicanos",
@@ -20,7 +20,7 @@ const carouselCards = [
     eventHref: "/evento/2",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7p3WLMuC-pzbCXMdt59eWtOcbhw_LxQga3Yd5tNhciMbJxFcHCHXl5G4QnlJo92d0gWh7beQUpxx8_1dghnjJYBhTaVtZIsXYzFK5hOGhpGfr4i0HqFX4_JOWLQ0L9qMM3gLaqNpMF-yoXCXeeAwUJBsm3Tk1YLP3aT9w1_u_H0CUm7c4oiZ4aFvPHtFycCbRmRRWLcg7E27IsnOHjjWoX21M0ygzgJxP2CTP86XHaNbtQ_30UsYp9RgNZJljcHdsfoc0ez1SohI",
+    img: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&q=80",
     tag: "GÉNERO",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Reforma tipifica violencia digital y mediática en el Código Penal Federal",
@@ -35,14 +35,14 @@ const carouselCards = [
     summary: "Decisiones complejas o irreversibles deben ser gestionadas por operador humano, no por sistemas automatizados...",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDP6jmHtSMZ1yPoeorX9klqgqRlfGw7-rEK8Nim1vFLQwUnxH9AgukhbfAYiybMeJLWGIE4t8nsAERbWUAwKT7VDDSKdfwUOe3IYwirLAPW-fXUh831NHrjIJlZAlpNtGndhU3suJwPy1fU6tumRLlnsER7LPmPqO7mrLBxzgteFsAq7_z4Z53wjNd6Z51kXhzZLo2hEJddcDFxNTtZzdm1DtbomQT54fEWtejXOwY7B9Zuaph5lk1iyzZ5ILY7S0VyqwulpZ7s3Vk",
+    img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
     tag: "LABORAL",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Iniciativa constitucionaliza jornada de 40 horas y derecho a desconexión digital",
     summary: "Reforma el Artículo 123 constitucional estableciendo jornada máxima semanal y prohibición de contacto fuera de horario...",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7p3WLMuC-pzbCXMdt59eWtOcbhw_LxQga3Yd5tNhciMbJxFcHCHXl5G4QnlJo92d0gWh7beQUpxx8_1dghnjJYBhTaVtZIsXYzFK5hOGhpGfr4i0HqFX4_JOWLQ0L9qMM3gLaqNpMF-yoXCXeeAwUJBsm3Tk1YLP3aT9w1_u_H0CUm7c4oiZ4aFvPHtFycCbRmRRWLcg7E27IsnOHjjWoX21M0ygzgJxP2CTP86XHaNbtQ_30UsYp9RgNZJljcHdsfoc0ez1SohI",
+    img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80",
     tag: "DERECHOS DE AUTOR",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Decreto protege a artistas intérpretes frente al uso no autorizado de IA",
