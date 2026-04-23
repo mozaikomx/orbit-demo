@@ -122,22 +122,53 @@ export default function Layout({ children }) {
             const isActive = router.pathname === href || (href === "/lens" && inLensGroup && router.pathname !== "/echo" && router.pathname !== "/tracker");
             const isLens = href === "/lens";
 
-            const handleClick = isLens
-              ? (e) => {
-                  if (inLensGroup) {
-                    e.preventDefault();
-                    setLensOpen((o) => !o);
-                  } else {
-                    setLensOpen(true);
-                  }
-                }
-              : undefined;
+            if (isLens && !collapsed) {
+              return (
+                <div
+                  key={label}
+                  className="my-0.5 flex items-center transition-all"
+                  style={{
+                    color: isActive ? "#60A5FA" : "#94A3B8",
+                    borderRight: isActive ? "4px solid #B87851" : "4px solid transparent",
+                    backgroundColor: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+                  }}
+                >
+                  <Link
+                    href={href}
+                    onClick={() => setLensOpen(true)}
+                    className="flex items-center gap-3 py-3 flex-1 min-w-0"
+                    style={{ paddingLeft: "2.5rem", color: "inherit" }}
+                  >
+                    <span className="material-symbols-outlined text-xl shrink-0">{icon}</span>
+                    <span
+                      className="text-sm tracking-wide font-medium whitespace-nowrap overflow-hidden text-ellipsis"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      {label}
+                    </span>
+                  </Link>
+                  <button
+                    onClick={() => setLensOpen((o) => !o)}
+                    className="py-3 pr-4 pl-2 shrink-0 hover:text-white transition-colors"
+                    style={{ color: "#475569", fontSize: 16, lineHeight: 1 }}
+                    title={lensOpen ? "Colapsar menú" : "Expandir menú"}
+                  >
+                    <span
+                      className="material-symbols-outlined text-[18px]"
+                      style={{ transition: "transform 0.2s ease", transform: lensOpen ? "rotate(90deg)" : "rotate(0deg)", display: "block" }}
+                    >
+                      chevron_right
+                    </span>
+                  </button>
+                </div>
+              );
+            }
 
             return (
               <Link
                 key={label}
                 href={href}
-                onClick={handleClick}
+                onClick={isLens ? () => setLensOpen(true) : undefined}
                 title={collapsed ? label : undefined}
                 className="my-0.5 py-3 flex items-center transition-all"
                 style={{
