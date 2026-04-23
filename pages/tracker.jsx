@@ -352,11 +352,13 @@ export default function Tracker() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [nodeRelations, setNodeRelations] = useState([]);
   const [profundidad, setProfundidad] = useState(15);
+  const [highDemand, setHighDemand] = useState(false);
 
   const handleInvestigate = async () => {
     if (!nombre.trim()) return;
     setLoading(true);
     setError(null);
+    setHighDemand(false);
     setSelectedNode(null);
     try {
       const res = await fetch("/api/tracker", {
@@ -365,7 +367,11 @@ export default function Tracker() {
         body: JSON.stringify({ nombre: nombre.trim(), profundidad }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(JSON.stringify(json, null, 2));
+      if (json.error === "high_demand") {
+        setHighDemand(true);
+        return;
+      }
+      if (!res.ok) throw new Error(json.error || "Error desconocido");
       setData({ nombre: nombre.trim(), ...json });
     } catch (e) {
       setError(e.message);
@@ -431,8 +437,22 @@ export default function Tracker() {
           >
             {loading ? "Investigando..." : "Investigar"}
           </button>
+          {highDemand && (
+            <div className="rounded-lg p-4 space-y-3" style={{ backgroundColor: "#FFF8F3", border: "1px solid #F0D5C0" }}>
+              <p className="text-sm font-medium leading-snug" style={{ color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
+                ⚠️ El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.
+              </p>
+              <button
+                onClick={handleInvestigate}
+                className="w-full py-2 rounded-lg font-bold text-sm border transition-all hover:opacity-80"
+                style={{ borderColor: "#B87851", color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
+              >
+                Reintentar
+              </button>
+            </div>
+          )}
           {error && (
-            <pre className="text-xs text-red-500 bg-red-50 p-3 rounded-lg overflow-auto whitespace-pre-wrap break-all" style={{ fontFamily: "monospace" }}>{error}</pre>
+            <p className="text-xs text-red-500 bg-red-50 p-3 rounded-lg" style={{ fontFamily: "'DM Sans', sans-serif" }}>{error}</p>
           )}
         </div>
 
