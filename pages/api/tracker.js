@@ -41,7 +41,7 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     { "id": "id_unico_snake_case", "label": "Nombre o institución", "tipo": "Persona|Gobierno|Empresa|ONG" }
   ],
   "conexiones": [
-    { "source": "id_fuente", "target": "id_destino", "tipo": "tipo de relación en 2-3 palabras" }
+    { "source": "id_fuente", "target": "id_destino", "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')" }
   ]
 }
 

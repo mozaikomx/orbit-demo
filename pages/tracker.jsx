@@ -145,7 +145,7 @@ function Graph({ data, onNodeClick }) {
       );
 
     node.append("circle")
-      .attr("r", (d) => d.id === mainActorId ? 28 : 18)
+      .attr("r", (d) => d.id === mainActorId ? 25 : 18)
       .attr("fill", (d) => nodeColors[d.tipo] || "#94A3B8")
       .attr("stroke", "#fff")
       .attr("stroke-width", 2)
@@ -163,7 +163,7 @@ function Graph({ data, onNodeClick }) {
 
     node.append("text")
       .attr("text-anchor", "middle")
-      .attr("dy", (d) => d.id === mainActorId ? 42 : 32)
+      .attr("dy", (d) => d.id === mainActorId ? 38 : 32)
       .attr("font-size", 9)
       .attr("fill", "#334155")
       .attr("font-family", "'DM Sans', sans-serif")
@@ -190,7 +190,7 @@ function Graph({ data, onNodeClick }) {
 
         d3.select(event.currentTarget).select("circle")
           .transition().duration(150)
-          .attr("r", d.id === mainActorId ? 28 * 1.4 : 18 * 1.4);
+          .attr("r", d.id === mainActorId ? 25 * 1.4 : 18 * 1.4);
 
         const mainRelation = data.conexiones.find((c) => {
           const s = typeof c.source === "object" ? c.source.id : c.source;
@@ -220,7 +220,7 @@ function Graph({ data, onNodeClick }) {
 
         d3.select(event.currentTarget).select("circle")
           .transition().duration(150)
-          .attr("r", d.id === mainActorId ? 28 : 18);
+          .attr("r", d.id === mainActorId ? 25 : 18);
 
         tooltip.style("opacity", "0");
       })
