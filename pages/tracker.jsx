@@ -366,6 +366,15 @@ export default function Tracker() {
   const [nodeRelations, setNodeRelations] = useState([]);
   const [profundidad, setProfundidad] = useState(15);
   const [highDemand, setHighDemand] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+
+  const LOADING_MESSAGES = [
+    "Investigando actor...",
+    "Analizando conexiones políticas...",
+    "Mapeando relaciones de influencia...",
+    "Construyendo grafo de actores...",
+    "Casi listo...",
+  ];
 
   const handleInvestigate = async () => {
     if (!nombre.trim()) return;
@@ -373,6 +382,14 @@ export default function Tracker() {
     setError(null);
     setHighDemand(false);
     setSelectedNode(null);
+    setLoadingMessage(LOADING_MESSAGES[0]);
+
+    let msgIndex = 0;
+    const msgInterval = setInterval(() => {
+      msgIndex = Math.min(msgIndex + 1, LOADING_MESSAGES.length - 1);
+      setLoadingMessage(LOADING_MESSAGES[msgIndex]);
+    }, 4000);
+
     try {
       const res = await fetch("/api/tracker", {
         method: "POST",
@@ -389,7 +406,9 @@ export default function Tracker() {
     } catch (e) {
       setError(e.message);
     } finally {
+      clearInterval(msgInterval);
       setLoading(false);
+      setLoadingMessage("");
     }
   };
 
@@ -576,10 +595,15 @@ export default function Tracker() {
       {/* Right: D3 Graph */}
       <div className="flex-1 relative bg-slate-50">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white/70 z-10">
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-8 h-8 border-2 border-[#B87851] border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm text-slate-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>Construyendo grafo...</p>
+          <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-10 h-10 border-[3px] border-[#B87851] border-t-transparent rounded-full animate-spin" />
+              <p
+                className="text-sm font-semibold transition-all duration-500"
+                style={{ color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {loadingMessage}
+              </p>
             </div>
           </div>
         )}

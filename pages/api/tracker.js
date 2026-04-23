@@ -1,17 +1,32 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-async function callWithRetry(model, prompt, attempts = 3) {
-  for (let i = 0; i < attempts; i++) {
-    try {
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
-      const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-      const jsonText = jsonMatch ? jsonMatch[1].trim() : text;
-      return JSON.parse(jsonText);
-    } catch (err) {
-      console.error(`Attempt ${i + 1} failed:`, err.message);
-      if (i < attempts - 1) await new Promise((r) => setTimeout(r, 2000));
+export const config = {
+  maxDuration: 60,
+};
+
+const MODELS = [
+  "gemini-2.5-flash",
+  "gemini-1.5-pro",
+  "gemini-1.5-flash",
+];
+
+async function callGeminiWithFallback(genAI, prompt) {
+  for (const modelName of MODELS) {
+    const model = genAI.getGenerativeModel({
+      model: modelName,
+      tools: [{ googleSearch: {} }],
+    });
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const result = await model.generateContent(prompt);
+        console.log(`Success: ${modelName} attempt ${attempt}`);
+        return result.response.text().trim();
+      } catch (err) {
+        console.error(`${modelName} attempt ${attempt} failed:`, err.message);
+        if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 2000));
+      }
     }
+    console.warn(`${modelName} exhausted, trying next`);
   }
   return null;
 }
@@ -68,21 +83,25 @@ Reglas:
 - No incluyas nodos sin conexión
 `;
 
-  const toolConfig = { tools: [{ googleSearch: {} }] };
+  const text = await callGeminiWithFallback(genAI, prompt);
 
-  // Try gemini-2.5-flash first, then fall back to gemini-1.5-flash
-  for (const modelName of ["gemini-2.5-flash", "gemini-1.5-flash"]) {
-    const model = genAI.getGenerativeModel({ model: modelName, ...toolConfig });
-    const data = await callWithRetry(model, prompt, 3);
-    if (data) {
-      console.log(`Success with ${modelName}`);
-      return res.status(200).json(data);
-    }
-    console.warn(`${modelName} exhausted, trying next model`);
+  if (!text) {
+    return res.status(503).json({
+      error: "high_demand",
+      message: "El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.",
+    });
   }
 
-  return res.status(503).json({
-    error: "high_demand",
-    message: "El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.",
-  });
+  try {
+    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
+    const jsonText = jsonMatch ? jsonMatch[1].trim() : text;
+    const data = JSON.parse(jsonText);
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error("JSON parse error:", err.message, "Raw text:", text.slice(0, 200));
+    return res.status(503).json({
+      error: "high_demand",
+      message: "El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.",
+    });
+  }
 }
