@@ -51,7 +51,7 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     "tags": ["etiqueta1", "etiqueta2", "etiqueta3"]
   },
   "nodos": [
-    { "id": "id_unico_snake_case", "label": "Nombre o institución", "tipo": "Persona|Gobierno|Empresa|ONG", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
+    { "id": "id_unico_snake_case", "label": "nombre completo de la institución o persona, nunca abreviado ni cortado (ej: 'Cámara de Diputados' no 'Cámara de', 'Secretaría de Gobernación' no 'Secretaría de', 'Universidad Panamericana' no 'Universidad de')", "tipo": "Persona|Gobierno|Empresa|ONG", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
   ],
   "conexiones": [
     { "source": "id_fuente", "target": "id_destino", "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')" }

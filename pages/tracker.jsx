@@ -89,24 +89,36 @@ function testImageLoad(url) {
   });
 }
 
-async function wikiThumb(lang, title) {
+async function wikiSearchThumb(lang, searchTerm) {
   try {
-    const r = await fetch(
-      `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+    const searchResp = await fetch(
+      `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&srprop=snippet&srlimit=3&format=json&origin=*`
     );
-    const j = await r.json();
-    const page = Object.values(j.query.pages)[0];
-    return page?.thumbnail?.source || null;
+    const searchData = await searchResp.json();
+    const results = searchData?.query?.search || [];
+    if (results.length === 0) return null;
+
+    for (let i = 0; i < Math.min(2, results.length); i++) {
+      const pageid = results[i].pageid;
+      const imgResp = await fetch(
+        `https://${lang}.wikipedia.org/w/api.php?action=query&pageids=${pageid}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+      );
+      const imgData = await imgResp.json();
+      const page = Object.values(imgData?.query?.pages || {})[0];
+      if (page?.thumbnail?.source) return page.thumbnail.source;
+    }
+    return null;
   } catch {
     return null;
   }
 }
 
-async function getNodeImageUrl(nodeData) {
-  const { tipo, label, dominio } = nodeData;
+async function getNodeImageUrl(nodeData, searchTerm) {
+  const { tipo, dominio } = nodeData;
+  const term = searchTerm || nodeData.label;
 
   if (tipo === "Persona") {
-    return (await wikiThumb("es", label)) || (await wikiThumb("en", label));
+    return (await wikiSearchThumb("es", term)) || (await wikiSearchThumb("en", term));
   }
 
   // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia es, then en
@@ -115,7 +127,7 @@ async function getNodeImageUrl(nodeData) {
     if (await testImageLoad(clearbitUrl)) return clearbitUrl;
   }
 
-  return (await wikiThumb("es", label)) || (await wikiThumb("en", label));
+  return (await wikiSearchThumb("es", term)) || (await wikiSearchThumb("en", term));
 }
 
 function Graph({ data, onNodeClick }) {
@@ -322,7 +334,8 @@ function Graph({ data, onNodeClick }) {
 
     // Async image loading — fires after initial render, non-blocking
     nodes.forEach(async (nd) => {
-      const url = await getNodeImageUrl(nd);
+      const searchTerm = nd.id === mainActorId && data.perfil?.nombre ? data.perfil.nombre : undefined;
+      const url = await getNodeImageUrl(nd, searchTerm);
       if (cancelled || !url || !svgRef.current) return;
       const imgEl = svgRef.current.querySelector(`image[data-node-id="${nd.id}"]`);
       if (imgEl) imgEl.setAttribute("href", url);
