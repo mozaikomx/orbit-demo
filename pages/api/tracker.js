@@ -5,10 +5,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { nombre } = req.body;
+  const { nombre, profundidad = 15 } = req.body;
   if (!nombre) {
     return res.status(400).json({ error: "nombre es requerido" });
   }
+  const nodos = parseInt(profundidad) || 15;
 
   console.log("KEY:", !!process.env.GEMINI_API_KEY);
 
@@ -47,8 +48,8 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
 
 Reglas:
 - El actor investigado debe aparecer como primer nodo con id "actor_principal"
-- Incluye entre 8 y 15 nodos relevantes (personas, instituciones, empresas, organizaciones vinculadas al actor)
-- Incluye entre 8 y 20 conexiones que muestren las relaciones
+- Incluye exactamente ${nodos} nodos relevantes (personas, instituciones, empresas, organizaciones vinculadas al actor)
+- Incluye entre ${nodos} y ${nodos + 5} conexiones que muestren las relaciones
 - Los tipos de nodo solo pueden ser: Persona, Gobierno, Empresa, ONG
 - Para nodos de tipo Gobierno, Empresa y ONG: "dominio" debe ser el sitio web oficial sin https (ej: "pemex.com", "ine.mx"). Para tipo Persona: "dominio" debe ser null
 - Las conexiones deben usar los IDs definidos en los nodos

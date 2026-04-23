@@ -89,39 +89,33 @@ function testImageLoad(url) {
   });
 }
 
+async function wikiThumb(lang, title) {
+  try {
+    const r = await fetch(
+      `https://${lang}.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(title)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+    );
+    const j = await r.json();
+    const page = Object.values(j.query.pages)[0];
+    return page?.thumbnail?.source || null;
+  } catch {
+    return null;
+  }
+}
+
 async function getNodeImageUrl(nodeData) {
   const { tipo, label, dominio } = nodeData;
 
   if (tipo === "Persona") {
-    try {
-      const r = await fetch(
-        `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(label)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
-      );
-      const j = await r.json();
-      const page = Object.values(j.query.pages)[0];
-      if (page?.thumbnail?.source) return page.thumbnail.source;
-    } catch {}
-    return null;
+    return (await wikiThumb("es", label)) || (await wikiThumb("en", label));
   }
 
-  // Gobierno / Empresa / ONG — try Clearbit first
+  // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia es, then en
   if (dominio) {
     const clearbitUrl = `https://logo.clearbit.com/${dominio}`;
-    const ok = await testImageLoad(clearbitUrl);
-    if (ok) return clearbitUrl;
+    if (await testImageLoad(clearbitUrl)) return clearbitUrl;
   }
 
-  // Fallback: Wikipedia thumbnail for the org
-  try {
-    const r = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(label)}&prop=pageimages&format=json&pithumbsize=120&origin=*`
-    );
-    const j = await r.json();
-    const page = Object.values(j.query.pages)[0];
-    if (page?.thumbnail?.source) return page.thumbnail.source;
-  } catch {}
-
-  return null;
+  return (await wikiThumb("es", label)) || (await wikiThumb("en", label));
 }
 
 function Graph({ data, onNodeClick }) {
@@ -344,6 +338,12 @@ function Graph({ data, onNodeClick }) {
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 }
 
+const DEPTH_OPTIONS = [
+  { label: "Rápido", value: 8 },
+  { label: "Estándar", value: 15 },
+  { label: "Profundo", value: 25 },
+];
+
 export default function Tracker() {
   const [nombre, setNombre] = useState("");
   const [loading, setLoading] = useState(false);
@@ -351,6 +351,7 @@ export default function Tracker() {
   const [error, setError] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [nodeRelations, setNodeRelations] = useState([]);
+  const [profundidad, setProfundidad] = useState(15);
 
   const handleInvestigate = async () => {
     if (!nombre.trim()) return;
@@ -361,7 +362,7 @@ export default function Tracker() {
       const res = await fetch("/api/tracker", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre: nombre.trim() }),
+        body: JSON.stringify({ nombre: nombre.trim(), profundidad }),
       });
       const json = await res.json();
       if (!res.ok) throw new Error(JSON.stringify(json, null, 2));
@@ -400,11 +401,28 @@ export default function Tracker() {
           <input
             className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#B87851]/30 focus:border-[#B87851]"
             style={{ fontFamily: "'DM Sans', sans-serif" }}
-            placeholder="Ej: Claudia Sheinbaum"
+            placeholder="Ej: Claudia Sheinbaum, presidenta de México"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleInvestigate()}
           />
+          <div className="flex gap-2">
+            {DEPTH_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => setProfundidad(opt.value)}
+                className="flex-1 py-1.5 rounded-full text-[11px] font-bold border transition-all"
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  backgroundColor: profundidad === opt.value ? "#B87851" : "white",
+                  color: profundidad === opt.value ? "white" : "#94A3B8",
+                  borderColor: profundidad === opt.value ? "#B87851" : "#CBD5E1",
+                }}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
           <button
             onClick={handleInvestigate}
             disabled={loading || !nombre.trim()}
