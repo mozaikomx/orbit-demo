@@ -183,11 +183,6 @@ export default function Echo() {
 
       <div className="p-8 flex gap-8">
         <div className="flex-1 max-w-5xl">
-          <header className="mb-6">
-            <h2 className="font-bold text-3xl text-on-surface mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>Broad Listening</h2>
-            <p className="text-sm text-slate-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>Calendario de eventos.</p>
-          </header>
-
           {/* Calendar */}
           <div className="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 mb-10">
             <div className="flex items-center justify-between mb-10">

@@ -443,15 +443,6 @@ export default function Tracker() {
     <div className="flex h-[calc(100vh-0px)] overflow-hidden">
       {/* Left panel */}
       <div className="w-[340px] shrink-0 flex flex-col border-r border-slate-100 bg-white overflow-y-auto custom-scrollbar">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-2xl font-bold text-on-surface mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Tracker
-          </h2>
-          <p className="text-sm text-slate-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            Mapa de actores e influencia.
-          </p>
-        </div>
-
         <div className="p-6 border-b border-slate-100 space-y-3">
           <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Nombre del actor

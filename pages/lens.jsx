@@ -178,12 +178,6 @@ export default function Lens() {
 
       <div className="flex flex-1 p-8 gap-8" style={{ overflow: "hidden" }}>
         <section className="flex-1 min-w-0" style={{ maxWidth: "calc(100% - 280px - 2rem)", overflowX: "hidden" }}>
-          <div className="mb-10">
-            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-4xl font-bold tracking-tight text-on-surface mb-2">
-              Eventos recomendados para ti
-            </h1>
-          </div>
-
           {/* Carousel */}
           <div className="relative mb-16">
             <div className="carousel-perspective">
