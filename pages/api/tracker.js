@@ -13,14 +13,15 @@ const MODELS = [
 async function callGeminiWithFallback(genAI, prompt) {
   for (const modelName of MODELS) {
     try {
+      const supportsGrounding = modelName.includes("2.5") || modelName.includes("2.0");
       const model = genAI.getGenerativeModel({
         model: modelName,
-        tools: [{ googleSearch: {} }],
+        ...(supportsGrounding ? { tools: [{ googleSearch: {} }] } : {}),
       });
       const result = await model.generateContent(prompt);
       return result.response.text().trim();
     } catch (err) {
-      console.log(`Model ${modelName} failed, trying next...`);
+      console.log(`Model ${modelName} failed: ${err.message}`);
       continue;
     }
   }
