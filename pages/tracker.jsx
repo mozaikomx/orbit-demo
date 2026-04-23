@@ -89,7 +89,14 @@ function testImageLoad(url) {
   });
 }
 
-async function wikiSearchThumb(lang, searchTerm) {
+const POLITICAL_KW = ["méxico", "político", "diputado", "senador", "gobierno", "partido", "secretar", "ministro", "presidente"];
+
+function snippetIsRelevant(snippet) {
+  const text = (snippet || "").toLowerCase();
+  return POLITICAL_KW.some((kw) => text.includes(kw));
+}
+
+async function wikiSearchThumb(lang, searchTerm, filterRelevance = false) {
   try {
     const searchResp = await fetch(
       `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&srprop=snippet&srlimit=3&format=json&origin=*`
@@ -99,9 +106,10 @@ async function wikiSearchThumb(lang, searchTerm) {
     if (results.length === 0) return null;
 
     for (let i = 0; i < Math.min(2, results.length); i++) {
-      const pageid = results[i].pageid;
+      const result = results[i];
+      if (filterRelevance && !snippetIsRelevant(result.snippet)) continue;
       const imgResp = await fetch(
-        `https://${lang}.wikipedia.org/w/api.php?action=query&pageids=${pageid}&prop=pageimages&format=json&pithumbsize=120&origin=*`
+        `https://${lang}.wikipedia.org/w/api.php?action=query&pageids=${result.pageid}&prop=pageimages&format=json&pithumbsize=120&origin=*`
       );
       const imgData = await imgResp.json();
       const page = Object.values(imgData?.query?.pages || {})[0];
@@ -115,18 +123,22 @@ async function wikiSearchThumb(lang, searchTerm) {
 
 async function getNodeImageUrl(nodeData, searchTerm) {
   const { tipo, dominio } = nodeData;
-  const term = searchTerm || nodeData.label;
 
   if (tipo === "Persona") {
-    return (await wikiSearchThumb("es", term)) || (await wikiSearchThumb("en", term));
+    // searchTerm (main actor) already carries full context; other personas get political context added
+    const term = searchTerm || `${nodeData.label} político México`;
+    return (
+      (await wikiSearchThumb("es", term, true)) ||
+      (await wikiSearchThumb("en", term, true))
+    );
   }
 
-  // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia es, then en
+  // Gobierno / Empresa / ONG — Clearbit first, then Wikipedia
+  const term = nodeData.label;
   if (dominio) {
     const clearbitUrl = `https://logo.clearbit.com/${dominio}`;
     if (await testImageLoad(clearbitUrl)) return clearbitUrl;
   }
-
   return (await wikiSearchThumb("es", term)) || (await wikiSearchThumb("en", term));
 }
 
@@ -334,7 +346,9 @@ function Graph({ data, onNodeClick }) {
 
     // Async image loading — fires after initial render, non-blocking
     nodes.forEach(async (nd) => {
-      const searchTerm = nd.id === mainActorId && data.perfil?.nombre ? data.perfil.nombre : undefined;
+      const searchTerm = nd.id === mainActorId && data.perfil?.nombre
+        ? `${data.perfil.nombre} ${data.perfil.cargo || "político"} México`
+        : undefined;
       const url = await getNodeImageUrl(nd, searchTerm);
       if (cancelled || !url || !svgRef.current) return;
       const imgEl = svgRef.current.querySelector(`image[data-node-id="${nd.id}"]`);
