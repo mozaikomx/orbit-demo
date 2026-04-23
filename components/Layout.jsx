@@ -2,10 +2,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
+const LENS_GROUP = ["/lens", "/dashboard", "/grupo"];
+
 const navLinks = [
   { href: "/lens", label: "Lens", icon: "home" },
-  { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
-  { href: "/grupo", label: "Grupo de interés setup", icon: "group" },
+  { href: "/dashboard", label: "Dashboard", subitem: true },
+  { href: "/grupo", label: "Grupo de interés", subitem: true },
   { divider: true },
   { href: "/echo", label: "Echo", icon: "sensors" },
   { href: "/tracker", label: "Tracker", icon: "account_tree" },
@@ -32,6 +34,7 @@ export default function Layout({ children }) {
   };
 
   const w = mounted ? (collapsed ? SIDEBAR_W_COLLAPSED : SIDEBAR_W) : SIDEBAR_W;
+  const inLensGroup = LENS_GROUP.includes(router.pathname);
 
   return (
     <div className="flex min-h-screen">
@@ -44,7 +47,7 @@ export default function Layout({ children }) {
           overflow: "hidden",
         }}
       >
-        {/* Logo + toggle button */}
+        {/* Logo + toggle */}
         <div
           className="flex items-center py-8 shrink-0"
           style={{
@@ -66,16 +69,11 @@ export default function Layout({ children }) {
             onClick={toggle}
             title={collapsed ? "Expandir sidebar" : "Colapsar sidebar"}
             className="flex items-center justify-center rounded-md transition-colors hover:bg-white/10"
-            style={{
-              width: 28,
-              height: 28,
-              color: "#64748B",
-              flexShrink: 0,
-            }}
+            style={{ width: 28, height: 28, color: "#64748B", flexShrink: 0 }}
           >
             <span
-              className="material-symbols-outlined text-[18px] transition-transform duration-250"
-              style={{ transform: collapsed ? "rotate(180deg)" : "rotate(0deg)" }}
+              className="material-symbols-outlined text-[18px]"
+              style={{ transition: "transform 0.25s ease", transform: collapsed ? "rotate(180deg)" : "rotate(0deg)" }}
             >
               chevron_left
             </span>
@@ -83,23 +81,54 @@ export default function Layout({ children }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 space-y-1 overflow-hidden">
+        <nav className="flex-1 space-y-0.5 overflow-hidden">
           {navLinks.map((item, i) => {
             if (item.divider) {
-              return <div key={`divider-${i}`} className="mx-4 my-2 border-t-[0.5px] border-slate-200/10" />;
+              return <div key={`d-${i}`} className="mx-4 my-2 border-t-[0.5px] border-slate-200/10" />;
             }
+
+            if (item.subitem) {
+              if (collapsed || !inLensGroup) return null;
+              const isActive = router.pathname === item.href;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-2 py-1.5 transition-all"
+                  style={{
+                    paddingLeft: "3.5rem",
+                    paddingRight: "1.5rem",
+                    color: isActive ? "#60A5FA" : "#64748B",
+                    borderRight: isActive ? "3px solid #B87851" : "3px solid transparent",
+                    backgroundColor: isActive ? "rgba(255,255,255,0.04)" : "transparent",
+                  }}
+                >
+                  <span
+                    className="w-1 h-1 rounded-full shrink-0"
+                    style={{ backgroundColor: isActive ? "#60A5FA" : "#475569" }}
+                  />
+                  <span
+                    className="text-xs tracking-wide font-medium whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            }
+
             const { href, label, icon } = item;
-            const isActive = router.pathname === href;
+            const isActive = router.pathname === href || (href === "/lens" && inLensGroup && router.pathname !== "/echo" && router.pathname !== "/tracker");
             return (
               <Link
                 key={label}
                 href={href}
                 title={collapsed ? label : undefined}
-                className="my-1 py-3 flex items-center transition-all"
+                className="my-0.5 py-3 flex items-center transition-all"
                 style={{
                   color: isActive ? "#60A5FA" : "#94A3B8",
                   borderRight: isActive ? "4px solid #B87851" : "4px solid transparent",
-                  backgroundColor: isActive ? "rgba(255, 255, 255, 0.06)" : "transparent",
+                  backgroundColor: isActive ? "rgba(255,255,255,0.06)" : "transparent",
                   paddingLeft: collapsed ? 0 : "2.5rem",
                   paddingRight: collapsed ? 0 : "1.5rem",
                   justifyContent: collapsed ? "center" : "flex-start",
@@ -122,11 +151,14 @@ export default function Layout({ children }) {
         </nav>
 
         {/* User */}
-        <div className="py-4 mt-auto shrink-0" style={{ paddingLeft: collapsed ? 0 : "1.5rem", paddingRight: collapsed ? 0 : "1.5rem" }}>
+        <div
+          className="py-4 mt-auto shrink-0"
+          style={{ paddingLeft: collapsed ? 0 : "1.5rem", paddingRight: collapsed ? 0 : "1.5rem" }}
+        >
           <div
             className="flex items-center rounded-lg"
             style={{
-              backgroundColor: "rgba(255, 255, 255, 0.06)",
+              backgroundColor: "rgba(255,255,255,0.06)",
               padding: "0.5rem",
               gap: collapsed ? 0 : "0.75rem",
               justifyContent: collapsed ? "center" : "flex-start",
@@ -160,10 +192,7 @@ export default function Layout({ children }) {
 
       <main
         className="min-h-screen flex flex-col w-full bg-surface"
-        style={{
-          marginLeft: w,
-          transition: "margin-left 0.25s ease",
-        }}
+        style={{ marginLeft: w, transition: "margin-left 0.25s ease" }}
       >
         {children}
       </main>
