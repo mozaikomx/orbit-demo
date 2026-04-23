@@ -5,28 +5,24 @@ export const config = {
 };
 
 const MODELS = [
-  "gemini-2.5-flash",
+  "gemini-2.5-pro",
   "gemini-1.5-pro",
   "gemini-1.5-flash",
 ];
 
 async function callGeminiWithFallback(genAI, prompt) {
   for (const modelName of MODELS) {
-    const model = genAI.getGenerativeModel({
-      model: modelName,
-      tools: [{ googleSearch: {} }],
-    });
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        const result = await model.generateContent(prompt);
-        console.log(`Success: ${modelName} attempt ${attempt}`);
-        return result.response.text().trim();
-      } catch (err) {
-        console.error(`${modelName} attempt ${attempt} failed:`, err.message);
-        if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 2000));
-      }
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        tools: [{ googleSearch: {} }],
+      });
+      const result = await model.generateContent(prompt);
+      return result.response.text().trim();
+    } catch (err) {
+      console.log(`Model ${modelName} failed, trying next...`);
+      continue;
     }
-    console.warn(`${modelName} exhausted, trying next`);
   }
   return null;
 }
