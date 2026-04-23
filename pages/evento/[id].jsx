@@ -30,10 +30,6 @@ const eventos = {
       { initials: "IND", bg: "bg-slate-50", text: "text-slate-700", name: "INDAUTOR", role: "ÓRGANO DESCONCENTRADO" },
       { initials: "STPS", bg: "bg-blue-50", text: "text-blue-800", name: "STPS", role: "EJECUTIVO FEDERAL" },
     ],
-    prevTitle: "Decreto Aduanero",
-    nextTitle: "Acuerdo Diverso",
-    prevHref: "/lens",
-    nextHref: "/lens",
   },
   "2": {
     date: "24 de febrero de 2026",
@@ -60,10 +56,6 @@ const eventos = {
       { initials: "PRO", bg: "bg-slate-50", text: "text-slate-700", name: "PROFECO", role: "ÓRGANO DESCONCENTRADO" },
       { initials: "SE", bg: "bg-orange-50", text: "text-orange-800", name: "Secretaría de Economía", role: "EJECUTIVO FEDERAL" },
     ],
-    prevTitle: "Ley Niños",
-    nextTitle: "Iniciativa 40 Horas",
-    prevHref: "/lens",
-    nextHref: "/lens",
   },
   "3": {
     date: "24 de febrero de 2026",
@@ -90,10 +82,6 @@ const eventos = {
       { initials: "IFT", bg: "bg-slate-50", text: "text-slate-700", name: "IFT", role: "ÓRGANO AUTÓNOMO" },
       { initials: "SS", bg: "bg-orange-50", text: "text-orange-800", name: "Secretaría de Salud", role: "EJECUTIVO FEDERAL" },
     ],
-    prevTitle: "Acuerdo Comercio Exterior",
-    nextTitle: "Iniciativa Consumidor",
-    prevHref: "/lens",
-    nextHref: "/lens",
   },
 };
 
@@ -107,6 +95,12 @@ export default function EventoDetalle() {
   const [toastVisible, setToastVisible] = useState(false);
 
   const ev = eventos[id];
+  const ids = Object.keys(eventos);
+  const numId = parseInt(id);
+  const prevId = numId > 1 ? String(numId - 1) : null;
+  const nextId = numId < ids.length ? String(numId + 1) : null;
+  const prevEv = prevId ? eventos[prevId] : null;
+  const nextEv = nextId ? eventos[nextId] : null;
 
   if (!ev) {
     return (
@@ -339,20 +333,24 @@ export default function EventoDetalle() {
 
           {/* Navigation Cards */}
           <div className="grid grid-cols-2 gap-4">
-            <Link href={ev.prevHref} className="bg-white p-4 rounded-lg group hover:-translate-y-1 transition-all" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
-              <div className="flex items-center gap-2 mb-2" style={{ color: COPPER }}>
-                <span className="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>Anterior</span>
-              </div>
-              <p className="text-xs font-bold text-slate-900 line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{ev.prevTitle}</p>
-            </Link>
-            <Link href={ev.nextHref} className="bg-white p-4 rounded-lg group hover:-translate-y-1 transition-all text-right" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
-              <div className="flex items-center justify-end gap-2 mb-2" style={{ color: COPPER }}>
-                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>Siguiente</span>
-                <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </div>
-              <p className="text-xs font-bold text-slate-900 line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{ev.nextTitle}</p>
-            </Link>
+            {prevEv ? (
+              <Link href={`/evento/${prevId}`} className="bg-white p-4 rounded-lg group hover:-translate-y-1 transition-all" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+                <div className="flex items-center gap-2 mb-2" style={{ color: COPPER }}>
+                  <span className="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>Anterior</span>
+                </div>
+                <p className="text-xs font-bold text-slate-900 line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{prevEv.title}</p>
+              </Link>
+            ) : <div />}
+            {nextEv ? (
+              <Link href={`/evento/${nextId}`} className="bg-white p-4 rounded-lg group hover:-translate-y-1 transition-all text-right" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+                <div className="flex items-center justify-end gap-2 mb-2" style={{ color: COPPER }}>
+                  <span className="text-[10px] font-bold uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>Siguiente</span>
+                  <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </div>
+                <p className="text-xs font-bold text-slate-900 line-clamp-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{nextEv.title}</p>
+              </Link>
+            ) : <div />}
           </div>
 
           {/* Toast */}

@@ -24,7 +24,7 @@ const carouselCards = [
     summary: "Busca sancionar conductas como difusión de contenido íntimo sin consentimiento en plataformas...",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTIDVMNtsIDcGdyTwGon0SEfEVG7DhQWDffKb69fzWN5lwAFZJzJ5QrBy-DbsYmS2FBKVL4dcfbMp7XoBzqVPKcjGQNA5S_JFo9R3tOuM_PR-dyPP18Av62MHYKsWZ8OXe4NNUDKIh1CRujBq_L0fgfpxUinXsEHPM6YAl4Id6d8UGVH32K6u7XIULhJgVPM4-uFIktc-A5NG5QASs",
+    img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
     tag: "CONSUMIDOR",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Iniciativa obliga a plataformas de e-commerce a garantizar atención humana",

@@ -52,7 +52,7 @@ const sessions = [
     statusClass: "bg-emerald-50 text-emerald-700",
     org: "Cámara de Diputados",
     title: "A la decimosexta reunión de junta directiva de la Comisión de Infraestructura",
-    href: "/sesion/2",
+    href: "/sesion/3",
   },
   {
     time: "13:00",
@@ -61,7 +61,7 @@ const sessions = [
     statusClass: "bg-[#B87851]/10 text-[#B87851]",
     org: "Senado de la República",
     title: "Reunión de la Comisión de Hacienda y Crédito Público para análisis de ley de egresos",
-    href: "/sesion/3",
+    href: "/sesion/2",
   },
 ];
 
