@@ -244,10 +244,10 @@ export default function EventoDetalle() {
           {/* Actions */}
           <div className="bg-white rounded-lg p-6 space-y-4" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
             <div className="space-y-3">
-              <button className="w-full py-3.5 text-white rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md" style={{ backgroundColor: COPPER, fontFamily: "'DM Sans', sans-serif" }}>
+              <a href="/reporte-individual.pdf" download="ReporteIniciativaArtistas.pdf" className="w-full py-3.5 text-white rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-md" style={{ backgroundColor: COPPER, fontFamily: "'DM Sans', sans-serif" }}>
                 <span className="material-symbols-outlined text-lg">download</span>
                 Descargar reporte PDF
-              </button>
+              </a>
               <button className="w-full py-3.5 bg-transparent border-2 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:opacity-10 transition-all" style={{ borderColor: COPPER, color: COPPER, fontFamily: "'DM Sans', sans-serif" }}>
                 <span className="material-symbols-outlined text-lg">calendar_today</span>
                 Descargar datos CSV
