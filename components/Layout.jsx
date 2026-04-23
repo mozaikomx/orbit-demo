@@ -25,6 +25,8 @@ export default function Layout({ children }) {
   useEffect(() => {
     const saved = localStorage.getItem("orbit_sidebar_collapsed");
     if (saved === "true") setCollapsed(true);
+    const savedLens = localStorage.getItem("orbit_lens_menu_open");
+    if (savedLens === "false") setLensOpen(false);
     setMounted(true);
   }, []);
 
@@ -89,7 +91,7 @@ export default function Layout({ children }) {
             }
 
             if (item.subitem) {
-              if (collapsed || !inLensGroup || !lensOpen) return null;
+              if (collapsed || !lensOpen) return null;
               const isActive = router.pathname === item.href;
               return (
                 <Link
@@ -148,7 +150,7 @@ export default function Layout({ children }) {
                     </span>
                   </Link>
                   <button
-                    onClick={() => setLensOpen((o) => !o)}
+                    onClick={() => { const next = !lensOpen; setLensOpen(next); localStorage.setItem("orbit_lens_menu_open", String(next)); }}
                     className="py-3 pr-4 pl-2 shrink-0 hover:text-white transition-colors"
                     style={{ color: "#475569", fontSize: 16, lineHeight: 1 }}
                     title={lensOpen ? "Colapsar menú" : "Expandir menú"}
