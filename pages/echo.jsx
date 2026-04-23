@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 
 const calendarDays = Array.from({ length: 28 }, (_, i) => i + 1);
 
@@ -42,6 +43,7 @@ const sessions = [
     statusClass: "bg-sky-50 text-sky-700",
     org: "Cámara de Diputados",
     title: "Debate sobre Presupuesto Nacional 2025",
+    href: "/sesion/1",
   },
   {
     time: "11:30",
@@ -50,6 +52,7 @@ const sessions = [
     statusClass: "bg-emerald-50 text-emerald-700",
     org: "Cámara de Diputados",
     title: "A la decimosexta reunión de junta directiva de la Comisión de Infraestructura",
+    href: "/sesion/2",
   },
   {
     time: "13:00",
@@ -58,6 +61,7 @@ const sessions = [
     statusClass: "bg-[#B87851]/10 text-[#B87851]",
     org: "Senado de la República",
     title: "Reunión de la Comisión de Hacienda y Crédito Público para análisis de ley de egresos",
+    href: "/sesion/3",
   },
 ];
 
@@ -203,30 +207,32 @@ export default function Echo() {
             </div>
             <div className="space-y-4">
               {sessions.map((s, i) => (
-                <article key={i} className="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all flex items-center gap-8 group">
-                  <div className="min-w-[100px] flex flex-col items-center justify-center border-r border-slate-100 pr-8">
-                    <span className="text-2xl font-bold text-on-surface" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.time}</span>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>hrs</span>
-                    <span className="text-[12px] font-medium text-slate-500 mt-2 italic" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.date}</span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${s.statusClass}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                        {s.status}
-                      </span>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.org}</span>
+                <Link key={i} href={s.href}>
+                  <article className="bg-white p-7 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all flex items-center gap-8 group cursor-pointer">
+                    <div className="min-w-[100px] flex flex-col items-center justify-center border-r border-slate-100 pr-8">
+                      <span className="text-2xl font-bold text-on-surface" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.time}</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>hrs</span>
+                      <span className="text-[12px] font-medium text-slate-500 mt-2 italic" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.date}</span>
                     </div>
-                    <h4
-                      className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors leading-snug"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
-                    >
-                      {s.title}
-                    </h4>
-                  </div>
-                  <button className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-[#B87851] group-hover:text-white group-hover:border-[#B87851] transition-all">
-                    <span className="material-symbols-outlined">arrow_forward</span>
-                  </button>
-                </article>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className={`px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${s.statusClass}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {s.status}
+                        </span>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.org}</span>
+                      </div>
+                      <h4
+                        className="font-bold text-lg text-on-surface group-hover:text-primary transition-colors leading-snug"
+                        style={{ fontFamily: "'Playfair Display', serif" }}
+                      >
+                        {s.title}
+                      </h4>
+                    </div>
+                    <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-[#B87851] group-hover:text-white group-hover:border-[#B87851] transition-all">
+                      <span className="material-symbols-outlined">arrow_forward</span>
+                    </div>
+                  </article>
+                </Link>
               ))}
             </div>
           </section>

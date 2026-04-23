@@ -278,8 +278,162 @@ export default function Grupo() {
         )}
 
         {activeTab === "base" && (
-          <div className="flex items-center justify-center h-64 text-slate-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            <p>Contenido de la pestaña Base próximamente.</p>
+          <div className="space-y-8 pb-20">
+            {/* DATOS GENERALES */}
+            <div className="bg-white rounded-xl p-8 border border-slate-100" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${COPPER}1A`, color: COPPER }}>
+                  <span className="material-symbols-outlined">business</span>
+                </div>
+                <h3 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>Datos generales</h3>
+              </div>
+              <form className="space-y-10">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Nombre de la organización</label>
+                    <input className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Enterprise Org" type="text" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Tipo de organización</label>
+                    <select className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 appearance-none cursor-pointer" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <option>Empresa</option><option>ONG</option><option>Gobierno</option><option>Otro</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Descripción</label>
+                    <textarea className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 resize-none" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Describe brevemente tu organización..." rows="3" />
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <h4 className="text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>Información corporativa</h4>
+                    <div className="h-px bg-slate-100 flex-1" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="col-span-2">
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Misión Corporativa</label>
+                      <textarea className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 resize-none" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Cuál es la misión de la empresa" rows="2" />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Visión de política pública</label>
+                      <textarea className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 resize-none" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Enfoque de la empresa sobre política pública" rows="2" />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Fecha de fundación</label>
+                    <select className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 appearance-none cursor-pointer" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <option disabled>Selecciona un año</option>
+                      <option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Tamaño de la empresa</label>
+                    <input className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Ej. 11-50 empleados" type="text" />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>¿A qué se dedican? (Business Focus)</label>
+                    <textarea className="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-4 text-sm outline-none focus:ring-2 resize-none" style={{ fontFamily: "'DM Sans', sans-serif" }} placeholder="Describe la actividad principal" rows="3" />
+                  </div>
+                </div>
+                <div className="pt-6 flex justify-center gap-4">
+                  <button className="px-8 py-3 rounded-full border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }} type="button">Cancelar</button>
+                  <button className="px-8 py-3 rounded-full text-white font-bold text-sm hover:opacity-90 transition-all shadow-lg" style={{ backgroundColor: COPPER, fontFamily: "'DM Sans', sans-serif" }} type="submit">Guardar cambios</button>
+                </div>
+              </form>
+            </div>
+
+            {/* ESTRUCTURA ORGANIZACIONAL */}
+            <div className="bg-white rounded-xl p-10 border border-slate-100" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+              <div className="flex items-center gap-4 mb-12">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${COPPER}1A`, color: COPPER }}>
+                  <span className="material-symbols-outlined">account_tree</span>
+                </div>
+                <h3 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>Estructura organizacional</h3>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="relative pb-16">
+                  <div className="w-56 p-5 rounded-xl text-center shadow-lg text-white" style={{ backgroundColor: COPPER }}>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-70 mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Liderazgo</p>
+                    <p className="font-bold text-base" style={{ fontFamily: "'DM Sans', sans-serif" }}>CEO Office</p>
+                  </div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-16 border-l border-dashed border-slate-300" />
+                </div>
+                <div className="relative w-[85%] max-w-3xl mb-16">
+                  <div className="absolute top-0 left-0 right-0 border-t border-dashed border-slate-300" />
+                  {[0, 1, 2, 3].map(p => (
+                    <div key={p} className="absolute top-0 h-8 border-l border-dashed border-slate-300" style={{ left: `${p * 33.33}%` }} />
+                  ))}
+                </div>
+                <div className="grid grid-cols-4 gap-6 w-full max-w-5xl">
+                  {[
+                    { bg: "bg-emerald-50", text: "text-emerald-800", border: "border-emerald-100", role: "Impacto", name: "Asuntos Públicos" },
+                    { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-100", role: "Delivery", name: "Operaciones" },
+                    { bg: "bg-rose-50", text: "text-rose-800", border: "border-rose-100", role: "Cumplimiento", name: "Legal" },
+                    { bg: "bg-slate-50", text: "text-slate-800", border: "border-slate-200", role: "Staff", name: "Recursos Humanos" },
+                  ].map(({ bg, text, border, role, name }) => (
+                    <div key={name} className={`w-full p-4 ${bg} ${text} border ${border} rounded-xl text-center transition-all hover:shadow-md hover:-translate-y-1`}>
+                      <p className="text-[9px] font-bold uppercase tracking-widest mb-1 opacity-60" style={{ fontFamily: "'DM Sans', sans-serif" }}>{role}</p>
+                      <p className="text-[13px] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* TEMAS DE INTERÉS */}
+            <div className="bg-white rounded-xl p-8 border border-slate-100" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${COPPER}1A`, color: COPPER }}>
+                  <span className="material-symbols-outlined">label</span>
+                </div>
+                <h3 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>Temas de interés estratégico</h3>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {["Economía", "Regulación fiscal", "Tecnología", "Competencia", "Privacidad", "Laboral"].map(t => (
+                  <span key={t} className="px-5 py-2.5 rounded-full text-[13px] font-bold flex items-center gap-2 border" style={{ backgroundColor: `${COPPER}0D`, color: COPPER, borderColor: `${COPPER}33`, fontFamily: "'DM Sans', sans-serif" }}>
+                    <span className="material-symbols-outlined text-[18px]">check_circle</span> {t}
+                  </span>
+                ))}
+                {["Turismo", "Energía", "Infraestructura"].map(t => (
+                  <span key={t} className="px-5 py-2.5 bg-[#f2f4f6] text-slate-400 border border-transparent rounded-full text-[13px] font-medium hover:bg-slate-200 transition-colors cursor-pointer" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* RECURSOS */}
+            <div className="grid grid-cols-2 gap-8">
+              <div className="bg-white rounded-xl p-8 border border-slate-100" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>Archivos adjuntos</h4>
+                <div className="space-y-4">
+                  {[
+                    { icon: "description", name: "Reglamento_Interno.pdf", size: "2.4 MB" },
+                    { icon: "account_tree", name: "Organigrama_Latam.png", size: "1.1 MB" },
+                    { icon: "rebase_edit", name: "Flujo_Aprobaciones.pdf", size: "850 KB" },
+                  ].map(({ icon, name, size }) => (
+                    <div key={name} className="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors group cursor-pointer border border-transparent hover:border-slate-200">
+                      <div className="flex items-center gap-4">
+                        <span className="material-symbols-outlined group-hover:scale-110 transition-transform" style={{ color: COPPER }}>{icon}</span>
+                        <span className="text-sm font-bold text-slate-700" style={{ fontFamily: "'DM Sans', sans-serif" }}>{name}</span>
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>{size}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-8 border border-slate-100 flex flex-col" style={{ boxShadow: "0 12px 32px rgba(15,23,42,0.04), 0 4px 8px rgba(15,23,42,0.02)" }}>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>Notas y contexto</h4>
+                <blockquote className="p-6 rounded-xl italic text-slate-600 text-[13px] leading-relaxed flex-1 bg-white border border-slate-50" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  "La operación de Apple en México se ha centrado históricamente en retail y servicios, sin embargo, con las nuevas tendencias de nearshoring, existe un interés creciente por fortalecer la cadena de suministro tecnológica. Se debe priorizar el monitoreo de cambios en leyes de ciberseguridad y protección de datos."
+                </blockquote>
+                <div className="mt-4 flex justify-end">
+                  <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest" style={{ fontFamily: "'DM Sans', sans-serif" }}>Caracteres: 342 / 500</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

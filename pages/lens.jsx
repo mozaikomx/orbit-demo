@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 
 const carouselCards = [
   {
@@ -23,7 +24,7 @@ const carouselCards = [
     summary: "Busca sancionar conductas como difusión de contenido íntimo sin consentimiento en plataformas...",
   },
   {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTIDVMNtsIDcGdyTwGon0SEfEVG7DhQWDffKb69fzWN5lwAFZJzJ5QrBy-DbsYmS2FBKVL4dcfbMp7XoBzqVPKcjGpBB2PLTqN9gi-4XWLx6zEt_36FP6hdOmz7-rvvtj_KzOk6hywJtIFUOQcjGQNA5S_JFo9R3tOuM_PR-dyPP18Av62MHYKsWZ8OXe4NNUDKIh1CRujBq_L0fgfpxUinXsEHPM6YAl4Id6d8UGVH32K6u7XIULhJgVPM4-uFIktc-A5NG5QASs",
+    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBTIDVMNtsIDcGdyTwGon0SEfEVG7DhQWDffKb69fzWN5lwAFZJzJ5QrBy-DbsYmS2FBKVL4dcfbMp7XoBzqVPKcjGQNA5S_JFo9R3tOuM_PR-dyPP18Av62MHYKsWZ8OXe4NNUDKIh1CRujBq_L0fgfpxUinXsEHPM6YAl4Id6d8UGVH32K6u7XIULhJgVPM4-uFIktc-A5NG5QASs",
     tag: "CONSUMIDOR",
     date: "24 feb 2026 · Gaceta Parlamentaria",
     title: "Iniciativa obliga a plataformas de e-commerce a garantizar atención humana",
@@ -53,6 +54,7 @@ const newsItems = [
     title: "Iniciativa del Ejecutivo federal con proyecto de decreto por el que se reforman y adicionan diversas disposiciones de la Ley Federal del Trabajo y de la Ley Federal del Derecho de Autor, en materia de derechos de las personas trabajadoras artistas intérpretes o ejecutantes",
     summary: "Prohíbe reproducción de voz e imagen de artistas mediante IA sin consentimiento expreso, informado y remunerado...",
     fuente: "Gaceta Parlamentaria",
+    href: "/evento/1",
   },
   {
     impactoItems: [{ label: "Apple", color: "#F59E0B" }],
@@ -69,6 +71,7 @@ const newsItems = [
     title: "Iniciativa que adiciona un artículo 101 Bis 4 a la Ley General de los Derechos de Niñas, Niños y Adolescentes, en materia de prevención de adicciones digitales",
     summary: "Establece Estrategia Nacional para la Prevención de Adicciones Digitales, con obligaciones de verificación de edad...",
     fuente: "Gaceta Parlamentaria",
+    href: "/evento/3",
   },
   {
     impactoItems: [{ label: "Apple", color: "#E24B4A" }, { label: "Rappi", color: "#F59E0B" }],
@@ -85,6 +88,7 @@ const newsItems = [
     title: "Iniciativa que reforma la fracción II del artículo 53 y la fracción III del artículo 76 Bis de la Ley Federal de Protección al Consumidor, en materia de garantía de asistencia humana en mecanismos de atención al consumidor en el comercio electrónico",
     summary: "Obliga a proveedores a asegurar que decisiones complejas sean gestionadas por operador humano...",
     fuente: "Gaceta Parlamentaria",
+    href: "/evento/2",
   },
   {
     impactoItems: [{ label: "Apple", color: "#E24B4A" }, { label: "Rappi", color: "#F59E0B" }],
@@ -106,6 +110,7 @@ const newsItems = [
 
 export default function Lens() {
   const [current, setCurrent] = useState(0);
+  const [filtersOpen, setFiltersOpen] = useState(true);
   const total = carouselCards.length;
 
   const goTo = (index) => {
@@ -179,7 +184,7 @@ export default function Lens() {
               <button
                 onClick={() => goTo(current - 1)}
                 disabled={current === 0}
-                className="carousel-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all z-40 hover:text-white"
+                className="carousel-prev absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all z-40 hover:text-white"
                 style={{ color: "#B87851", opacity: current === 0 ? 0.3 : 1 }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B87851'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
@@ -189,7 +194,7 @@ export default function Lens() {
               <button
                 onClick={() => goTo(current + 1)}
                 disabled={current === total - 1}
-                className="carousel-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all z-40"
+                className="carousel-next absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center transition-all z-40"
                 style={{ color: "#B87851", opacity: current === total - 1 ? 0.3 : 1 }}
                 onMouseEnter={e => e.currentTarget.style.backgroundColor = '#B87851'}
                 onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
@@ -233,104 +238,127 @@ export default function Lens() {
               </div>
             </div>
 
-            {newsItems.map((item, i) => (
-              <article key={i} className="p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow flex gap-6 group" style={{ backgroundColor: "#ffffff" }}>
-                <div className="flex flex-col items-center min-w-[80px] border-r border-slate-100 pr-4">
-                  <p className="text-[9px] font-bold uppercase text-[#9CA3AF] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Impacto</p>
-                  <div className="flex flex-col gap-2 w-full">
-                    {item.impactoItems.map((imp, j) => (
-                      <span key={j} className="text-white text-[10px] font-bold px-3 py-1 rounded-full text-center" style={{ backgroundColor: imp.color, fontFamily: "'DM Sans', sans-serif" }}>
-                        {imp.label}
+            {newsItems.map((item, i) => {
+              const inner = (
+                <article key={i} className="p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow flex gap-6 group" style={{ backgroundColor: "#ffffff" }}>
+                  <div className="flex flex-col items-center min-w-[80px] border-r border-slate-100 pr-4">
+                    <p className="text-[9px] font-bold uppercase text-[#9CA3AF] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Impacto</p>
+                    <div className="flex flex-col gap-2 w-full">
+                      {item.impactoItems.map((imp, j) => (
+                        <span key={j} className="text-white text-[10px] font-bold px-3 py-1 rounded-full text-center" style={{ backgroundColor: imp.color, fontFamily: "'DM Sans', sans-serif" }}>
+                          {imp.label}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${item.tagColor}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        {item.tag}
                       </span>
-                    ))}
+                      <time className="text-[11px] text-slate-400 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.date}</time>
+                    </div>
+                    <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>{item.title}</h4>
+                    <p className="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.summary}</p>
+                    <div className="border-t border-[#F3F4F6] pt-2 mt-auto flex items-center gap-[6px]">
+                      <span className="text-[10px] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Fuente:</span>
+                      <span className="text-[10px] text-[#6B7280] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.fuente}</span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex-1 flex flex-col">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded ${item.tagColor}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                      {item.tag}
-                    </span>
-                    <time className="text-[11px] text-slate-400 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.date}</time>
-                  </div>
-                  <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors" style={{ fontFamily: "'Playfair Display', serif" }}>{item.title}</h4>
-                  <p className="text-sm text-on-surface-variant line-clamp-2 leading-relaxed mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.summary}</p>
-                  <div className="border-t border-[#F3F4F6] pt-2 mt-auto flex items-center gap-[6px]">
-                    <span className="text-[10px] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Fuente:</span>
-                    <span className="text-[10px] text-[#6B7280] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.fuente}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+              return item.href ? (
+                <Link key={i} href={item.href} className="block">{inner}</Link>
+              ) : inner;
+            })}
           </div>
         </section>
 
         {/* Right Panel */}
         <aside className="w-[280px] flex flex-col gap-4 shrink-0">
           <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col gap-5">
-            <h4 className="text-lg font-bold text-on-surface" style={{ fontFamily: "'Playfair Display', serif" }}>Filtros</h4>
-
-            <FilterSection label="Grupo de Interés">
-              <div className="relative bg-[#F3F4F6] h-8 rounded-full flex p-1 items-center">
-                <div className="absolute inset-y-1 left-1 w-[calc(33.33%-4px)] bg-white rounded-full shadow-sm" />
-                <button className="flex-1 text-[10px] font-bold z-10 text-on-surface text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Todas</button>
-                <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Rappi</button>
-                <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Apple</button>
-              </div>
-            </FilterSection>
-
-            <FilterSection label="Fuente">
-              <div className="flex flex-wrap gap-2">
-                <PillBtn active>Todas</PillBtn>
-                <PillBtn accent>DOF</PillBtn>
-                <PillBtn>CONAMER</PillBtn>
-                <PillBtn>PROFECO</PillBtn>
-              </div>
-            </FilterSection>
-
-            <FilterSection label="Tema">
-              <div className="flex flex-wrap gap-2">
-                <PillBtn active>Todas</PillBtn>
-                <PillBtn accent>Salud</PillBtn>
-                <PillBtn>Seguridad</PillBtn>
-                <PillBtn>Laboral</PillBtn>
-                <PillBtn>Economía</PillBtn>
-                <PillBtn>Gobierno</PillBtn>
-              </div>
-            </FilterSection>
-
-            <FilterSection label="Poder">
-              <div className="flex flex-wrap gap-2">
-                <PillBtn active>Todas</PillBtn>
-                <PillBtn accent>Ejecutivo</PillBtn>
-                <PillBtn>Legislativo</PillBtn>
-                <PillBtn>Judicial</PillBtn>
-              </div>
-            </FilterSection>
-
-            <FilterSection label="Nivel de gobierno">
-              <div className="flex flex-wrap gap-2">
-                <PillBtn active>Todas</PillBtn>
-                <PillBtn accent>Federal</PillBtn>
-                <PillBtn>Estatal</PillBtn>
-                <PillBtn>Local</PillBtn>
-              </div>
-            </FilterSection>
-
-            <FilterSection label="Ver desde:">
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
-                <input className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2" type="date" defaultValue="2023-10-15" style={{ fontFamily: "'DM Sans', sans-serif" }} />
-              </div>
-            </FilterSection>
-
-            <div className="pt-2 space-y-3">
-              <button className="w-full text-white py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
-                Aplicar filtros
-              </button>
-              <button className="w-full text-center text-slate-400 text-xs font-bold hover:text-slate-600 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Restablecer
+            <div className="flex items-center justify-between">
+              <h4 className="text-lg font-bold text-on-surface" style={{ fontFamily: "'Playfair Display', serif" }}>Filtros</h4>
+              <button
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                className="w-7 h-7 flex items-center justify-center rounded-md hover:bg-slate-100 transition-colors"
+                style={{ color: "#64748B" }}
+              >
+                <span
+                  className="material-symbols-outlined text-[18px]"
+                  style={{ transition: "transform 0.25s ease", transform: filtersOpen ? "rotate(0deg)" : "rotate(180deg)" }}
+                >
+                  expand_less
+                </span>
               </button>
             </div>
+
+            {filtersOpen && (
+              <>
+                <FilterSection label="Grupo de Interés">
+                  <div className="relative bg-[#F3F4F6] h-8 rounded-full flex p-1 items-center">
+                    <div className="absolute inset-y-1 left-1 w-[calc(33.33%-4px)] bg-white rounded-full shadow-sm" />
+                    <button className="flex-1 text-[10px] font-bold z-10 text-on-surface text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Todas</button>
+                    <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Rappi</button>
+                    <button className="flex-1 text-[10px] font-bold z-10 text-slate-500 text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>Apple</button>
+                  </div>
+                </FilterSection>
+
+                <FilterSection label="Fuente">
+                  <div className="flex flex-wrap gap-2">
+                    <PillBtn active>Todas</PillBtn>
+                    <PillBtn accent>DOF</PillBtn>
+                    <PillBtn>CONAMER</PillBtn>
+                    <PillBtn>PROFECO</PillBtn>
+                  </div>
+                </FilterSection>
+
+                <FilterSection label="Tema">
+                  <div className="flex flex-wrap gap-2">
+                    <PillBtn active>Todas</PillBtn>
+                    <PillBtn accent>Salud</PillBtn>
+                    <PillBtn>Seguridad</PillBtn>
+                    <PillBtn>Laboral</PillBtn>
+                    <PillBtn>Economía</PillBtn>
+                    <PillBtn>Gobierno</PillBtn>
+                  </div>
+                </FilterSection>
+
+                <FilterSection label="Poder">
+                  <div className="flex flex-wrap gap-2">
+                    <PillBtn active>Todas</PillBtn>
+                    <PillBtn accent>Ejecutivo</PillBtn>
+                    <PillBtn>Legislativo</PillBtn>
+                    <PillBtn>Judicial</PillBtn>
+                  </div>
+                </FilterSection>
+
+                <FilterSection label="Nivel de gobierno">
+                  <div className="flex flex-wrap gap-2">
+                    <PillBtn active>Todas</PillBtn>
+                    <PillBtn accent>Federal</PillBtn>
+                    <PillBtn>Estatal</PillBtn>
+                    <PillBtn>Local</PillBtn>
+                  </div>
+                </FilterSection>
+
+                <FilterSection label="Ver desde:">
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">calendar_today</span>
+                    <input className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-2" type="date" defaultValue="2023-10-15" style={{ fontFamily: "'DM Sans', sans-serif" }} />
+                  </div>
+                </FilterSection>
+
+                <div className="pt-2 space-y-3">
+                  <button className="w-full text-white py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
+                    Aplicar filtros
+                  </button>
+                  <button className="w-full text-center text-slate-400 text-xs font-bold hover:text-slate-600 transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Restablecer
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="space-y-3 mt-2">
