@@ -46,7 +46,7 @@ const nodeColors = {
   ONG: "#10B981",
 };
 
-function Graph({ data }) {
+function Graph({ data, onNodeClick }) {
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -57,9 +57,9 @@ function Graph({ data }) {
     const height = container.clientHeight || 500;
 
     d3.select(svgRef.current).selectAll("*").remove();
+    d3.selectAll(".orbit-tooltip").remove();
 
-    const svg = d3
-      .select(svgRef.current)
+    const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height);
 
@@ -71,6 +71,7 @@ function Graph({ data }) {
       })
     );
 
+    const mainActorId = data.nodos[0].id;
     const nodes = data.nodos.map((n) => ({ ...n }));
     const links = data.conexiones.map((l) => ({ ...l }));
 
@@ -95,8 +96,7 @@ function Graph({ data }) {
       .attr("fill", "#94A3B8")
       .attr("d", "M0,-5L10,0L0,5");
 
-    const link = g
-      .append("g")
+    const link = g.append("g")
       .selectAll("line")
       .data(links)
       .join("line")
@@ -104,23 +104,28 @@ function Graph({ data }) {
       .attr("stroke-width", 1.5)
       .attr("marker-end", "url(#arrow)");
 
-    const linkLabel = g
-      .append("g")
-      .selectAll("text")
-      .data(links)
-      .join("text")
-      .attr("text-anchor", "middle")
-      .attr("font-size", 9)
-      .attr("fill", "#94A3B8")
-      .attr("font-family", "'DM Sans', sans-serif")
-      .text((d) => d.tipo);
+    // Tooltip div appended to body
+    const tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "orbit-tooltip")
+      .style("position", "fixed")
+      .style("background", "white")
+      .style("border", "1px solid #E2E8F0")
+      .style("border-radius", "12px")
+      .style("padding", "10px 14px")
+      .style("font-family", "'DM Sans', sans-serif")
+      .style("box-shadow", "0 4px 20px rgba(0,0,0,0.14)")
+      .style("pointer-events", "none")
+      .style("z-index", "9999")
+      .style("opacity", "0")
+      .style("max-width", "210px")
+      .style("transition", "opacity 0.12s");
 
-    const node = g
-      .append("g")
+    const node = g.append("g")
       .selectAll("g")
       .data(nodes)
       .join("g")
-      .style("cursor", "grab")
+      .style("cursor", (d) => d.id === mainActorId ? "grab" : "pointer")
       .call(
         d3.drag()
           .on("start", (event, d) => {
@@ -139,32 +144,105 @@ function Graph({ data }) {
           })
       );
 
-    node
-      .append("circle")
-      .attr("r", (d) => (d.id === "claudia" ? 28 : 18))
+    node.append("circle")
+      .attr("r", (d) => d.id === mainActorId ? 28 : 18)
       .attr("fill", (d) => nodeColors[d.tipo] || "#94A3B8")
       .attr("stroke", "#fff")
       .attr("stroke-width", 2)
       .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.15))");
 
-    node
-      .append("text")
+    node.append("text")
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
-      .attr("font-size", (d) => (d.id === "claudia" ? 10 : 8))
+      .attr("font-size", (d) => d.id === mainActorId ? 10 : 8)
       .attr("font-weight", "bold")
       .attr("fill", "#fff")
       .attr("font-family", "'DM Sans', sans-serif")
+      .style("pointer-events", "none")
       .text((d) => d.label.split(" ")[0]);
 
-    node
-      .append("text")
+    node.append("text")
       .attr("text-anchor", "middle")
-      .attr("dy", (d) => (d.id === "claudia" ? 42 : 32))
+      .attr("dy", (d) => d.id === mainActorId ? 42 : 32)
       .attr("font-size", 9)
       .attr("fill", "#334155")
       .attr("font-family", "'DM Sans', sans-serif")
+      .style("pointer-events", "none")
       .text((d) => d.label.split(" ").slice(0, 2).join(" "));
+
+    // Helpers to resolve source/target after simulation mutates them
+    const srcId = (l) => (typeof l.source === "object" ? l.source.id : l.source);
+    const tgtId = (l) => (typeof l.target === "object" ? l.target.id : l.target);
+
+    node
+      .on("mouseover", (event, d) => {
+        const connectedIds = new Set();
+        links.forEach((l) => {
+          if (srcId(l) === d.id) connectedIds.add(tgtId(l));
+          if (tgtId(l) === d.id) connectedIds.add(srcId(l));
+        });
+
+        node.style("opacity", (n) => n.id === d.id || connectedIds.has(n.id) ? 1 : 0.2);
+        link
+          .style("opacity", (l) => srcId(l) === d.id || tgtId(l) === d.id ? 1 : 0.08)
+          .attr("stroke-width", (l) => srcId(l) === d.id || tgtId(l) === d.id ? 3 : 1.5)
+          .attr("stroke", (l) => srcId(l) === d.id || tgtId(l) === d.id ? "#B87851" : "#CBD5E1");
+
+        d3.select(event.currentTarget).select("circle")
+          .transition().duration(150)
+          .attr("r", d.id === mainActorId ? 28 * 1.4 : 18 * 1.4);
+
+        const mainRelation = data.conexiones.find((c) => {
+          const s = typeof c.source === "object" ? c.source.id : c.source;
+          const t = typeof c.target === "object" ? c.target.id : c.target;
+          return (s === d.id && t === mainActorId) || (t === d.id && s === mainActorId);
+        });
+
+        tooltip
+          .html(`
+            <div style="font-weight:700;font-size:13px;color:#0F172A;margin-bottom:3px">${d.label}</div>
+            <div style="font-size:10px;font-weight:700;color:${nodeColors[d.tipo] || "#94A3B8"};text-transform:uppercase;letter-spacing:0.08em;${mainRelation ? "margin-bottom:7px" : ""}">${d.tipo}</div>
+            ${mainRelation ? `<div style="font-size:11px;color:#64748B;border-top:1px solid #F1F5F9;padding-top:6px">Relación: <strong style="color:#334155">${mainRelation.tipo}</strong></div>` : ""}
+          `)
+          .style("opacity", "1");
+      })
+      .on("mousemove", (event) => {
+        tooltip
+          .style("left", (event.clientX + 16) + "px")
+          .style("top", (event.clientY - 44) + "px");
+      })
+      .on("mouseout", (event, d) => {
+        node.style("opacity", 1);
+        link
+          .style("opacity", 1)
+          .attr("stroke-width", 1.5)
+          .attr("stroke", "#CBD5E1");
+
+        d3.select(event.currentTarget).select("circle")
+          .transition().duration(150)
+          .attr("r", d.id === mainActorId ? 28 : 18);
+
+        tooltip.style("opacity", "0");
+      })
+      .on("click", (event, d) => {
+        if (d.id === mainActorId) return;
+
+        const relations = data.conexiones
+          .filter((c) => {
+            const s = typeof c.source === "object" ? c.source.id : c.source;
+            const t = typeof c.target === "object" ? c.target.id : c.target;
+            return s === d.id || t === d.id;
+          })
+          .map((c) => {
+            const s = typeof c.source === "object" ? c.source.id : c.source;
+            const t = typeof c.target === "object" ? c.target.id : c.target;
+            const otherId = s === d.id ? t : s;
+            const other = data.nodos.find((n) => n.id === otherId);
+            return { tipo: c.tipo, direction: s === d.id ? "out" : "in", otherLabel: other?.label || otherId };
+          });
+
+        onNodeClick(d, relations);
+      });
 
     simulation.on("tick", () => {
       link
@@ -172,15 +250,13 @@ function Graph({ data }) {
         .attr("y1", (d) => d.source.y)
         .attr("x2", (d) => d.target.x)
         .attr("y2", (d) => d.target.y);
-
-      linkLabel
-        .attr("x", (d) => (d.source.x + d.target.x) / 2)
-        .attr("y", (d) => (d.source.y + d.target.y) / 2 - 4);
-
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
 
-    return () => simulation.stop();
+    return () => {
+      simulation.stop();
+      tooltip.remove();
+    };
   }, [data]);
 
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
@@ -191,11 +267,14 @@ export default function Tracker() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(EXAMPLE_DATA);
   const [error, setError] = useState(null);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [nodeRelations, setNodeRelations] = useState([]);
 
   const handleInvestigate = async () => {
     if (!nombre.trim()) return;
     setLoading(true);
     setError(null);
+    setSelectedNode(null);
     try {
       const res = await fetch("/api/tracker", {
         method: "POST",
@@ -210,6 +289,11 @@ export default function Tracker() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNodeClick = (node, relations) => {
+    setSelectedNode(node);
+    setNodeRelations(relations);
   };
 
   const perfil = data?.perfil;
@@ -252,7 +336,54 @@ export default function Tracker() {
           )}
         </div>
 
-        {perfil && (
+        {/* Node detail panel */}
+        {selectedNode ? (
+          <div className="p-6 space-y-5">
+            <button
+              onClick={() => setSelectedNode(null)}
+              className="flex items-center gap-1.5 text-xs font-bold hover:opacity-70 transition-opacity"
+              style={{ color: "#B87851", fontFamily: "'DM Sans', sans-serif" }}
+            >
+              <span className="material-symbols-outlined text-sm">arrow_back</span>
+              Volver al perfil
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div
+                className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
+                style={{ backgroundColor: nodeColors[selectedNode.tipo] || "#94A3B8" }}
+              >
+                {selectedNode.label.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+              </div>
+              <div>
+                <p className="font-bold text-on-surface text-sm leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{selectedNode.label}</p>
+                <p className="text-xs font-bold mt-0.5" style={{ color: nodeColors[selectedNode.tipo] || "#94A3B8", fontFamily: "'DM Sans', sans-serif" }}>{selectedNode.tipo}</p>
+              </div>
+            </div>
+
+            {nodeRelations.length > 0 && (
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  Conexiones ({nodeRelations.length})
+                </p>
+                <div className="space-y-2">
+                  {nodeRelations.map((rel, i) => (
+                    <div key={i} className="flex items-start gap-2 text-xs text-slate-600 py-1.5 border-b border-slate-50 last:border-0" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <span className="material-symbols-outlined text-sm text-slate-400 mt-0.5 shrink-0">
+                        {rel.direction === "out" ? "arrow_forward" : "arrow_back"}
+                      </span>
+                      <span>
+                        <span className="font-bold text-slate-700">{rel.tipo}</span>
+                        <span className="text-slate-400"> · </span>
+                        {rel.otherLabel}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : perfil && (
           <div className="p-6 space-y-5">
             <div className="flex items-center gap-3">
               <div
@@ -293,7 +424,6 @@ export default function Tracker() {
               </div>
             )}
 
-            {/* Legend */}
             <div className="pt-4 border-t border-slate-100 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Tipos de nodo</p>
               {Object.entries(nodeColors).map(([tipo, color]) => (
@@ -306,7 +436,7 @@ export default function Tracker() {
 
             {data?.nodos && (
               <div className="pt-4 border-t border-slate-100">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   {data.nodos.length} actores · {data.conexiones.length} conexiones
                 </p>
               </div>
@@ -326,10 +456,10 @@ export default function Tracker() {
           </div>
         )}
         <div className="absolute top-4 right-4 text-[11px] text-slate-400 z-10" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          Arrastra nodos · Scroll para zoom
+          Arrastra nodos · Scroll para zoom · Click para ver detalle
         </div>
         <div style={{ width: "100%", height: "100%" }}>
-          {data && <Graph key={data.nombre} data={data} />}
+          {data && <Graph key={data.nombre} data={data} onNodeClick={handleNodeClick} />}
         </div>
       </div>
     </div>
