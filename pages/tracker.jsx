@@ -202,8 +202,8 @@ export default function Tracker() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre: nombre.trim() }),
       });
-      if (!res.ok) throw new Error("Error al consultar la API");
       const json = await res.json();
+      if (!res.ok) throw new Error(JSON.stringify(json, null, 2));
       setData({ nombre: nombre.trim(), ...json });
     } catch (e) {
       setError(e.message);
@@ -248,7 +248,7 @@ export default function Tracker() {
             {loading ? "Investigando..." : "Investigar"}
           </button>
           {error && (
-            <p className="text-xs text-red-500" style={{ fontFamily: "'DM Sans', sans-serif" }}>{error}</p>
+            <pre className="text-xs text-red-500 bg-red-50 p-3 rounded-lg overflow-auto whitespace-pre-wrap break-all" style={{ fontFamily: "monospace" }}>{error}</pre>
           )}
         </div>
 

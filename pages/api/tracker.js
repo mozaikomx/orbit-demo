@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     tools: [{ googleSearch: {} }],
   });
 
@@ -68,7 +68,6 @@ Reglas:
     return res.status(200).json(data);
   } catch (err) {
     console.error("Tracker API error:", err);
-    console.log("Error detail:", err.message);
-    return res.status(500).json({ error: "Error al procesar la solicitud", detail: err.message });
+    return res.status(500).json({ error: err.message, stack: err.stack, key: !!process.env.GEMINI_API_KEY });
   }
 }
