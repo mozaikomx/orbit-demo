@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 const LENS_GROUP = ["/lens", "/dashboard", "/grupo"];
+const TRACKER_GROUP = ["/tracker", "/actores"];
 
 const navLinks = [
   { href: "/lens", label: "Lens", icon: "home" },
@@ -11,6 +12,7 @@ const navLinks = [
   { divider: true },
   { href: "/echo", label: "Echo", icon: "sensors" },
   { href: "/tracker", label: "Tracker", icon: "account_tree" },
+  { href: "/actores", label: "Actores guardados", trackerSubitem: true },
 ];
 
 const SIDEBAR_W = 220;
@@ -21,14 +23,22 @@ export default function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [lensOpen, setLensOpen] = useState(true);
+  const [trackerOpen, setTrackerOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("orbit_sidebar_collapsed");
     if (saved === "true") setCollapsed(true);
     const savedLens = localStorage.getItem("orbit_lens_menu_open");
     if (savedLens === "false") setLensOpen(false);
+    const savedTracker = localStorage.getItem("orbit_tracker_menu_open");
+    if (savedTracker === "true") setTrackerOpen(true);
     setMounted(true);
   }, []);
+
+  // Auto-open tracker submenu when navigating into the tracker group
+  useEffect(() => {
+    if (TRACKER_GROUP.includes(router.pathname)) setTrackerOpen(true);
+  }, [router.pathname]);
 
   const toggle = () => {
     const next = !collapsed;
@@ -38,6 +48,7 @@ export default function Layout({ children }) {
 
   const w = mounted ? (collapsed ? SIDEBAR_W_COLLAPSED : SIDEBAR_W) : SIDEBAR_W;
   const inLensGroup = LENS_GROUP.includes(router.pathname);
+  const inTrackerGroup = TRACKER_GROUP.includes(router.pathname);
 
   return (
     <div className="flex min-h-screen">
@@ -85,6 +96,7 @@ export default function Layout({ children }) {
               return <div key={`d-${i}`} className="mx-4 my-2 border-t-[0.5px] border-slate-200/10" />;
             }
 
+            // Lens subitems
             if (item.subitem) {
               if (collapsed || !lensOpen) return null;
               const isActive = router.pathname === item.href;
@@ -115,10 +127,46 @@ export default function Layout({ children }) {
               );
             }
 
-            const { href, label, icon } = item;
-            const isActive = router.pathname === href || (href === "/lens" && inLensGroup && router.pathname !== "/echo" && router.pathname !== "/tracker");
-            const isLens = href === "/lens";
+            // Tracker subitems
+            if (item.trackerSubitem) {
+              if (collapsed || !trackerOpen) return null;
+              const isActive = router.pathname === item.href;
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-2 py-1.5 transition-all"
+                  style={{
+                    paddingLeft: "3.5rem",
+                    paddingRight: "1.5rem",
+                    color: isActive ? "#60A5FA" : "#64748B",
+                    borderRight: isActive ? "3px solid #B87851" : "3px solid transparent",
+                    backgroundColor: isActive ? "rgba(255,255,255,0.04)" : "transparent",
+                  }}
+                >
+                  <span
+                    className="w-1 h-1 rounded-full shrink-0"
+                    style={{ backgroundColor: isActive ? "#60A5FA" : "#475569" }}
+                  />
+                  <span
+                    className="text-xs tracking-wide font-medium whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            }
 
+            const { href, label, icon } = item;
+            const isActive =
+              router.pathname === href ||
+              (href === "/lens" && inLensGroup && !inTrackerGroup && router.pathname !== "/echo") ||
+              (href === "/tracker" && inTrackerGroup);
+            const isLens = href === "/lens";
+            const isTracker = href === "/tracker";
+
+            // Lens with chevron toggle
             if (isLens && !collapsed) {
               return (
                 <div
@@ -153,6 +201,48 @@ export default function Layout({ children }) {
                     <span
                       className="material-symbols-outlined text-[18px]"
                       style={{ transition: "transform 0.2s ease", transform: lensOpen ? "rotate(90deg)" : "rotate(0deg)", display: "block" }}
+                    >
+                      chevron_right
+                    </span>
+                  </button>
+                </div>
+              );
+            }
+
+            // Tracker with chevron toggle
+            if (isTracker && !collapsed) {
+              return (
+                <div
+                  key={label}
+                  className="my-0.5 flex items-center transition-all"
+                  style={{
+                    color: isActive ? "#60A5FA" : "#94A3B8",
+                    borderRight: isActive ? "4px solid #B87851" : "4px solid transparent",
+                    backgroundColor: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+                  }}
+                >
+                  <Link
+                    href={href}
+                    className="flex items-center gap-3 py-3 flex-1 min-w-0"
+                    style={{ paddingLeft: "2.5rem", color: "inherit" }}
+                  >
+                    <span className="material-symbols-outlined text-xl shrink-0">{icon}</span>
+                    <span
+                      className="text-sm tracking-wide font-medium whitespace-nowrap overflow-hidden text-ellipsis"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      {label}
+                    </span>
+                  </Link>
+                  <button
+                    onClick={() => { const next = !trackerOpen; setTrackerOpen(next); localStorage.setItem("orbit_tracker_menu_open", String(next)); }}
+                    className="py-3 pr-4 pl-2 shrink-0 hover:text-white transition-colors"
+                    style={{ color: "#475569", fontSize: 16, lineHeight: 1 }}
+                    title={trackerOpen ? "Colapsar menú" : "Expandir menú"}
+                  >
+                    <span
+                      className="material-symbols-outlined text-[18px]"
+                      style={{ transition: "transform 0.2s ease", transform: trackerOpen ? "rotate(90deg)" : "rotate(0deg)", display: "block" }}
                     >
                       chevron_right
                     </span>

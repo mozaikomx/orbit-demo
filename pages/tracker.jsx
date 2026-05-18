@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 import * as d3 from "d3";
 
 const EXAMPLE_DATA = {
@@ -481,15 +482,61 @@ const DEPTH_OPTIONS = [
 ];
 
 export default function Tracker() {
+  const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(EXAMPLE_DATA);
+  const [isSearchResult, setIsSearchResult] = useState(false);
   const [error, setError] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [nodeRelations, setNodeRelations] = useState([]);
   const [profundidad, setProfundidad] = useState(15);
   const [highDemand, setHighDemand] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  // Load actor from URL param ?actor=UUID
+  useEffect(() => {
+    const { actor } = router.query;
+    if (!actor) return;
+    setLoading(true);
+    fetch(`/api/actores?id=${actor}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.error) { setError(json.error); return; }
+        setData({ nombre: json.nombre, ...json });
+        setNombre(json.nombre);
+        setIsSearchResult(true);
+        setIsSaved(true);
+      })
+      .catch(() => setError("Error al cargar el actor"))
+      .finally(() => setLoading(false));
+  }, [router.query]);
+
+  const handleGuardar = async () => {
+    if (!data || !isSearchResult) return;
+    setSaving(true);
+    try {
+      await fetch("/api/actores", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: data.nombre,
+          perfil: data.perfil,
+          nodos: data.nodos,
+          conexiones: data.conexiones,
+          investigacion: data.investigacion,
+          profundidad,
+        }),
+      });
+      setIsSaved(true);
+    } catch {
+      setError("Error al guardar");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const LOADING_MESSAGES = [
     "Investigando actor...",
@@ -526,6 +573,7 @@ export default function Tracker() {
       }
       if (!res.ok) throw new Error(json.error || "Error desconocido");
       setData({ nombre: nombre.trim(), ...json });
+      setIsSearchResult(true);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -651,11 +699,31 @@ export default function Tracker() {
         ) : perfil && (
           <div className="p-6 space-y-5">
             <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0"
-                style={{ backgroundColor: "#B87851" }}
-              >
-                {perfil.nombre.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+              <div className="relative shrink-0">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg"
+                  style={{ backgroundColor: "#B87851" }}
+                >
+                  {perfil.nombre.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                </div>
+                {isSearchResult && (
+                  <button
+                    onClick={handleGuardar}
+                    disabled={saving || isSaved}
+                    className="absolute -top-1 -right-1 w-6 h-6 flex items-center justify-center rounded-full bg-white shadow-md transition-all hover:scale-110 disabled:cursor-default"
+                    title={isSaved ? "Guardado" : "Guardar actor"}
+                  >
+                    <span
+                      className="material-symbols-outlined text-[17px] transition-all duration-300"
+                      style={{
+                        color: isSaved ? "#B87851" : "#94A3B8",
+                        fontVariationSettings: isSaved ? "'FILL' 1" : "'FILL' 0",
+                      }}
+                    >
+                      bookmark
+                    </span>
+                  </button>
+                )}
               </div>
               <div>
                 <p className="font-bold text-on-surface text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>{perfil.nombre}</p>
