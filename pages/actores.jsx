@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Layout from "../components/Layout";
-
 function formatDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" });
@@ -35,8 +33,7 @@ export default function ActoresGuardados() {
   };
 
   return (
-    <Layout>
-      <div className="w-full px-6 py-8">
+    <div className="w-full px-6 py-8">
         <div className="mb-8">
           <h1
             className="text-2xl font-bold text-slate-900 mb-1"
@@ -127,6 +124,5 @@ export default function ActoresGuardados() {
           })}
         </div>
       </div>
-    </Layout>
   );
 }
