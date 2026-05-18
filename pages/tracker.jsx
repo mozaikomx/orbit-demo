@@ -495,6 +495,53 @@ export default function Tracker() {
   const [saving, setSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
+  const PANEL_MIN = 280;
+  const PANEL_MAX = 600;
+  const PANEL_DEFAULT = 400;
+  const [panelWidth, setPanelWidth] = useState(PANEL_DEFAULT);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragStartWidth = useRef(0);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("orbit_tracker_panel_width");
+    if (saved) {
+      const w = parseInt(saved, 10);
+      if (w >= PANEL_MIN && w <= PANEL_MAX) setPanelWidth(w);
+    }
+  }, []);
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!isDragging.current) return;
+      const dx = e.clientX - dragStartX.current;
+      const newWidth = Math.min(PANEL_MAX, Math.max(PANEL_MIN, dragStartWidth.current + dx));
+      setPanelWidth(newWidth);
+    };
+    const onMouseUp = (e) => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      const finalWidth = Math.min(PANEL_MAX, Math.max(PANEL_MIN, dragStartWidth.current + (e.clientX - dragStartX.current)));
+      localStorage.setItem("orbit_tracker_panel_width", String(Math.round(finalWidth)));
+    };
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, []);
+
+  const handleDividerMouseDown = (e) => {
+    isDragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartWidth.current = panelWidth;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
   // Load actor from URL param ?actor=UUID
   useEffect(() => {
     const { actor } = router.query;
@@ -592,7 +639,10 @@ export default function Tracker() {
   return (
     <div className="flex h-[calc(100vh-0px)] overflow-hidden">
       {/* Left panel */}
-      <div className="w-[340px] shrink-0 flex flex-col border-r border-slate-100 bg-white overflow-y-auto custom-scrollbar">
+      <div
+        className="shrink-0 flex flex-col bg-white overflow-y-auto custom-scrollbar"
+        style={{ width: panelWidth }}
+      >
         <div className="p-6 border-b border-slate-100 space-y-3">
           <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Nombre del actor
@@ -785,8 +835,21 @@ export default function Tracker() {
         )}
       </div>
 
+      {/* Resizable divider */}
+      <div
+        onMouseDown={handleDividerMouseDown}
+        className="relative shrink-0 group"
+        style={{ width: 4, cursor: "col-resize", backgroundColor: "#E2E8F0", zIndex: 10 }}
+      >
+        <div className="absolute inset-y-0 -left-1 -right-1 group-hover:bg-[#B87851]/15 transition-colors duration-150" />
+        <div
+          className="absolute left-0 right-0 top-1/2 -translate-y-1/2 mx-auto rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+          style={{ width: 3, height: 32, backgroundColor: "#B87851" }}
+        />
+      </div>
+
       {/* Right: D3 Graph */}
-      <div className="flex-1 relative bg-slate-50">
+      <div className="flex-1 relative bg-slate-50" style={{ minWidth: 0 }}>
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
             <div className="flex flex-col items-center gap-4">
