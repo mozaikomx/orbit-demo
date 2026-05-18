@@ -2,13 +2,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 
-const nodeColors = {
-  Persona: "#3B82F6",
-  Gobierno: "#EF4444",
-  Empresa: "#8B5CF6",
-  ONG: "#10B981",
-};
-
 function formatDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year: "numeric" });
@@ -43,7 +36,7 @@ export default function ActoresGuardados() {
 
   return (
     <Layout>
-      <div className="p-8">
+      <div className="w-full p-8">
         <div className="mb-8">
           <h1
             className="text-2xl font-bold text-slate-900 mb-1"
