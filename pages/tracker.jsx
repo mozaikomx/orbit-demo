@@ -316,17 +316,19 @@ function formatInline(text) {
     // [Fuente: ...] legacy format
     .replace(/\[Fuente:([^\]]+)\]/g, (match, inner) => {
       const parts = inner.split("|").map((s) => s.trim());
-      const url = parts.find((p) => p.startsWith("http"));
+      const rawUrl = parts.find((p) => p.startsWith("http"));
       const style = "color:#B87851;font-size:11px;font-weight:600";
-      if (url) {
+      if (rawUrl) {
+        const url = rawUrl.replace(/[?&]utm_source=openai/g, "");
         return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="${style};text-decoration:underline;text-underline-offset:2px">${match}</a>`;
       }
       return `<span style="${style}">${match}</span>`;
     })
     // [texto](url) markdown links — must come before [N] footnote handler
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) =>
-      `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#B87851;text-decoration:underline;text-underline-offset:2px">${label}</a>`
-    )
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) => {
+      const cleanUrl = url.replace(/[?&]utm_source=openai/g, "");
+      return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" style="color:#B87851;text-decoration:underline;text-underline-offset:2px">${label}</a>`;
+    })
     // [1] [2] inline footnote refs → superscript anchors
     .replace(/\[(\d+)\]/g, (_, num) =>
       `<sup><a id="fnref-${num}" href="#fn-${num}" style="color:#B87851;font-weight:700;text-decoration:none;cursor:pointer;font-size:10px">${num}</a></sup>`
@@ -387,9 +389,10 @@ function renderInvestigacion(text) {
       const urlMatch = content.match(/(https?:\/\/\S+)/);
       let renderedContent = content;
       if (urlMatch) {
-        const url = urlMatch[1];
+        const rawUrl = urlMatch[1];
+        const url = rawUrl.replace(/[?&]utm_source=openai/g, "");
         renderedContent = content.replace(
-          url,
+          rawUrl,
           `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#3B82F6;word-break:break-all;text-decoration:underline">${url}</a>`
         );
       }
