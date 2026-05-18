@@ -371,6 +371,109 @@ function Graph({ data, onNodeClick }) {
   return <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />;
 }
 
+function formatInline(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    // [Fuente: ...] legacy format
+    .replace(/\[Fuente:([^\]]+)\]/g, (match, inner) => {
+      const parts = inner.split("|").map((s) => s.trim());
+      const url = parts.find((p) => p.startsWith("http"));
+      const style = "color:#B87851;font-size:11px;font-weight:600";
+      if (url) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="${style};text-decoration:underline;text-underline-offset:2px">${match}</a>`;
+      }
+      return `<span style="${style}">${match}</span>`;
+    })
+    // [texto](url) markdown links — must come before [N] footnote handler
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, (_, label, url) =>
+      `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#B87851;text-decoration:underline;text-underline-offset:2px">${label}</a>`
+    )
+    // [1] [2] inline footnote refs → superscript anchors
+    .replace(/\[(\d+)\]/g, (_, num) =>
+      `<sup><a id="fnref-${num}" href="#fn-${num}" style="color:#B87851;font-weight:700;text-decoration:none;cursor:pointer;font-size:10px">${num}</a></sup>`
+    );
+}
+
+function renderInvestigacion(text) {
+  const lines = text.split("\n");
+  let html = "";
+  let inParagraph = false;
+  let inList = false;
+
+  const closeParagraph = () => { if (inParagraph) { html += "</p>"; inParagraph = false; } };
+  const closeList = () => { if (inList) { html += "</ul>"; inList = false; } };
+
+  for (const raw of lines) {
+    const line = raw.trim();
+
+    if (line === "") {
+      closeParagraph();
+      closeList();
+      continue;
+    }
+
+    // Must check ### before ## before #
+    if (line.startsWith("### ")) {
+      closeParagraph(); closeList();
+      html += `<h3 style="font-size:13px;font-weight:600;color:#0F172A;margin:12px 0 3px">${formatInline(line.slice(4))}</h3>`;
+      continue;
+    }
+
+    if (line.startsWith("## ")) {
+      closeParagraph(); closeList();
+      html += `<h2 style="font-size:14px;font-weight:600;color:#0F172A;margin:14px 0 4px">${formatInline(line.slice(3))}</h2>`;
+      continue;
+    }
+
+    if (line.startsWith("# ")) {
+      closeParagraph(); closeList();
+      html += `<h1 style="font-size:15px;font-weight:700;color:#0F172A;margin:16px 0 4px">${formatInline(line.slice(2))}</h1>`;
+      continue;
+    }
+
+    if (line.startsWith("* ") || line.startsWith("- ")) {
+      closeParagraph();
+      if (!inList) { html += '<ul style="margin:4px 0 8px;padding-left:16px;list-style:disc">'; inList = true; }
+      html += `<li style="margin-bottom:3px">${formatInline(line.slice(2))}</li>`;
+      continue;
+    }
+
+    // Footnote entry: [1] Title — Medium — https://...
+    // Must be checked before paragraph so [N] isn't converted to a superscript ref
+    const fnMatch = line.match(/^\[(\d+)\]\s+(.+)$/);
+    if (fnMatch) {
+      closeParagraph(); closeList();
+      const num = fnMatch[1];
+      const content = fnMatch[2];
+      const urlMatch = content.match(/(https?:\/\/\S+)/);
+      let renderedContent = content;
+      if (urlMatch) {
+        const url = urlMatch[1];
+        renderedContent = content.replace(
+          url,
+          `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#3B82F6;word-break:break-all;text-decoration:underline">${url}</a>`
+        );
+      }
+      html += `<p id="fn-${num}" style="font-size:11px;color:#64748B;margin:3px 0;padding-left:10px;border-left:2px solid #E2E8F0;line-height:1.5"><a href="#fnref-${num}" style="color:#B87851;font-weight:700;text-decoration:none;margin-right:4px">[${num}]</a>${renderedContent}</p>`;
+      continue;
+    }
+
+    closeList();
+    if (!inParagraph) {
+      html += '<p style="margin:0 0 8px">';
+      inParagraph = true;
+    } else {
+      html += " ";
+    }
+    html += formatInline(line);
+  }
+
+  closeParagraph();
+  closeList();
+  return html;
+}
+
 const DEPTH_OPTIONS = [
   { label: "Rápido", value: 8 },
   { label: "Estándar", value: 15 },
@@ -591,6 +694,26 @@ export default function Tracker() {
                 </div>
               ))}
             </div>
+
+            {data?.investigacion && (
+              <div className="pt-4 border-t border-slate-100">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  Investigación completa
+                </p>
+                <div
+                  className="custom-scrollbar"
+                  style={{
+                    maxHeight: 400,
+                    overflowY: "auto",
+                    fontSize: 13,
+                    color: "#64748B",
+                    lineHeight: 1.6,
+                    fontFamily: "'DM Sans', sans-serif",
+                  }}
+                  dangerouslySetInnerHTML={{ __html: renderInvestigacion(data.investigacion) }}
+                />
+              </div>
+            )}
 
             {data?.nodos && (
               <div className="pt-4 border-t border-slate-100">

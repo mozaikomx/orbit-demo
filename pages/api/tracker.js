@@ -1,28 +1,20 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { OpenAI } = require("openai");
 
 export const config = {
-  maxDuration: 60,
+  maxDuration: 120,
 };
 
-const MODELS = [
-  "gemini-2.5-pro",
-  "gemini-2.5-flash",
-  "gemini-1.5-flash",
-];
+const GEMINI_JSON_MODELS = ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-flash-latest"];
 
-async function callGeminiWithFallback(genAI, prompt) {
-  for (const modelName of MODELS) {
+async function callGeminiJSON(genAI, prompt) {
+  for (const modelName of GEMINI_JSON_MODELS) {
     try {
-      const supportsGrounding = modelName.includes("2.5") || modelName.includes("2.0");
-      const model = genAI.getGenerativeModel({
-        model: modelName,
-        ...(supportsGrounding ? { tools: [{ googleSearch: {} }] } : {}),
-      });
+      const model = genAI.getGenerativeModel({ model: modelName });
       const result = await model.generateContent(prompt);
       return result.response.text().trim();
     } catch (err) {
-      console.log(`Model ${modelName} failed: ${err.message}`);
-      continue;
+      console.error(`Gemini JSON error (${modelName}):`, err.message);
     }
   }
   return null;
@@ -39,27 +31,69 @@ export default async function handler(req, res) {
   }
   const nodos = parseInt(profundidad) || 15;
 
-  console.log("KEY:", !!process.env.GEMINI_API_KEY);
+  const geminiKey = process.env.GEMINI_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY no configurada" });
+  if (!geminiKey) return res.status(500).json({ error: "GEMINI_API_KEY no configurada" });
+  if (!openaiKey) return res.status(500).json({ error: "OPENAI_API_KEY no configurada" });
+
+  const genAI = new GoogleGenerativeAI(geminiKey);
+  const openai = new OpenAI({ apiKey: openaiKey });
+
+  // Paso 1 — Investigación con OpenAI gpt-4o + web search
+  let investigacion;
+  try {
+    const responseInvestigacion = await openai.responses.create({
+      model: "gpt-4o",
+      tools: [{ type: "web_search_preview" }],
+      input: `Eres un analista de inteligencia especializado en mapear actores de influencia en México.
+Investiga exhaustivamente a: "${nombre}"
+
+Escribe un reporte de inteligencia completo que incluya según aplique:
+- Quién es, formación académica, trayectoria profesional
+- Cargos actuales y pasados, o giro y posicionamiento si es empresa/institución
+- Afiliación política, sectorial o ideológica si aplica
+- Relaciones clave: personas, instituciones, empresas, organizaciones con las que tiene vínculos
+- Contexto actual y relevancia en México
+- Controversias, investigaciones o noticias relevantes si las hay
+
+Para cada afirmación importante cita la fuente con superíndice numérico y lista todas las fuentes al final con su URL completa en este formato:
+[1] Título del artículo — Nombre del medio — URL completa
+[2] ...
+
+Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
+    });
+    investigacion = responseInvestigacion.output_text;
+  } catch (err) {
+    console.error("OpenAI error:", err.message);
+    return res.status(503).json({
+      error: "high_demand",
+      message: "El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.",
+    });
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
+  if (!investigacion) {
+    return res.status(503).json({
+      error: "high_demand",
+      message: "El servicio está experimentando alta demanda. Intenta de nuevo en unos segundos.",
+    });
+  }
 
-  const prompt = `
-Eres un analista político especializado en actores de influencia en México.
-Investiga al actor: "${nombre}"
+  // Paso 2 — JSON con Gemini 1.5 Flash (sin tools, solo estructurar)
+  const promptJSON = `
+Basándote en la siguiente investigación sobre "${nombre}", genera un JSON de red de influencia.
+
+INVESTIGACIÓN:
+${investigacion}
 
 Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, sin explicaciones extra) con la siguiente estructura exacta:
 
 {
   "perfil": {
     "nombre": "nombre completo del actor",
-    "cargo": "cargo actual o más relevante",
+    "cargo": "cargo actual o más relevante, o giro principal si es empresa/institución",
     "partido": "partido político si aplica, sino null",
-    "descripcion": "descripción de 2-3 oraciones sobre el actor y su relevancia política",
+    "descripcion": "descripción de 2-3 oraciones sobre el actor y su relevancia en México",
     "tags": ["etiqueta1", "etiqueta2", "etiqueta3"]
   },
   "nodos": [
@@ -78,9 +112,10 @@ Reglas:
 - Para nodos de tipo Gobierno, Empresa y ONG: "dominio" debe ser el sitio web oficial sin https (ej: "pemex.com", "ine.mx"). Para tipo Persona: "dominio" debe ser null
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
+- El campo "partido" es null si el actor no tiene afiliación político-partidista
 `;
 
-  const text = await callGeminiWithFallback(genAI, prompt);
+  const text = await callGeminiJSON(genAI, promptJSON);
 
   if (!text) {
     return res.status(503).json({
@@ -93,6 +128,7 @@ Reglas:
     const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
     const jsonText = jsonMatch ? jsonMatch[1].trim() : text;
     const data = JSON.parse(jsonText);
+    data.investigacion = investigacion;
     return res.status(200).json(data);
   } catch (err) {
     console.error("JSON parse error:", err.message, "Raw text:", text.slice(0, 200));
