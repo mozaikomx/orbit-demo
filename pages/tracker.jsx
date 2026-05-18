@@ -44,7 +44,7 @@ const nodeColors = {
   Persona: "#3B82F6",
   Gobierno: "#EF4444",
   Empresa: "#8B5CF6",
-  Sociedad Civil: "#10B981",
+  "Sociedad Civil": "#10B981",
 };
 
 // SVG fallback icons per node type (white icon on transparent bg, overlaid on colored circle)
@@ -76,7 +76,7 @@ const SVG_FALLBACKS = {
      <rect x="62" y="50" width="14" height="11" rx="1" fill="rgba(0,0,0,0.12)"/>
      <rect x="38" y="66" width="24" height="20" rx="1" fill="rgba(0,0,0,0.12)"/>`
   ),
-  Sociedad Civil: makeSvgFallback(
+  "Sociedad Civil": makeSvgFallback(
     `<path d="M50 78 C50 78 16 58 16 36 C16 25 24 16 36 18 C43 18 48 23 50 28 C52 23 57 18 64 18 C76 16 84 25 84 36 C84 58 50 78 50 78 Z" fill="rgba(255,255,255,0.88)"/>`
   ),
 };
