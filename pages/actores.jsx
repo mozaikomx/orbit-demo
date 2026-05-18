@@ -36,7 +36,7 @@ export default function ActoresGuardados() {
 
   return (
     <Layout>
-      <div className="w-full p-8">
+      <div className="w-full px-6 py-8">
         <div className="mb-8">
           <h1
             className="text-2xl font-bold text-slate-900 mb-1"

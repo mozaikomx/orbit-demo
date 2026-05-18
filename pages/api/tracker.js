@@ -93,8 +93,7 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     "nombre": "nombre completo del actor",
     "cargo": "cargo actual o más relevante, o giro principal si es empresa/institución",
     "partido": "partido político si aplica, sino null",
-    "descripcion": "descripción de 2-3 oraciones sobre el actor y su relevancia en México",
-    "tags": ["etiqueta1", "etiqueta2", "etiqueta3"]
+    "descripcion": "descripción de 2-3 oraciones sobre el actor y su relevancia en México"
   },
   "nodos": [
     { "id": "id_unico_snake_case", "label": "nombre completo de la institución o persona, nunca abreviado ni cortado (ej: 'Cámara de Diputados' no 'Cámara de', 'Secretaría de Gobernación' no 'Secretaría de', 'Universidad Panamericana' no 'Universidad de')", "tipo": "Persona|Gobierno|Empresa|Sociedad Civil", "dominio": "sitio web oficial sin https (ej: itam.mx)" }

@@ -10,7 +10,6 @@ const EXAMPLE_DATA = {
     partido: "Morena",
     descripcion:
       "Primera mujer en ocupar la Presidencia de México. Científica e ingeniera ambiental. Gobernó la Ciudad de México de 2018 a 2023. Ganó las elecciones del 2 de junio de 2024 con más del 59% de los votos.",
-    tags: ["Presidenta", "Morena", "Científica", "CDMX"],
   },
   nodos: [
     { id: "claudia", label: "Claudia Sheinbaum", tipo: "Persona", dominio: null },
@@ -743,15 +742,7 @@ export default function Tracker() {
               <p className="text-sm text-slate-600 leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{perfil.descripcion}</p>
             </div>
 
-            {perfil.tags && (
-              <div className="flex flex-wrap gap-2">
-                {perfil.tags.map((tag) => (
-                  <span key={tag} className="text-[11px] font-bold px-3 py-1 rounded-full text-white" style={{ backgroundColor: "#B87851", fontFamily: "'DM Sans', sans-serif" }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
+
 
             <div className="pt-4 border-t border-slate-100 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Tipos de nodo</p>
