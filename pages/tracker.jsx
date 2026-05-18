@@ -80,68 +80,12 @@ const SVG_FALLBACKS = {
   ),
 };
 
-function testImageLoad(url) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve(url);
-    img.onerror = () => resolve(null);
-    img.src = url;
-  });
-}
-
-const POLITICAL_KW = ["méxico", "político", "diputado", "senador", "gobierno", "partido", "secretar", "ministro", "presidente"];
-
-function snippetIsRelevant(snippet) {
-  const text = (snippet || "").toLowerCase();
-  return POLITICAL_KW.some((kw) => text.includes(kw));
-}
-
-async function wikiSearchThumb(lang, searchTerm, filterRelevance = false) {
-  try {
-    const searchResp = await fetch(
-      `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(searchTerm)}&srprop=snippet&srlimit=3&format=json&origin=*`
-    );
-    const searchData = await searchResp.json();
-    const results = searchData?.query?.search || [];
-    if (results.length === 0) return null;
-
-    for (let i = 0; i < Math.min(2, results.length); i++) {
-      const result = results[i];
-      if (filterRelevance && !snippetIsRelevant(result.snippet)) continue;
-      const imgResp = await fetch(
-        `https://${lang}.wikipedia.org/w/api.php?action=query&pageids=${result.pageid}&prop=pageimages&format=json&pithumbsize=120&origin=*`
-      );
-      const imgData = await imgResp.json();
-      const page = Object.values(imgData?.query?.pages || {})[0];
-      if (page?.thumbnail?.source) return page.thumbnail.source;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-async function getNodeImageUrl(nodeData) {
-  const { tipo, dominio } = nodeData;
-
-  // Personas always use SVG silhouette — no Wikipedia fetch
-  if (tipo === "Persona") return null;
-
-  // Gobierno / Empresa / Sociedad Civil — Clearbit first, then Wikipedia es, then en
-  if (dominio) {
-    const clearbitUrl = `https://logo.clearbit.com/${dominio}`;
-    if (await testImageLoad(clearbitUrl)) return clearbitUrl;
-  }
-  return (await wikiSearchThumb("es", nodeData.label)) || (await wikiSearchThumb("en", nodeData.label));
-}
 
 function Graph({ data, onNodeClick }) {
   const svgRef = useRef(null);
 
   useEffect(() => {
     if (!data || !svgRef.current) return;
-    let cancelled = false;
-
     const container = svgRef.current.parentElement;
     const width = container.clientWidth || 600;
     const height = container.clientHeight || 500;
@@ -236,17 +180,20 @@ function Graph({ data, onNodeClick }) {
           })
       );
 
-    // Colored background circle
+    // Outer color ring (same color, lower opacity)
+    node.append("circle")
+      .attr("r", (d) => getR(d) + 4)
+      .attr("fill", (d) => nodeColors[d.tipo] || "#94A3B8")
+      .attr("fill-opacity", 0.25);
+
+    // Main colored circle
     node.append("circle")
       .attr("r", getR)
       .attr("fill", (d) => nodeColors[d.tipo] || "#94A3B8")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 2)
       .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.15))");
 
-    // Image element — starts with SVG fallback, replaced async with real image
+    // SVG icon (always from fallback, no external fetches)
     node.append("image")
-      .attr("data-node-id", (d) => d.id)
       .attr("clip-path", (d) => `url(#clip-${safeId(d.id)})`)
       .attr("width", (d) => getR(d) * 2)
       .attr("height", (d) => getR(d) * 2)
@@ -353,16 +300,7 @@ function Graph({ data, onNodeClick }) {
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
 
-    // Async image loading — fires after initial render, non-blocking
-    nodes.forEach(async (nd) => {
-      const url = await getNodeImageUrl(nd);
-      if (cancelled || !url || !svgRef.current) return;
-      const imgEl = svgRef.current.querySelector(`image[data-node-id="${nd.id}"]`);
-      if (imgEl) imgEl.setAttribute("href", url);
-    });
-
     return () => {
-      cancelled = true;
       simulation.stop();
       tooltip.remove();
     };
