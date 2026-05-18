@@ -324,8 +324,8 @@ export default function Layout({ children }) {
       </aside>
 
       <main
-        className="min-h-screen flex flex-col w-full bg-surface"
-        style={{ marginLeft: w, transition: "margin-left 0.25s ease" }}
+        className="min-h-screen flex flex-col bg-surface"
+        style={{ marginLeft: w, width: `calc(100% - ${w}px)`, transition: "margin-left 0.25s ease, width 0.25s ease" }}
       >
         {children}
       </main>
