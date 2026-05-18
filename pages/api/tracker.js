@@ -97,7 +97,7 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     "tags": ["etiqueta1", "etiqueta2", "etiqueta3"]
   },
   "nodos": [
-    { "id": "id_unico_snake_case", "label": "nombre completo de la institución o persona, nunca abreviado ni cortado (ej: 'Cámara de Diputados' no 'Cámara de', 'Secretaría de Gobernación' no 'Secretaría de', 'Universidad Panamericana' no 'Universidad de')", "tipo": "Persona|Gobierno|Empresa|ONG", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
+    { "id": "id_unico_snake_case", "label": "nombre completo de la institución o persona, nunca abreviado ni cortado (ej: 'Cámara de Diputados' no 'Cámara de', 'Secretaría de Gobernación' no 'Secretaría de', 'Universidad Panamericana' no 'Universidad de')", "tipo": "Persona|Gobierno|Empresa|Sociedad Civil", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
   ],
   "conexiones": [
     { "source": "id_fuente", "target": "id_destino", "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')" }
@@ -108,8 +108,8 @@ Reglas:
 - El actor investigado debe aparecer como primer nodo con id "actor_principal"
 - Incluye exactamente ${nodos} nodos relevantes (personas, instituciones, empresas, organizaciones vinculadas al actor)
 - Incluye entre ${nodos} y ${nodos + 5} conexiones que muestren las relaciones
-- Los tipos de nodo solo pueden ser: Persona, Gobierno, Empresa, ONG
-- Para nodos de tipo Gobierno, Empresa y ONG: "dominio" debe ser el sitio web oficial sin https (ej: "pemex.com", "ine.mx"). Para tipo Persona: "dominio" debe ser null
+- Los tipos de nodo solo pueden ser: Persona, Gobierno, Empresa, Sociedad Civil
+- Para nodos de tipo Gobierno, Empresa y Sociedad Civil: "dominio" debe ser el sitio web oficial sin https (ej: "pemex.com", "ine.mx"). Para tipo Persona: "dominio" debe ser null
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
 - El campo "partido" es null si el actor no tiene afiliación político-partidista
