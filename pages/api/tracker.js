@@ -49,19 +49,18 @@ export default async function handler(req, res) {
       input: `Eres un analista de inteligencia especializado en mapear actores de influencia en México.
 Investiga exhaustivamente a: "${nombre}"
 
-Escribe un reporte de inteligencia completo que incluya según aplique:
-- Quién es, formación académica, trayectoria profesional
-- Cargos actuales y pasados, o giro y posicionamiento si es empresa/institución
-- Afiliación política, sectorial o ideológica si aplica
-- Relaciones clave: personas, instituciones, empresas, organizaciones con las que tiene vínculos
-- Contexto actual y relevancia en México
-- Controversias, investigaciones o noticias relevantes si las hay
+Estructura el reporte con estas secciones usando ## para los títulos:
+## Identificación y Formación Académica
+## Trayectoria Profesional y Cargos
+## Afiliación Política e Ideológica
+## Relaciones Clave
+## Contexto Actual y Relevancia
+## Controversias e Investigaciones Relevantes
+## Fuentes consultadas
 
-Para cada afirmación importante cita la fuente con superíndice numérico [1].
-Al final del reporte incluye una sección "## Fuentes consultadas" con TODAS las fuentes que usaste, numeradas, en este formato:
-[N] Título del artículo — Nombre del medio — URL completa
-
-Incluye todas las fuentes, aunque no hayas citado algunas inline en el texto.
+Usa **negrita** para nombres propios y datos importantes.
+Para cada afirmación importante cita la fuente inline con formato [texto](url).
+Al final en ## Fuentes consultadas lista TODAS las fuentes numeradas: [N] Título — Medio — URL
 
 Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
     });
