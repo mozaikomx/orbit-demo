@@ -288,7 +288,7 @@ function Graph({ data, onNodeClick }) {
             const t = typeof c.target === "object" ? c.target.id : c.target;
             const otherId = s === d.id ? t : s;
             const other = data.nodos.find((n) => n.id === otherId);
-            return { tipo: c.tipo, direction: s === d.id ? "out" : "in", otherLabel: other?.label || otherId };
+            return { tipo: c.tipo, direction: s === d.id ? "out" : "in", otherLabel: other?.label || otherId, fuente_titulo: c.fuente_titulo || null, fuente_url: c.fuente_url || null };
           });
         onNodeClick(d, relations);
       });
@@ -679,6 +679,17 @@ export default function Tracker() {
                         <span className="font-bold text-slate-700">{rel.tipo}</span>
                         <span className="text-slate-400"> · </span>
                         {rel.otherLabel}
+                        {rel.fuente_titulo && (
+                          <span className="block mt-0.5">
+                            {rel.fuente_url ? (
+                              <a href={rel.fuente_url} target="_blank" rel="noopener noreferrer" style={{ color: "#B87851", fontSize: 11, textDecoration: "underline", textUnderlineOffset: 2 }}>
+                                {rel.fuente_titulo}
+                              </a>
+                            ) : (
+                              <span style={{ color: "#B87851", fontSize: 11 }}>{rel.fuente_titulo}</span>
+                            )}
+                          </span>
+                        )}
                       </span>
                     </div>
                   ))}

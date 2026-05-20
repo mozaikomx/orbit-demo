@@ -57,9 +57,11 @@ Escribe un reporte de inteligencia completo que incluya según aplique:
 - Contexto actual y relevancia en México
 - Controversias, investigaciones o noticias relevantes si las hay
 
-Para cada afirmación importante cita la fuente con superíndice numérico y lista todas las fuentes al final con su URL completa en este formato:
-[1] Título del artículo — Nombre del medio — URL completa
-[2] ...
+Para cada afirmación importante cita la fuente con superíndice numérico [1].
+Al final del reporte incluye una sección "## Fuentes consultadas" con TODAS las fuentes que usaste, numeradas, en este formato:
+[N] Título del artículo — Nombre del medio — URL completa
+
+Incluye todas las fuentes, aunque no hayas citado algunas inline en el texto.
 
 Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
     });
@@ -99,7 +101,13 @@ Responde ÚNICAMENTE con un JSON válido (sin markdown, sin bloques de código, 
     { "id": "id_unico_snake_case", "label": "nombre completo de la institución o persona, nunca abreviado ni cortado (ej: 'Cámara de Diputados' no 'Cámara de', 'Secretaría de Gobernación' no 'Secretaría de', 'Universidad Panamericana' no 'Universidad de')", "tipo": "Persona|Gobierno|Empresa|Sociedad Civil", "dominio": "sitio web oficial sin https (ej: itam.mx)" }
   ],
   "conexiones": [
-    { "source": "id_fuente", "target": "id_destino", "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')" }
+    {
+      "source": "id_fuente",
+      "target": "id_destino",
+      "tipo": "etiqueta corta que describa la relación, máximo 4 palabras, primera letra en mayúscula, sin preposiciones al final (nunca terminar en 'en', 'de', 'por', 'a', 'con')",
+      "fuente_titulo": "título corto del artículo o medio que respalda esta relación",
+      "fuente_url": "URL exacta tomada de la investigación que respalda esta relación, null si no hay"
+    }
   ]
 }
 
@@ -112,6 +120,7 @@ Reglas:
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
 - El campo "partido" es null si el actor no tiene afiliación político-partidista
+- Para cada conexión, busca en la investigación proporcionada la fuente más relevante que respalde esa relación y úsala en fuente_titulo y fuente_url. Solo usa URLs que aparezcan en la investigación, nunca inventes URLs.
 `;
 
   const text = await callGeminiJSON(genAI, promptJSON);
