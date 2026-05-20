@@ -124,7 +124,7 @@ Reglas:
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
 - El campo "partido" es null si el actor no tiene afiliación político-partidista
-- Para cada conexión, busca en la investigación la fuente más relevante que respalde esa relación. Para fuente_titulo usa el nombre del medio periodístico o sitio web (ej: "El Financiero", "Forbes", "Expansión"), NO el nombre de una sección del reporte. Para fuente_url usa la URL completa que aparece en la sección ## Fuentes consultadas de la investigación. Si no encuentras una URL específica para esa conexión, usa null.
+- Para cada conexión, busca en la investigación la fuente más relevante que respalde esa relación. Para fuente_titulo usa el nombre del medio periodístico o sitio web (ej: "El Financiero", "Forbes", "Expansión"), NO el nombre de una sección del reporte. Para fuente_url: busca en la sección ## Fuentes consultadas de la investigación la URL completa y específica del artículo (no el dominio genérico como "forbes.com" sino la URL completa como "https://forbes.com.mx/carlos-slim-..."). Si no encuentras una URL específica de artículo para esa conexión, pon null — es mejor null que una URL genérica del medio.
 `;
 
   const text = await callGeminiJSON(genAI, promptJSON);
