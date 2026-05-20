@@ -49,20 +49,19 @@ export default async function handler(req, res) {
       input: `Eres un analista de inteligencia especializado en mapear actores de influencia en México.
 Investiga exhaustivamente a: "${nombre}"
 
-Estructura el reporte con estas secciones usando ## para los títulos:
-## Identificación y Formación Académica
-## Trayectoria Profesional y Cargos
-## Afiliación Política e Ideológica
-## Relaciones Clave
-## Contexto Actual y Relevancia
-## Controversias e Investigaciones Relevantes
-## Fuentes consultadas
+Estructura el reporte con las secciones relevantes para este actor usando ## para los títulos. Usa solo las secciones que apliquen:
 
-Usa **negrita** para nombres propios y datos importantes.
-Para cada afirmación importante cita la fuente inline con formato [texto](url).
-Al final en ## Fuentes consultadas lista TODAS las fuentes numeradas: [N] Título — Medio — URL
+Para personas políticas incluye: Identificación y Formación Académica, Trayectoria Política y Cargos, Afiliación Política e Ideológica, Relaciones Clave, Contexto Actual y Relevancia, Controversias e Investigaciones Relevantes
 
-Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
+Para empresarios o ejecutivos incluye: Identificación y Trayectoria Profesional, Perfil Empresarial y Sector, Relaciones y Alianzas Clave, Contexto Actual y Relevancia, Controversias e Investigaciones Relevantes
+
+Para empresas e instituciones incluye: Perfil y Giro Principal, Estructura y Liderazgo, Afiliaciones y Membresías, Relaciones Clave, Contexto Actual y Relevancia, Controversias e Investigaciones Relevantes
+
+Para organizaciones de sociedad civil incluye: Misión y Objetivos, Liderazgo y Estructura, Financiamiento y Alianzas, Contexto Actual y Relevancia, Controversias si las hay
+
+Siempre termina con: ## Fuentes consultadas
+
+Adapta el lenguaje al tipo de actor. Usa **negrita** para nombres y datos clave. Cita fuentes inline con [nombre del medio](url). Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
     });
     investigacion = responseInvestigacion.output_text;
   } catch (err) {
