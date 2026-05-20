@@ -59,7 +59,13 @@ Para empresas e instituciones incluye: Perfil y Giro Principal, Estructura y Lid
 
 Para organizaciones de sociedad civil incluye: Misión y Objetivos, Liderazgo y Estructura, Financiamiento y Alianzas, Contexto Actual y Relevancia, Controversias si las hay
 
-Siempre termina con: ## Fuentes consultadas
+Al final incluye obligatoriamente la sección:
+## Fuentes consultadas
+Lista TODAS las fuentes numeradas exactamente así:
+[1] Título del artículo — Nombre del medio — https://url-completa.com
+[2] Título del artículo — Nombre del medio — https://url-completa.com
+...
+Nunca uses bullets (-) para las fuentes, siempre números con corchetes [N].
 
 Adapta el lenguaje al tipo de actor. Usa **negrita** para nombres y datos clave. Cita fuentes inline con [nombre del medio](url). Mínimo 400 palabras. No incluyas campos como Fecha:, Analista:, Clasificación: al inicio.`,
     });
@@ -118,7 +124,7 @@ Reglas:
 - Las conexiones deben usar los IDs definidos en los nodos
 - No incluyas nodos sin conexión
 - El campo "partido" es null si el actor no tiene afiliación político-partidista
-- Para cada conexión, busca en la investigación proporcionada la fuente más relevante que respalde esa relación y úsala en fuente_titulo y fuente_url. Solo usa URLs que aparezcan en la investigación, nunca inventes URLs.
+- Para cada conexión, busca en la investigación la fuente más relevante que respalde esa relación. Para fuente_titulo usa el nombre del medio periodístico o sitio web (ej: "El Financiero", "Forbes", "Expansión"), NO el nombre de una sección del reporte. Para fuente_url usa la URL completa que aparece en la sección ## Fuentes consultadas de la investigación. Si no encuentras una URL específica para esa conexión, usa null.
 `;
 
   const text = await callGeminiJSON(genAI, promptJSON);
