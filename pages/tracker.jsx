@@ -770,6 +770,7 @@ export default function Tracker() {
                     color: "#64748B",
                     lineHeight: 1.6,
                     fontFamily: "'DM Sans', sans-serif",
+                    textAlign: "justify",
                   }}
                   dangerouslySetInnerHTML={{ __html: renderInvestigacion(data.investigacion) }}
                 />
